@@ -27,7 +27,7 @@ export function QuickActions() {
               <div className={`w-10 h-10 rounded-2xl ${a.color} border flex items-center justify-center group-hover:bg-amber/12 transition-colors duration-300`}>
                 <a.icon size={18} className={`${a.iconColor} group-hover:text-amber transition-colors duration-300`} />
               </div>
-              <ArrowRight size={14} className={`text-text-faint group-hover:text-text-muted group-hover:translate-x-0.5 transition-all duration-300 ${locale === 'ar' ? 'rotate-180' : ''}`} />
+              <ArrowRight size={14} className="text-text-faint group-hover:text-text-muted group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 rtl:rotate-180 transition-all duration-300" />
             </div>
             <p className="text-sm font-semibold font-heading">{a.label}</p>
             <p className="text-xs text-text-muted mt-1">{a.description}</p>

@@ -44,7 +44,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
       <div className="flex items-center gap-3">
         <button className="relative p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors cursor-pointer">
           <Bell size={18} />
-          <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-amber" />
+          <span className="absolute top-1.5 end-1.5 w-2 h-2 rounded-full bg-amber" />
         </button>
         <Avatar name={displayName} size="md" />
       </div>

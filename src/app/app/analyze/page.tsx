@@ -290,7 +290,7 @@ export default function AnalysisPage() {
                 {t.app.analyze.selectAll}
               </button>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto pr-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-96 overflow-y-auto pe-1">
               {personas?.map((persona) => (
                 <button
                   key={persona._id}

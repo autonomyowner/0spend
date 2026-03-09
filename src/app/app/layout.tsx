@@ -20,7 +20,7 @@ export default function AppLayout({
   // This hook auto-creates the user record in Convex when authenticated
   useCurrentUser()
 
-  const sidebarWidth = collapsed ? 'lg:pl-16' : 'lg:pl-60'
+  const sidebarWidth = collapsed ? 'lg:ps-16' : 'lg:ps-60'
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {

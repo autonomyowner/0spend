@@ -26,7 +26,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-800 border-r border-surface-500 transition-all duration-200 rtl:left-auto rtl:right-0 rtl:border-r-0 rtl:border-l',
+        'fixed start-0 top-0 bottom-0 z-40 flex flex-col bg-surface-800 border-e border-surface-500 transition-all duration-200',
         collapsed ? 'w-16' : 'w-60'
       )}
     >
@@ -70,7 +70,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           onClick={onToggle}
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors w-full cursor-pointer"
         >
-          {collapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
+          {collapsed ? <PanelLeft size={20} className="rtl:-scale-x-100" /> : <PanelLeftClose size={20} className="rtl:-scale-x-100" />}
           {!collapsed && <span>{t.app.sidebar.collapse}</span>}
         </button>
         <button

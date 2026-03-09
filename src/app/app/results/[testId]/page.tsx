@@ -91,7 +91,7 @@ export default function ResultsPage() {
             <h1 className="text-2xl font-bold font-heading">{test.name}</h1>
             <p className="text-sm text-text-muted mt-0.5">
               {test.format && test.format !== 'image' && (
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500 mr-2">
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500 me-2">
                   {test.format === 'landing_page' ? 'Page' : test.format}
                 </span>
               )}
