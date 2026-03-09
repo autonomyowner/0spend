@@ -2,7 +2,7 @@
 
 import { parseJSON } from "./utils";
 
-const GEMINI_MODEL = "google/gemini-2.5-flash-preview";
+const GEMINI_MODEL = "google/gemini-2.5-flash";
 
 interface GeminiContentPart {
   type: "text" | "image_url" | "video_url";
@@ -11,9 +11,14 @@ interface GeminiContentPart {
   video_url?: { url: string };
 }
 
+/**
+ * Call Gemini via OpenRouter.
+ * For video: pass a base64 data URL (data:video/mp4;base64,...) since
+ * OpenRouter's Gemini provider requires base64 for non-YouTube video URLs.
+ */
 export async function callGemini(
   prompt: string,
-  mediaUrl?: string,
+  mediaDataUrl?: string,
   mediaType?: "video" | "image"
 ): Promise<string> {
   const apiKey = process.env.OPENROUTER_API_KEY;
@@ -21,10 +26,10 @@ export async function callGemini(
 
   const content: GeminiContentPart[] = [];
 
-  if (mediaUrl && mediaType === "video") {
-    content.push({ type: "video_url", video_url: { url: mediaUrl } });
-  } else if (mediaUrl && mediaType === "image") {
-    content.push({ type: "image_url", image_url: { url: mediaUrl } });
+  if (mediaDataUrl && mediaType === "video") {
+    content.push({ type: "video_url", video_url: { url: mediaDataUrl } });
+  } else if (mediaDataUrl && mediaType === "image") {
+    content.push({ type: "image_url", image_url: { url: mediaDataUrl } });
   }
 
   content.push({ type: "text", text: prompt });
@@ -48,22 +53,27 @@ export async function callGemini(
   }
 
   const data = await response.json();
-  return data.choices?.[0]?.message?.content || "";
+  const text = data.choices?.[0]?.message?.content || "";
+  if (!text) {
+    throw new Error(`Gemini returned empty response: ${JSON.stringify(data).substring(0, 500)}`);
+  }
+  return text;
 }
 
 export async function callGeminiJSON<T>(
   prompt: string,
-  mediaUrl?: string,
+  mediaDataUrl?: string,
   mediaType?: "video" | "image",
   retries = 2
 ): Promise<T> {
   let lastError: Error | null = null;
   for (let i = 0; i <= retries; i++) {
     try {
-      const text = await callGemini(prompt, mediaUrl, mediaType);
+      const text = await callGemini(prompt, mediaDataUrl, mediaType);
       return parseJSON<T>(text);
     } catch (err) {
       lastError = err as Error;
+      console.error(`[callGeminiJSON] Attempt ${i + 1} failed:`, (err as Error).message);
       if (i < retries) {
         await new Promise((r) => setTimeout(r, 1000));
       }

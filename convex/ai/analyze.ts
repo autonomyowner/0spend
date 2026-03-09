@@ -335,6 +335,15 @@ export const runVideoAnalysis = action({
     if (!videoUrl) throw new Error("Video URL not found");
     console.log("[runVideoAnalysis] Video URL:", videoUrl);
 
+    // Fetch video and convert to base64 data URL (required by OpenRouter Gemini)
+    const videoResponse = await fetch(videoUrl);
+    if (!videoResponse.ok) throw new Error(`Video fetch failed: ${videoResponse.status}`);
+    const videoBuffer = await videoResponse.arrayBuffer();
+    const videoBase64 = Buffer.from(videoBuffer).toString("base64");
+    const videoMimeType = creative.mimeType || "video/mp4";
+    const videoDataUrl = `data:${videoMimeType};base64,${videoBase64}`;
+    console.log("[runVideoAnalysis] Video loaded, size:", Math.round(videoBuffer.byteLength / 1024), "KB, type:", videoMimeType);
+
     // 2. Create test record
     const testId = await ctx.runMutation(internal.tests.createTest, {
       userId: user._id,
@@ -349,7 +358,7 @@ export const runVideoAnalysis = action({
       console.log("[runVideoAnalysis] Starting video vision extraction...");
       const visionResponse = await callGemini(
         VIDEO_VISION_EXTRACTION_PROMPT,
-        videoUrl,
+        videoDataUrl,
         "video"
       );
       const analysis = visionResponse;
@@ -360,7 +369,7 @@ export const runVideoAnalysis = action({
       const metricPrompt = VIDEO_METRIC_SCORING_PROMPT.replace("{analysis}", analysis);
       const { metrics } = await callGeminiJSON<{
         metrics: { label: string; value: number; max: number }[];
-      }>(metricPrompt, videoUrl, "video");
+      }>(metricPrompt, videoDataUrl, "video");
       console.log("[runVideoAnalysis] Metric scoring complete");
 
       const metricsStr = JSON.stringify(metrics);
@@ -391,7 +400,7 @@ export const runVideoAnalysis = action({
                 sentiment: "positive" | "neutral" | "negative";
                 reaction: string;
                 highlights: string[];
-              }>(prompt, videoUrl, "video");
+              }>(prompt, videoDataUrl, "video");
 
               await ctx.runMutation(internal.results.savePersonaFeedback, {
                 testId,
@@ -442,7 +451,7 @@ export const runVideoAnalysis = action({
       console.log("[runVideoAnalysis] Starting heatmap analysis...");
       const { zones } = await callGeminiJSON<{
         zones: { label: string; attention: number; x: number; y: number; w: number; h: number }[];
-      }>(VIDEO_HEATMAP_PROMPT, videoUrl, "video");
+      }>(VIDEO_HEATMAP_PROMPT, videoDataUrl, "video");
       await ctx.runMutation(internal.results.saveHeatmap, { testId, zones });
       console.log("[runVideoAnalysis] Heatmap analysis complete");
 
