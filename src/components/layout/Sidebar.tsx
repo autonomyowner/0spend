@@ -2,10 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { PanelLeftClose, PanelLeft, LogOut } from 'lucide-react'
+import { LayoutDashboard, FlaskConical, Users, BarChart3, PanelLeftClose, PanelLeft, LogOut } from 'lucide-react'
 import { cn } from '@/lib/cn'
-import { APP_NAV } from '@/lib/constants'
 import { authClient } from '@/lib/auth-client'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface SidebarProps {
   collapsed: boolean
@@ -14,11 +14,19 @@ interface SidebarProps {
 
 export function Sidebar({ collapsed, onToggle }: SidebarProps) {
   const pathname = usePathname()
+  const { t } = useLanguage()
+
+  const navItems = [
+    { label: t.app.sidebar.dashboard, href: '/app', icon: LayoutDashboard },
+    { label: t.app.sidebar.analyze, href: '/app/analyze', icon: FlaskConical },
+    { label: t.app.sidebar.personas, href: '/app/personas', icon: Users },
+    { label: t.app.sidebar.results, href: '/app/results', icon: BarChart3 },
+  ]
 
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-800 border-r border-surface-500 transition-all duration-200',
+        'fixed left-0 top-0 bottom-0 z-40 flex flex-col bg-surface-800 border-r border-surface-500 transition-all duration-200 rtl:left-auto rtl:right-0 rtl:border-r-0 rtl:border-l',
         collapsed ? 'w-16' : 'w-60'
       )}
     >
@@ -34,7 +42,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
 
       {/* Nav */}
       <nav className="flex-1 py-4 px-2 flex flex-col gap-1">
-        {APP_NAV.map((item) => {
+        {navItems.map((item) => {
           const isActive = item.href === '/app'
             ? pathname === '/app'
             : pathname.startsWith(item.href)
@@ -63,7 +71,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors w-full cursor-pointer"
         >
           {collapsed ? <PanelLeft size={20} /> : <PanelLeftClose size={20} />}
-          {!collapsed && <span>Collapse</span>}
+          {!collapsed && <span>{t.app.sidebar.collapse}</span>}
         </button>
         <button
           onClick={async () => {
@@ -73,7 +81,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
           className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-danger hover:bg-danger/5 transition-colors w-full cursor-pointer"
         >
           <LogOut size={20} className="flex-shrink-0" />
-          {!collapsed && <span>Sign Out</span>}
+          {!collapsed && <span>{t.app.sidebar.signOut}</span>}
         </button>
       </div>
     </aside>

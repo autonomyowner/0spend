@@ -2,6 +2,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { Card } from '@/components/ui/Card'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface BenchmarkEntry {
   metric: string
@@ -15,19 +16,21 @@ interface CompetitiveBenchmarkProps {
 }
 
 export function CompetitiveBenchmark({ entries }: CompetitiveBenchmarkProps) {
+  const { t } = useLanguage()
+
   if (!entries || entries.length === 0) {
     return (
       <Card className="p-6 flex items-center justify-center">
-        <p className="text-sm text-text-muted">Benchmarks loading...</p>
+        <p className="text-sm text-text-muted">{t.app.benchmark.loading}</p>
       </Card>
     )
   }
 
   return (
     <Card className="p-6">
-      <h3 className="text-sm font-semibold font-heading mb-4">Competitive Benchmark</h3>
+      <h3 className="text-sm font-semibold font-heading mb-4">{t.app.benchmark.title}</h3>
       <p className="text-xs text-text-muted mb-6">
-        Compare your creative scores against industry average and top performers.
+        {t.app.benchmark.description}
       </p>
 
       <div className="h-80">
@@ -61,9 +64,9 @@ export function CompetitiveBenchmark({ entries }: CompetitiveBenchmarkProps) {
             <Legend
               wrapperStyle={{ fontSize: '12px', color: '#777777' }}
             />
-            <Bar dataKey="yours" name="Your Score" fill="#C8FF00" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="average" name="Industry Avg" fill="#3A3A3A" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="topPerformer" name="Top Performer" fill="#5B9A6B" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="yours" name={t.app.benchmark.yourScore} fill="#C8FF00" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="average" name={t.app.benchmark.industryAvg} fill="#3A3A3A" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="topPerformer" name={t.app.benchmark.topPerformer} fill="#5B9A6B" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>

@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn'
 import { Card } from '@/components/ui/Card'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface HeatmapZone {
   label: string
@@ -22,19 +23,21 @@ function getHeatColor(attention: number) {
 }
 
 export function AttentionHeatmap({ zones }: AttentionHeatmapProps) {
+  const { t } = useLanguage()
+
   if (!zones || zones.length === 0) {
     return (
       <Card className="p-6 flex items-center justify-center">
-        <p className="text-sm text-text-muted">Heatmap loading...</p>
+        <p className="text-sm text-text-muted">{t.app.heatmap.loading}</p>
       </Card>
     )
   }
 
   return (
     <Card className="p-6">
-      <h3 className="text-sm font-semibold font-heading mb-4">Attention Heatmap</h3>
+      <h3 className="text-sm font-semibold font-heading mb-4">{t.app.heatmap.title}</h3>
       <p className="text-xs text-text-muted mb-6">
-        Zone-based attention analysis showing where viewers focus. Red = high attention, yellow = moderate, green = low.
+        {t.app.heatmap.description}
       </p>
 
       <div className="flex flex-col lg:flex-row gap-6">
@@ -64,7 +67,7 @@ export function AttentionHeatmap({ zones }: AttentionHeatmapProps) {
 
         {/* Legend */}
         <div className="space-y-3 flex-1">
-          <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider">Attention Breakdown</h4>
+          <h4 className="text-xs font-semibold text-text-muted uppercase tracking-wider">{t.app.heatmap.breakdown}</h4>
           {[...zones]
             .sort((a, b) => b.attention - a.attention)
             .map((zone) => (

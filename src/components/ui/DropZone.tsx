@@ -3,14 +3,17 @@
 import { useState, DragEvent, useRef } from 'react'
 import { Upload } from 'lucide-react'
 import { cn } from '@/lib/cn'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface DropZoneProps {
   onFiles?: (files: File[]) => void
   accept?: string
+  description?: string
   className?: string
 }
 
-export function DropZone({ onFiles, accept, className }: DropZoneProps) {
+export function DropZone({ onFiles, accept, description, className }: DropZoneProps) {
+  const { t } = useLanguage()
   const [dragging, setDragging] = useState(false)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -59,9 +62,9 @@ export function DropZone({ onFiles, accept, className }: DropZoneProps) {
       </div>
       <div className="text-center">
         <p className="text-sm font-medium text-text-primary">
-          Drop your creative here, or <span className="text-amber">browse</span>
+          {t.app.dropZone.dropHere} <span className="text-amber">{t.app.dropZone.browse}</span>
         </p>
-        <p className="text-xs text-text-muted mt-1">PNG, JPG, WebP up to 10MB</p>
+        <p className="text-xs text-text-muted mt-1">{description || t.app.dropZone.formats}</p>
       </div>
       <input
         ref={inputRef}

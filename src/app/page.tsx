@@ -1,6 +1,5 @@
 'use client'
 
-import { LanguageProvider } from '@/lib/i18n/LanguageContext'
 import { Navbar } from '@/components/landing/Navbar'
 import { Hero } from '@/components/landing/Hero'
 import { HowItWorks } from '@/components/landing/HowItWorks'
@@ -13,18 +12,16 @@ import { Footer } from '@/components/landing/Footer'
 
 export default function LandingPage() {
   return (
-    <LanguageProvider>
-      <div className="min-h-screen bg-bg noise-overlay">
-        <Navbar />
-        <Hero />
-        <HowItWorks />
-        <FeaturesGrid />
-        <DemoPreview />
-        <SocialProof />
-        <Pricing />
-        <CTA />
-        <Footer />
-      </div>
-    </LanguageProvider>
+    <div className="min-h-screen bg-bg noise-overlay">
+      <Navbar />
+      <Hero />
+      <HowItWorks />
+      <FeaturesGrid />
+      <DemoPreview />
+      <SocialProof />
+      <Pricing />
+      <CTA />
+      <Footer />
+    </div>
   )
 }

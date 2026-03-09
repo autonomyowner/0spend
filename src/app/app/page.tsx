@@ -6,17 +6,19 @@ import { StatsRow } from '@/components/dashboard/StatsRow'
 import { ScoreChart } from '@/components/dashboard/ScoreChart'
 import { RecentTests } from '@/components/dashboard/RecentTests'
 import { QuickActions } from '@/components/dashboard/QuickActions'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function DashboardPage() {
   const stats = useQuery(api.dashboard.stats)
   const recentTests = useQuery(api.dashboard.recentTests)
   const scoreTrend = useQuery(api.dashboard.scoreTrend)
+  const { t } = useLanguage()
 
   return (
     <div className="space-y-6 sm:space-y-8 max-w-7xl">
       <div>
-        <h1 className="text-2xl font-bold font-heading">Dashboard</h1>
-        <p className="text-sm text-text-muted mt-1">Overview of your creative testing performance</p>
+        <h1 className="text-2xl font-bold font-heading">{t.app.dashboard.title}</h1>
+        <p className="text-sm text-text-muted mt-1">{t.app.dashboard.subtitle}</p>
       </div>
 
       <StatsRow stats={stats} />
@@ -31,7 +33,7 @@ export default function DashboardPage() {
       </div>
 
       <div className="hidden lg:block">
-        <h2 className="text-sm font-semibold font-heading mb-3">Quick Actions</h2>
+        <h2 className="text-sm font-semibold font-heading mb-3">{t.app.dashboard.quickActions}</h2>
         <QuickActions />
       </div>
     </div>

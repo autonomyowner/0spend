@@ -5,8 +5,10 @@ import Link from 'next/link'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { authClient } from '@/lib/auth-client'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function SignInPage() {
+  const { t } = useLanguage()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -19,12 +21,12 @@ export default function SignInPage() {
     try {
       const { error } = await authClient.signIn.email({ email, password })
       if (error) {
-        setError(error.message || 'Sign in failed')
+        setError(error.message || t.auth.signIn.failed)
       } else {
         window.location.href = '/app'
       }
     } catch {
-      setError('Something went wrong')
+      setError(t.auth.signIn.error)
     } finally {
       setLoading(false)
     }
@@ -49,8 +51,8 @@ export default function SignInPage() {
         </Link>
 
         <div className="rounded-2xl bg-surface-800 border border-surface-500 p-8">
-          <h1 className="text-2xl font-bold font-heading mb-1 text-center">Welcome back</h1>
-          <p className="text-sm text-text-muted mb-8 text-center">Sign in to your account</p>
+          <h1 className="text-2xl font-bold font-heading mb-1 text-center">{t.auth.signIn.title}</h1>
+          <p className="text-sm text-text-muted mb-8 text-center">{t.auth.signIn.subtitle}</p>
 
           {error && (
             <div className="mb-4 p-3 rounded-xl bg-danger/10 border border-danger/20 text-sm text-danger">
@@ -60,24 +62,24 @@ export default function SignInPage() {
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <Input
-              label="Email"
+              label={t.auth.signIn.email}
               id="email"
               type="email"
-              placeholder="you@company.com"
+              placeholder={t.auth.signIn.emailPlaceholder}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
             <Input
-              label="Password"
+              label={t.auth.signIn.password}
               id="password"
               type="password"
-              placeholder="••••••••"
+              placeholder={t.auth.signIn.passwordPlaceholder}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
 
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? t.auth.signIn.submitting : t.auth.signIn.submit}
             </Button>
           </form>
 
@@ -86,7 +88,7 @@ export default function SignInPage() {
               <div className="w-full border-t border-surface-500" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-surface-800 px-3 text-text-muted">or continue with</span>
+              <span className="bg-surface-800 px-3 text-text-muted">{t.auth.signIn.orContinue}</span>
             </div>
           </div>
 
@@ -101,12 +103,12 @@ export default function SignInPage() {
               <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
               <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
             </svg>
-            Continue with Google
+            {t.auth.signIn.google}
           </Button>
 
           <p className="text-sm text-text-muted text-center mt-6">
-            Don&apos;t have an account?{' '}
-            <Link href="/sign-up" className="text-amber hover:underline">Sign up</Link>
+            {t.auth.signIn.noAccount}{' '}
+            <Link href="/sign-up" className="text-amber hover:underline">{t.auth.signIn.signUp}</Link>
           </p>
         </div>
       </div>

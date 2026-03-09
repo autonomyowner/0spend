@@ -4,6 +4,7 @@ import { useState } from 'react'
 import { Modal } from '@/components/ui/Modal'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface CreatePersonaModalProps {
   open: boolean
@@ -18,6 +19,7 @@ interface CreatePersonaModalProps {
 }
 
 export function CreatePersonaModal({ open, onClose, onCreate }: CreatePersonaModalProps) {
+  const { t } = useLanguage()
   const [name, setName] = useState('')
   const [role, setRole] = useState('')
   const [age, setAge] = useState('')
@@ -54,47 +56,47 @@ export function CreatePersonaModal({ open, onClose, onCreate }: CreatePersonaMod
   }
 
   return (
-    <Modal open={open} onClose={onClose} title="Create Custom Persona">
+    <Modal open={open} onClose={onClose} title={t.app.createPersonaModal.title}>
       <div className="space-y-4">
         <Input
-          label="Persona Name"
+          label={t.app.createPersonaModal.personaName}
           id="persona-name"
-          placeholder="e.g., Tech-Savvy Millennial"
+          placeholder={t.app.createPersonaModal.personaNamePlaceholder}
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
         <div className="grid grid-cols-2 gap-4">
           <Input
-            label="Role"
+            label={t.app.createPersonaModal.role}
             id="persona-role"
-            placeholder="e.g., Startup CTO"
+            placeholder={t.app.createPersonaModal.rolePlaceholder}
             value={role}
             onChange={(e) => setRole(e.target.value)}
           />
           <Input
-            label="Age"
+            label={t.app.createPersonaModal.age}
             id="persona-age"
             type="number"
-            placeholder="e.g., 32"
+            placeholder={t.app.createPersonaModal.agePlaceholder}
             value={age}
             onChange={(e) => setAge(e.target.value)}
           />
         </div>
         <Input
-          label="Traits (comma separated)"
+          label={t.app.createPersonaModal.traits}
           id="persona-traits"
-          placeholder="e.g., Data-driven, Risk-averse, ROI-focused"
+          placeholder={t.app.createPersonaModal.traitsPlaceholder}
           value={traits}
           onChange={(e) => setTraits(e.target.value)}
         />
         <div className="flex flex-col gap-1.5">
           <label htmlFor="persona-desc" className="text-sm font-medium text-text-primary">
-            Description & Behavior
+            {t.app.createPersonaModal.descriptionLabel}
           </label>
           <textarea
             id="persona-desc"
             rows={3}
-            placeholder="Describe how this persona evaluates ads..."
+            placeholder={t.app.createPersonaModal.descriptionPlaceholder}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="w-full rounded-xl bg-surface-600 border border-surface-500 px-4 py-3 text-sm text-text-primary placeholder:text-text-muted focus:outline-none focus:border-amber/50 focus:ring-1 focus:ring-amber/20 transition-all duration-200 resize-none"
@@ -102,10 +104,10 @@ export function CreatePersonaModal({ open, onClose, onCreate }: CreatePersonaMod
         </div>
         <div className="flex gap-3 pt-2">
           <Button variant="secondary" onClick={onClose} className="flex-1">
-            Cancel
+            {t.app.createPersonaModal.cancel}
           </Button>
           <Button onClick={handleCreate} className="flex-1" disabled={loading}>
-            {loading ? 'Creating...' : 'Create Persona'}
+            {loading ? t.app.createPersonaModal.creating : t.app.createPersonaModal.createPersona}
           </Button>
         </div>
       </div>

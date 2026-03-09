@@ -2,6 +2,7 @@
 
 import { ProgressBar } from '@/components/ui/ProgressBar'
 import { Card } from '@/components/ui/Card'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface MetricScore {
   label: string
@@ -15,6 +16,7 @@ interface ScoreBreakdownProps {
 }
 
 export function ScoreBreakdown({ metrics, overallScore }: ScoreBreakdownProps) {
+  const { t } = useLanguage()
   const displayMetrics = metrics || []
   const overall = overallScore ?? (displayMetrics.length > 0
     ? displayMetrics.reduce((sum, m) => sum + m.value, 0) / displayMetrics.length
@@ -23,7 +25,7 @@ export function ScoreBreakdown({ metrics, overallScore }: ScoreBreakdownProps) {
   if (displayMetrics.length === 0) {
     return (
       <Card className="p-6 flex items-center justify-center">
-        <p className="text-sm text-text-muted">Scores loading...</p>
+        <p className="text-sm text-text-muted">{t.app.scoreBreakdown.loading}</p>
       </Card>
     )
   }
@@ -52,14 +54,14 @@ export function ScoreBreakdown({ metrics, overallScore }: ScoreBreakdownProps) {
             <span className="text-2xl font-bold font-heading" style={{ color: overall >= 7 ? '#5B9A6B' : overall >= 5 ? '#C8FF00' : '#D4645C' }}>
               {overall.toFixed(1)}
             </span>
-            <span className="text-xs text-text-muted">/ 10</span>
+            <span className="text-xs text-text-muted">{t.app.scoreBreakdown.outOf}</span>
           </div>
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold font-heading mb-1">Overall Score</h3>
+          <h3 className="text-lg font-semibold font-heading mb-1">{t.app.scoreBreakdown.overallScore}</h3>
           <p className="text-sm text-text-muted">
-            {overall >= 8 ? 'Excellent — ship it!' : overall >= 7 ? 'Strong creative with minor improvements.' : overall >= 5 ? 'Decent but needs work.' : 'Significant improvements needed.'}
+            {overall >= 8 ? t.app.scoreBreakdown.excellent : overall >= 7 ? t.app.scoreBreakdown.strong : overall >= 5 ? t.app.scoreBreakdown.decent : t.app.scoreBreakdown.significant}
           </p>
         </div>
       </div>

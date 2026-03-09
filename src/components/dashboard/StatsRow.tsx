@@ -1,5 +1,8 @@
+'use client'
+
 import { FlaskConical, TrendingUp, DollarSign, Wrench } from 'lucide-react'
 import { Card } from '@/components/ui/Card'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface StatsRowProps {
   stats?: {
@@ -11,35 +14,37 @@ interface StatsRowProps {
 }
 
 export function StatsRow({ stats }: StatsRowProps) {
+  const { t } = useLanguage()
+
   const items = [
     {
-      label: 'Tests Run',
+      label: t.app.stats.testsRun,
       value: stats ? String(stats.testCount) : '—',
-      change: stats ? `${stats.completedCount} completed` : '',
+      change: stats ? `${stats.completedCount} ${t.app.stats.completed}` : '',
       icon: FlaskConical,
       color: 'text-amber',
       bg: 'bg-amber/8 border-amber/10',
     },
     {
-      label: 'Avg Score',
+      label: t.app.stats.avgScore,
       value: stats ? String(stats.avgScore) : '—',
-      change: stats ? 'Across all tests' : '',
+      change: stats ? t.app.stats.acrossAllTests : '',
       icon: TrendingUp,
       color: 'text-success',
       bg: 'bg-success/8 border-success/10',
     },
     {
-      label: 'Completed',
+      label: t.app.stats.completedLabel,
       value: stats ? String(stats.completedCount) : '—',
-      change: 'Successful analyses',
+      change: t.app.stats.successfulAnalyses,
       icon: DollarSign,
       color: 'text-amber',
       bg: 'bg-amber/8 border-amber/10',
     },
     {
-      label: 'Fix-Its Generated',
+      label: t.app.stats.fixItsGenerated,
       value: stats ? String(stats.fixItsCount) : '—',
-      change: 'Actionable suggestions',
+      change: t.app.stats.actionableSuggestions,
       icon: Wrench,
       color: 'text-text-muted',
       bg: 'bg-surface-500/30 border-surface-500/30',

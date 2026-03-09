@@ -1,7 +1,10 @@
+'use client'
+
 import Link from 'next/link'
 import { Card } from '@/components/ui/Card'
 import { Badge } from '@/components/ui/Badge'
 import { BarChart3 } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface Test {
   _id: string
@@ -23,6 +26,12 @@ const statusVariant = {
 }
 
 export function RecentTests({ tests }: RecentTestsProps) {
+  const { t } = useLanguage()
+
+  const statusLabel = (status: string) => {
+    return t.app.status[status as keyof typeof t.app.status] || status
+  }
+
   return (
     <Card className="p-5 sm:p-6">
       <div className="flex items-center justify-between mb-5">
@@ -30,13 +39,13 @@ export function RecentTests({ tests }: RecentTestsProps) {
           <div className="w-8 h-8 rounded-xl bg-surface-500/30 border border-surface-500/30 flex items-center justify-center">
             <BarChart3 size={14} className="text-text-muted" />
           </div>
-          <h3 className="text-sm font-semibold font-heading">Recent Tests</h3>
+          <h3 className="text-sm font-semibold font-heading">{t.app.recentTests.title}</h3>
         </div>
-        <Link href="/app/results" className="text-xs text-amber hover:text-amber/80 transition-colors">View all</Link>
+        <Link href="/app/results" className="text-xs text-amber hover:text-amber/80 transition-colors">{t.app.recentTests.viewAll}</Link>
       </div>
       {(!tests || tests.length === 0) ? (
         <div className="py-8 text-center rounded-xl bg-surface-800/40 border border-surface-500/30">
-          <p className="text-sm text-text-muted">No tests yet. Run your first analysis!</p>
+          <p className="text-sm text-text-muted">{t.app.recentTests.empty}</p>
         </div>
       ) : (
         <div className="space-y-2">
@@ -49,7 +58,7 @@ export function RecentTests({ tests }: RecentTestsProps) {
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate group-hover:text-white transition-colors">{test.name}</p>
                 <p className="text-xs text-text-muted mt-0.5">
-                  {test.personaCount} personas &middot; {new Date(test.createdAt).toLocaleDateString()}
+                  {test.personaCount} {t.app.recentTests.personas} &middot; {new Date(test.createdAt).toLocaleDateString()}
                 </p>
               </div>
               <div className="flex items-center gap-3 flex-shrink-0">
@@ -59,7 +68,7 @@ export function RecentTests({ tests }: RecentTestsProps) {
                   </span>
                 )}
                 <Badge variant={statusVariant[test.status]}>
-                  {test.status}
+                  {statusLabel(test.status)}
                 </Badge>
               </div>
             </Link>

@@ -4,20 +4,21 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { LayoutDashboard, FlaskConical, Users, BarChart3 } from 'lucide-react'
 import { cn } from '@/lib/cn'
-
-const items = [
-  { label: 'Home', href: '/app', icon: LayoutDashboard },
-  { label: 'Analyze', href: '/app/analyze', icon: FlaskConical },
-  { label: 'Personas', href: '/app/personas', icon: Users },
-  { label: 'Results', href: '/app/results', icon: BarChart3 },
-]
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export function BottomNav() {
   const pathname = usePathname()
+  const { t } = useLanguage()
+
+  const items = [
+    { label: t.app.bottomNav.home, href: '/app', icon: LayoutDashboard },
+    { label: t.app.bottomNav.analyze, href: '/app/analyze', icon: FlaskConical },
+    { label: t.app.bottomNav.personas, href: '/app/personas', icon: Users },
+    { label: t.app.bottomNav.results, href: '/app/results', icon: BarChart3 },
+  ]
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
-      {/* Glassmorphic background */}
       <div className="border-t border-surface-500/50 bg-surface-800/80 backdrop-blur-xl">
         <div className="flex items-center justify-around px-2 pb-[env(safe-area-inset-bottom)]">
           {items.map((item) => {

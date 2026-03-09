@@ -1,4 +1,5 @@
 import { PersonaCard } from './PersonaCard'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface Persona {
   _id: string
@@ -15,10 +16,12 @@ interface PersonaGridProps {
 }
 
 export function PersonaGrid({ personas }: PersonaGridProps) {
+  const { t } = useLanguage()
+
   if (personas.length === 0) {
     return (
       <div className="py-12 text-center">
-        <p className="text-sm text-text-muted">No personas found</p>
+        <p className="text-sm text-text-muted">{t.app.personasPage.noPersonas}</p>
       </div>
     )
   }

@@ -1,5 +1,6 @@
 import { Avatar } from '@/components/ui/Avatar'
 import { Badge } from '@/components/ui/Badge'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface PersonaFeedbackCardProps {
   feedback: {
@@ -19,6 +20,7 @@ const sentimentVariant = {
 }
 
 export function PersonaFeedbackCard({ feedback }: PersonaFeedbackCardProps) {
+  const { t } = useLanguage()
   const scoreColor = feedback.score >= 7 ? 'text-success' : feedback.score >= 5 ? 'text-amber' : 'text-danger'
 
   return (
@@ -28,7 +30,7 @@ export function PersonaFeedbackCard({ feedback }: PersonaFeedbackCardProps) {
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
             <span className="text-sm font-semibold">{feedback.personaName}</span>
-            <Badge variant={sentimentVariant[feedback.sentiment]}>{feedback.sentiment}</Badge>
+            <Badge variant={sentimentVariant[feedback.sentiment]}>{t.app.sentiment[feedback.sentiment]}</Badge>
           </div>
           <p className="text-xs text-text-muted">{feedback.personaRole}</p>
         </div>

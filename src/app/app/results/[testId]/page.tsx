@@ -14,16 +14,18 @@ import { AgentDebateView } from '@/components/results/AgentDebateView'
 import { FixItSuggestions } from '@/components/results/FixItSuggestions'
 import { AttentionHeatmap } from '@/components/results/AttentionHeatmap'
 import { CompetitiveBenchmark } from '@/components/results/CompetitiveBenchmark'
-
-const tabs = [
-  { id: 'overview', label: 'Overview' },
-  { id: 'feedback', label: 'Feedback' },
-  { id: 'debate', label: 'Debate' },
-  { id: 'heatmap', label: 'Heatmap' },
-  { id: 'benchmarks', label: 'Benchmarks' },
-]
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function ResultsPage() {
+  const { t, locale } = useLanguage()
+
+  const tabs = [
+    { id: 'overview', label: t.app.resultsDetail.overview },
+    { id: 'feedback', label: t.app.resultsDetail.feedback },
+    { id: 'debate', label: t.app.resultsDetail.debate },
+    { id: 'heatmap', label: t.app.resultsDetail.heatmap },
+    { id: 'benchmarks', label: t.app.resultsDetail.benchmarks },
+  ]
   const params = useParams()
   const router = useRouter()
   const testId = params.testId as Id<'tests'>
@@ -36,6 +38,10 @@ export default function ResultsPage() {
   const heatmap = useQuery(api.results.getHeatmap, { testId })
   const fixIts = useQuery(api.results.getFixIts, { testId })
   const benchmarks = useQuery(api.results.getBenchmarks, { testId })
+  const creative = useQuery(
+    api.creatives.getCreative,
+    test?.creativeId ? { creativeId: test.creativeId } : "skip"
+  )
   const creativeUrl = useQuery(
     api.creatives.getCreativeUrl,
     test?.creativeId ? { creativeId: test.creativeId } : "skip"
@@ -53,13 +59,13 @@ export default function ResultsPage() {
   if (!test) {
     return (
       <div className="max-w-6xl py-20 text-center">
-        <p className="text-text-muted">Test not found</p>
+        <p className="text-text-muted">{t.app.resultsDetail.testNotFound}</p>
       </div>
     )
   }
 
   async function handleDelete() {
-    if (!confirm('Delete this test and all its results?')) return
+    if (!confirm(t.app.resultsDetail.deleteConfirm)) return
     setDeleting(true)
     try {
       await deleteTest({ testId })
@@ -79,12 +85,17 @@ export default function ResultsPage() {
             href="/app/results"
             className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors"
           >
-            <ArrowLeft size={20} />
+            <ArrowLeft size={20} className={locale === 'ar' ? 'rotate-180' : ''} />
           </Link>
           <div>
             <h1 className="text-2xl font-bold font-heading">{test.name}</h1>
             <p className="text-sm text-text-muted mt-0.5">
-              {test.personaCount} personas &middot; {test.status} &middot; {dateStr}
+              {test.format && test.format !== 'image' && (
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500 mr-2">
+                  {test.format === 'landing_page' ? 'Page' : test.format}
+                </span>
+              )}
+              {test.personaCount} {t.app.recentTests.personas} &middot; {t.app.status[test.status as keyof typeof t.app.status] || test.status} &middot; {dateStr}
             </p>
           </div>
         </div>
@@ -101,25 +112,45 @@ export default function ResultsPage() {
       {/* Creative preview */}
       {creativeUrl && (
         <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
-          <img
-            src={creativeUrl}
-            alt={test.name}
-            className="w-full h-auto max-h-64 object-contain"
-          />
+          {test.format === 'video' ? (
+            <video
+              src={creativeUrl}
+              controls
+              className="w-full max-h-64"
+            />
+          ) : (
+            <img
+              src={creativeUrl}
+              alt={test.name}
+              className="w-full h-auto max-h-64 object-contain"
+            />
+          )}
+          {creative?.sourceUrl && (
+            <div className="p-3 border-t border-surface-500">
+              <a
+                href={creative.sourceUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-amber hover:underline truncate block"
+              >
+                {creative.sourceUrl}
+              </a>
+            </div>
+          )}
         </div>
       )}
 
       {test.status === 'running' && (
         <div className="rounded-xl bg-surface-700 border border-amber/20 p-6 flex flex-col items-center gap-3">
           <div className="w-10 h-10 rounded-full border-2 border-amber border-t-transparent animate-spin" />
-          <p className="text-sm text-text-primary font-medium">Analysis in progress...</p>
-          <p className="text-xs text-text-muted">Results will appear as they complete</p>
+          <p className="text-sm text-text-primary font-medium">{t.app.resultsDetail.inProgress}</p>
+          <p className="text-xs text-text-muted">{t.app.resultsDetail.resultsWillAppear}</p>
         </div>
       )}
 
       {test.status === 'failed' && (
         <div className="rounded-xl bg-danger/10 border border-danger/20 p-6 text-center">
-          <p className="text-sm text-danger">Analysis failed. You can delete this test and try again.</p>
+          <p className="text-sm text-danger">{t.app.resultsDetail.analysisFailed}</p>
         </div>
       )}
 
@@ -145,7 +176,7 @@ export default function ResultsPage() {
                 ))
               ) : (
                 <p className="text-sm text-text-muted col-span-2 text-center py-8">
-                  No feedback available.
+                  {t.app.resultsDetail.noFeedback}
                 </p>
               )}
             </div>

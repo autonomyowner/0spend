@@ -3,12 +3,15 @@
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts'
 import { Card } from '@/components/ui/Card'
 import { TrendingUp } from 'lucide-react'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface ScoreChartProps {
   data?: { date: string; score: number }[]
 }
 
 export function ScoreChart({ data }: ScoreChartProps) {
+  const { t } = useLanguage()
+
   const chartData = data && data.length > 0 ? data : [
     { date: 'Mon', score: 0 },
     { date: 'Tue', score: 0 },
@@ -21,11 +24,11 @@ export function ScoreChart({ data }: ScoreChartProps) {
         <div className="w-8 h-8 rounded-xl bg-amber/8 border border-amber/10 flex items-center justify-center">
           <TrendingUp size={14} className="text-amber" />
         </div>
-        <h3 className="text-sm font-semibold font-heading">Average Score Trend</h3>
+        <h3 className="text-sm font-semibold font-heading">{t.app.scoreChart.title}</h3>
       </div>
       {(!data || data.length === 0) ? (
         <div className="h-56 sm:h-64 flex items-center justify-center rounded-xl bg-surface-800/40 border border-surface-500/30">
-          <p className="text-sm text-text-muted">Run some tests to see your score trend</p>
+          <p className="text-sm text-text-muted">{t.app.scoreChart.empty}</p>
         </div>
       ) : (
         <div className="h-56 sm:h-64">

@@ -4,23 +4,26 @@ import { usePathname } from 'next/navigation'
 import { Bell, Menu } from 'lucide-react'
 import { Avatar } from '@/components/ui/Avatar'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface TopBarProps {
   onMenuClick?: () => void
 }
 
-const breadcrumbMap: Record<string, string> = {
-  '/app': 'Dashboard',
-  '/app/analyze': 'Creative Analysis',
-  '/app/personas': 'Persona Builder',
-  '/app/results': 'Results',
-}
-
 export function TopBar({ onMenuClick }: TopBarProps) {
   const pathname = usePathname()
   const { user } = useCurrentUser()
+  const { t } = useLanguage()
+
+  const breadcrumbMap: Record<string, string> = {
+    '/app': t.app.topBar.dashboard,
+    '/app/analyze': t.app.topBar.creativeAnalysis,
+    '/app/personas': t.app.topBar.personaBuilder,
+    '/app/results': t.app.topBar.results,
+  }
+
   const base = Object.keys(breadcrumbMap).find((k) => pathname.startsWith(k)) || '/app'
-  const title = breadcrumbMap[base] || 'Dashboard'
+  const title = breadcrumbMap[base] || t.app.topBar.dashboard
   const displayName = user?.name || 'User'
 
   return (
@@ -33,7 +36,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
           <Menu size={20} />
         </button>
         <div className="flex items-center gap-2 text-sm">
-          <span className="text-text-muted">App</span>
+          <span className="text-text-muted">{t.app.topBar.app}</span>
           <span className="text-text-faint">/</span>
           <span className="text-text-primary font-medium">{title}</span>
         </div>

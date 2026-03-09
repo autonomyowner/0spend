@@ -8,15 +8,17 @@ import { PersonaGrid } from '@/components/personas/PersonaGrid'
 import { CreatePersonaModal } from '@/components/personas/CreatePersonaModal'
 import { Button } from '@/components/ui/Button'
 import { Tabs } from '@/components/ui/Tabs'
-
-const tabs = [
-  { id: 'all', label: 'All Personas' },
-  { id: 'preset', label: 'Preset' },
-  { id: 'custom', label: 'Custom' },
-]
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function PersonasPage() {
   const [activeTab, setActiveTab] = useState('all')
+  const { t } = useLanguage()
+
+  const tabs = [
+    { id: 'all', label: t.app.personasPage.allPersonas },
+    { id: 'preset', label: t.app.personasPage.preset },
+    { id: 'custom', label: t.app.personasPage.custom },
+  ]
   const [modalOpen, setModalOpen] = useState(false)
   const personas = useQuery(api.personas.list)
   const createPersona = useMutation(api.personas.create)
@@ -44,14 +46,14 @@ export default function PersonasPage() {
     <div className="max-w-6xl space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold font-heading">Persona Builder</h1>
+          <h1 className="text-2xl font-bold font-heading">{t.app.personasPage.title}</h1>
           <p className="text-sm text-text-muted mt-1">
-            {personas ? `${personas.length} personas available` : 'Loading...'}
+            {personas ? `${personas.length} ${t.app.personasPage.personasAvailable}` : t.app.personasPage.loading}
           </p>
         </div>
         <Button onClick={() => setModalOpen(true)} size="sm">
           <Plus size={16} />
-          Create Custom
+          {t.app.personasPage.createCustom}
         </Button>
       </div>
 

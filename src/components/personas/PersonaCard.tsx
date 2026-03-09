@@ -1,5 +1,6 @@
 import { Badge } from '@/components/ui/Badge'
 import { Avatar } from '@/components/ui/Avatar'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface Persona {
   _id: string
@@ -16,6 +17,8 @@ interface PersonaCardProps {
 }
 
 export function PersonaCard({ persona }: PersonaCardProps) {
+  const { t } = useLanguage()
+
   return (
     <div className="rounded-xl bg-surface-700 border border-surface-500 p-5 hover:border-amber/20 transition-all duration-200">
       <div className="flex items-start gap-3 mb-4">
@@ -25,7 +28,7 @@ export function PersonaCard({ persona }: PersonaCardProps) {
           <p className="text-xs text-text-muted">{persona.role}, {persona.age}</p>
         </div>
         {!persona.isPreset && (
-          <Badge variant="amber">Custom</Badge>
+          <Badge variant="amber">{t.app.personaCard.custom}</Badge>
         )}
       </div>
       <p className="text-xs text-text-muted leading-relaxed mb-3">{persona.description}</p>
