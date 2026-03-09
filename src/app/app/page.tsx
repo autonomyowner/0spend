@@ -30,7 +30,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div>
+      <div className="hidden lg:block">
         <h2 className="text-sm font-semibold font-heading mb-3">Quick Actions</h2>
         <QuickActions />
       </div>

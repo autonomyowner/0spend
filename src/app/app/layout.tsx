@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { Sidebar } from '@/components/layout/Sidebar'
 import { TopBar } from '@/components/layout/TopBar'
+import { BottomNav } from '@/components/layout/BottomNav'
 import { cn } from '@/lib/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
 import { useConvexAuth, useCurrentUser } from '@/hooks/useCurrentUser'
@@ -64,10 +65,13 @@ export default function AppLayout({
       {/* Main content */}
       <div className={cn('transition-all duration-200', sidebarWidth)}>
         <TopBar onMenuClick={() => setMobileOpen(true)} />
-        <main className="p-6">
+        <main className="p-6 pb-28 lg:pb-6">
           {children}
         </main>
       </div>
+
+      {/* Mobile bottom nav */}
+      <BottomNav />
     </div>
   )
 }

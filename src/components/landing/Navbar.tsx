@@ -6,9 +6,12 @@ import { Menu, X } from 'lucide-react'
 import { NAV_LINKS } from '@/lib/constants'
 import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
+import { authClient } from '@/lib/auth-client'
 
 export function Navbar() {
   const [open, setOpen] = useState(false)
+  const { data: session, isPending } = authClient.useSession()
+  const isLoggedIn = !isPending && !!session
 
   return (
     <nav className="fixed top-4 left-4 right-4 z-50">
@@ -37,12 +40,22 @@ export function Navbar() {
 
           {/* Desktop CTAs */}
           <div className="hidden md:flex items-center gap-3">
-            <Link href="/sign-in">
-              <Button variant="ghost" size="sm">Sign In</Button>
-            </Link>
-            <Link href="/sign-up">
-              <Button size="sm">Get Started</Button>
-            </Link>
+            {isPending ? (
+              <div className="w-20 h-8" />
+            ) : isLoggedIn ? (
+              <Link href="/app">
+                <Button size="sm">Dashboard</Button>
+              </Link>
+            ) : (
+              <>
+                <Link href="/sign-in">
+                  <Button variant="ghost" size="sm">Sign In</Button>
+                </Link>
+                <Link href="/sign-up">
+                  <Button size="sm">Get Started</Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile toggle */}
@@ -72,12 +85,20 @@ export function Navbar() {
               </a>
             ))}
             <div className="flex gap-3 pt-2 border-t border-surface-500">
-              <Link href="/sign-in" className="flex-1">
-                <Button variant="secondary" size="sm" className="w-full">Sign In</Button>
-              </Link>
-              <Link href="/sign-up" className="flex-1">
-                <Button size="sm" className="w-full">Get Started</Button>
-              </Link>
+              {isLoggedIn ? (
+                <Link href="/app" className="flex-1">
+                  <Button size="sm" className="w-full">Dashboard</Button>
+                </Link>
+              ) : (
+                <>
+                  <Link href="/sign-in" className="flex-1">
+                    <Button variant="secondary" size="sm" className="w-full">Sign In</Button>
+                  </Link>
+                  <Link href="/sign-up" className="flex-1">
+                    <Button size="sm" className="w-full">Get Started</Button>
+                  </Link>
+                </>
+              )}
             </div>
           </div>
         </div>
