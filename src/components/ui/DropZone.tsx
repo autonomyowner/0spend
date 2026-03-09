@@ -61,7 +61,7 @@ export function DropZone({ onFiles, accept, className }: DropZoneProps) {
         <p className="text-sm font-medium text-text-primary">
           Drop your creative here, or <span className="text-amber">browse</span>
         </p>
-        <p className="text-xs text-text-muted mt-1">PNG, JPG, MP4, WebP up to 50MB</p>
+        <p className="text-xs text-text-muted mt-1">PNG, JPG, WebP up to 10MB</p>
       </div>
       <input
         ref={inputRef}

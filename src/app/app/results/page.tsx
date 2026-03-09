@@ -12,7 +12,7 @@ const statusVariant = {
 }
 
 export default function ResultsListPage() {
-  const tests = useQuery(api.tests.listUserTests)
+  const tests = useQuery(api.tests.listUserTests, {})
 
   return (
     <div className="max-w-6xl space-y-6">

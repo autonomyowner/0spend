@@ -2,11 +2,10 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useQuery, useMutation, useAction } from 'convex/react'
+import { useQuery, useAction } from 'convex/react'
 import { api } from '../../../../convex/_generated/api'
 import { Id } from '../../../../convex/_generated/dataModel'
 import { UploadZone } from '@/components/analysis/UploadZone'
-import { FormatSelector } from '@/components/analysis/FormatSelector'
 import { Button } from '@/components/ui/Button'
 import { useUploadCreative } from '@/hooks/useUploadCreative'
 import { useCurrentUser } from '@/hooks/useCurrentUser'
@@ -20,7 +19,6 @@ export default function AnalysisPage() {
 
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
-  const [format, setFormat] = useState('image')
   const [creativeId, setCreativeId] = useState<Id<'creatives'> | null>(null)
   const [selectedPersonas, setSelectedPersonas] = useState<Id<'personas'>[]>([])
   const [running, setRunning] = useState(false)
@@ -29,7 +27,6 @@ export default function AnalysisPage() {
   function handleUpload(files: File[]) {
     const f = files[0]
     if (!f) return
-    // Validate image type and size
     if (!f.type.startsWith('image/')) {
       setError('Only images are supported')
       return
@@ -41,12 +38,18 @@ export default function AnalysisPage() {
     setFile(f)
     setPreviewUrl(URL.createObjectURL(f))
     setError('')
-    // Auto-upload
-    upload(f, format).then((result) => {
+    upload(f, 'image').then((result) => {
       setCreativeId(result.creativeId)
     }).catch(() => {
       setError('Upload failed')
     })
+  }
+
+  function clearUpload() {
+    setFile(null)
+    setPreviewUrl(null)
+    setCreativeId(null)
+    setError('')
   }
 
   function togglePersona(id: Id<'personas'>) {
@@ -71,7 +74,6 @@ export default function AnalysisPage() {
         creativeId,
         personaIds: selectedPersonas,
         testName: file?.name || 'Untitled Test',
-        userId: user._id,
       })
       router.push(`/app/results/${result.testId}`)
     } catch (err) {
@@ -94,31 +96,35 @@ export default function AnalysisPage() {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Left: Upload & Config */}
+        {/* Left: Upload & Preview */}
         <div className="space-y-6">
-          <UploadZone onUpload={handleUpload} />
-          <FormatSelector value={format} onChange={setFormat} />
-
-          {/* Preview */}
-          {previewUrl ? (
+          {!previewUrl ? (
+            <UploadZone onUpload={handleUpload} />
+          ) : (
             <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
               <img
                 src={previewUrl}
                 alt="Creative preview"
                 className="w-full h-auto max-h-80 object-contain"
               />
-              <div className="p-3 border-t border-surface-500">
-                <p className="text-sm text-text-primary font-medium">{file?.name}</p>
-                <p className="text-xs text-text-muted">
-                  {file ? (file.size / 1024).toFixed(1) + ' KB' : ''}
-                  {uploading && ' · Uploading...'}
-                  {creativeId && !uploading && ' · Ready'}
-                </p>
+              <div className="p-3 border-t border-surface-500 flex items-center justify-between">
+                <div>
+                  <p className="text-sm text-text-primary font-medium">{file?.name}</p>
+                  <p className="text-xs text-text-muted">
+                    {file ? (file.size / 1024).toFixed(1) + ' KB' : ''}
+                    {uploading && ' · Uploading...'}
+                    {creativeId && !uploading && ' · Ready'}
+                  </p>
+                </div>
+                {!running && (
+                  <button
+                    onClick={clearUpload}
+                    className="text-xs text-text-muted hover:text-danger transition-colors cursor-pointer"
+                  >
+                    Remove
+                  </button>
+                )}
               </div>
-            </div>
-          ) : (
-            <div className="rounded-xl bg-surface-700 border border-surface-500 aspect-video flex flex-col items-center justify-center gap-2">
-              <p className="text-sm text-text-muted">Upload a creative to preview</p>
             </div>
           )}
         </div>

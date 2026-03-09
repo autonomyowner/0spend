@@ -59,10 +59,67 @@ async function callClaude(
 }
 
 function parseJSON<T>(text: string): T {
-  // Extract JSON from markdown code blocks if present
+  // Try multiple extraction strategies
+  // 1. Try extracting from markdown code blocks
   const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  const jsonStr = jsonMatch ? jsonMatch[1]!.trim() : text.trim();
-  return JSON.parse(jsonStr) as T;
+  if (jsonMatch) {
+    try {
+      return JSON.parse(jsonMatch[1]!.trim()) as T;
+    } catch {
+      // Fall through to other strategies
+    }
+  }
+
+  // 2. Try parsing the whole text as JSON
+  try {
+    return JSON.parse(text.trim()) as T;
+  } catch {
+    // Fall through
+  }
+
+  // 3. Try finding JSON object/array in the text
+  const objectMatch = text.match(/\{[\s\S]*\}/);
+  if (objectMatch) {
+    try {
+      return JSON.parse(objectMatch[0]) as T;
+    } catch {
+      // Fall through
+    }
+  }
+
+  const arrayMatch = text.match(/\[[\s\S]*\]/);
+  if (arrayMatch) {
+    try {
+      return JSON.parse(arrayMatch[0]) as T;
+    } catch {
+      // Fall through
+    }
+  }
+
+  throw new Error(`Failed to parse JSON from LLM response: ${text.substring(0, 200)}`);
+}
+
+async function callClaudeJSON<T>(
+  client: Anthropic,
+  prompt: string,
+  imageBase64?: string,
+  imageMimeType?: string,
+  retries = 2
+): Promise<T> {
+  let lastError: Error | null = null;
+  for (let i = 0; i <= retries; i++) {
+    try {
+      const text = await callClaude(client, prompt, imageBase64, imageMimeType);
+      return parseJSON<T>(text);
+    } catch (err) {
+      lastError = err as Error;
+      if (i < retries) {
+        // Wait briefly before retry
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+    }
+  }
+  throw lastError!;
 }
 
 export const runAnalysis = action({
@@ -70,9 +127,12 @@ export const runAnalysis = action({
     creativeId: v.id("creatives"),
     personaIds: v.array(v.id("personas")),
     testName: v.string(),
-    userId: v.id("users"),
   },
   handler: async (ctx, args): Promise<{ testId: string; status: string }> => {
+    // Derive userId server-side from auth context
+    const user = await ctx.runQuery(internal.users.getViewer);
+    if (!user) throw new Error("Unauthenticated");
+
     const client = getClient();
 
     // 1. Get creative from storage
@@ -81,6 +141,11 @@ export const runAnalysis = action({
       { creativeId: args.creativeId }
     );
     if (!creative) throw new Error("Creative not found");
+
+    // Verify ownership
+    if (creative.userId !== user._id) {
+      throw new Error("Unauthorized: creative belongs to another user");
+    }
 
     const imageUrl = await ctx.storage.getUrl(creative.storageId);
     if (!imageUrl) throw new Error("Image URL not found");
@@ -93,7 +158,7 @@ export const runAnalysis = action({
 
     // 2. Create test record
     const testId = await ctx.runMutation(internal.tests.createTest, {
-      userId: args.userId,
+      userId: user._id,
       creativeId: args.creativeId,
       name: args.testName,
       personaCount: args.personaIds.length,
@@ -111,10 +176,9 @@ export const runAnalysis = action({
 
       // 4. Metric scoring
       const metricPrompt = METRIC_SCORING_PROMPT.replace("{analysis}", analysis);
-      const metricResponse = await callClaude(client, metricPrompt);
-      const { metrics } = parseJSON<{
+      const { metrics } = await callClaudeJSON<{
         metrics: { label: string; value: number; max: number }[];
-      }>(metricResponse);
+      }>(client, metricPrompt);
 
       const metricsStr = JSON.stringify(metrics);
 
@@ -137,29 +201,37 @@ export const runAnalysis = action({
               description: persona.description,
             }).replace("{analysis}", analysis);
 
-            const response = await callClaude(
-              client,
-              prompt,
-              imageBase64,
-              imageMimeType
-            );
-            const result = parseJSON<{
-              score: number;
-              sentiment: "positive" | "neutral" | "negative";
-              reaction: string;
-              highlights: string[];
-            }>(response);
+            try {
+              const result = await callClaudeJSON<{
+                score: number;
+                sentiment: "positive" | "neutral" | "negative";
+                reaction: string;
+                highlights: string[];
+              }>(client, prompt, imageBase64, imageMimeType);
 
-            await ctx.runMutation(internal.results.savePersonaFeedback, {
-              testId,
-              personaId: persona._id,
-              personaName: persona.name,
-              personaRole: `${persona.role}, ${persona.age}`,
-              score: result.score,
-              sentiment: result.sentiment,
-              reaction: result.reaction,
-              highlights: result.highlights,
-            });
+              await ctx.runMutation(internal.results.savePersonaFeedback, {
+                testId,
+                personaId: persona._id,
+                personaName: persona.name,
+                personaRole: `${persona.role}, ${persona.age}`,
+                score: result.score,
+                sentiment: result.sentiment,
+                reaction: result.reaction,
+                highlights: result.highlights,
+              });
+            } catch (err) {
+              // Save a fallback feedback so the user knows this persona failed
+              await ctx.runMutation(internal.results.savePersonaFeedback, {
+                testId,
+                personaId: persona._id,
+                personaName: persona.name,
+                personaRole: `${persona.role}, ${persona.age}`,
+                score: 0,
+                sentiment: "neutral",
+                reaction: `Analysis failed for this persona: ${(err as Error).message}`,
+                highlights: [],
+              });
+            }
           })
         );
       }
@@ -169,18 +241,12 @@ export const runAnalysis = action({
         "{analysis}",
         analysis
       ).replace("{metrics}", metricsStr);
-      const debateResponse = await callClaude(
-        client,
-        debatePrompt,
-        imageBase64,
-        imageMimeType
-      );
-      const { exchanges } = parseJSON<{
+      const { exchanges } = await callClaudeJSON<{
         exchanges: {
           agent: "buyer" | "skeptic" | "verdict";
           text: string;
         }[];
-      }>(debateResponse);
+      }>(client, debatePrompt, imageBase64, imageMimeType);
       await ctx.runMutation(internal.results.saveDebate, {
         testId,
         exchanges,
@@ -191,33 +257,21 @@ export const runAnalysis = action({
         "{metrics}",
         metricsStr
       );
-      const fixItResponse = await callClaude(
-        client,
-        fixItPrompt,
-        imageBase64,
-        imageMimeType
-      );
-      const { suggestions } = parseJSON<{
+      const { suggestions } = await callClaudeJSON<{
         suggestions: {
           element: string;
           current: string;
           suggested: string;
           impact: "high" | "medium" | "low";
         }[];
-      }>(fixItResponse);
+      }>(client, fixItPrompt, imageBase64, imageMimeType);
       await ctx.runMutation(internal.results.saveFixIts, {
         testId,
         suggestions,
       });
 
       // 8. Attention heatmap
-      const heatmapResponse = await callClaude(
-        client,
-        HEATMAP_PROMPT,
-        imageBase64,
-        imageMimeType
-      );
-      const { zones } = parseJSON<{
+      const { zones } = await callClaudeJSON<{
         zones: {
           label: string;
           attention: number;
@@ -226,7 +280,7 @@ export const runAnalysis = action({
           w: number;
           h: number;
         }[];
-      }>(heatmapResponse);
+      }>(client, HEATMAP_PROMPT, imageBase64, imageMimeType);
       await ctx.runMutation(internal.results.saveHeatmap, {
         testId,
         zones,
@@ -234,15 +288,14 @@ export const runAnalysis = action({
 
       // 9. Benchmarks
       const benchmarkPrompt = BENCHMARK_PROMPT.replace("{metrics}", metricsStr);
-      const benchmarkResponse = await callClaude(client, benchmarkPrompt);
-      const { entries } = parseJSON<{
+      const { entries } = await callClaudeJSON<{
         entries: {
           metric: string;
           yours: number;
           average: number;
           topPerformer: number;
         }[];
-      }>(benchmarkResponse);
+      }>(client, benchmarkPrompt);
       await ctx.runMutation(internal.results.saveBenchmarks, {
         testId,
         entries,

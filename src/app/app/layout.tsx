@@ -5,7 +5,7 @@ import { Sidebar } from '@/components/layout/Sidebar'
 import { TopBar } from '@/components/layout/TopBar'
 import { cn } from '@/lib/cn'
 import { useMediaQuery } from '@/hooks/useMediaQuery'
-import { useConvexAuth } from '@/hooks/useCurrentUser'
+import { useConvexAuth, useCurrentUser } from '@/hooks/useCurrentUser'
 
 export default function AppLayout({
   children,
@@ -16,6 +16,8 @@ export default function AppLayout({
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
   const { isAuthenticated, isLoading } = useConvexAuth()
+  // This hook auto-creates the user record in Convex when authenticated
+  useCurrentUser()
 
   const sidebarWidth = collapsed ? 'lg:pl-16' : 'lg:pl-60'
 

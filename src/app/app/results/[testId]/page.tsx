@@ -1,12 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { useParams } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { useQuery } from 'convex/react'
+import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../../../../convex/_generated/api'
 import { Id } from '../../../../../convex/_generated/dataModel'
-import { ArrowLeft } from 'lucide-react'
+import { ArrowLeft, Trash2 } from 'lucide-react'
 import { Tabs } from '@/components/ui/Tabs'
 import { ScoreBreakdown } from '@/components/results/ScoreBreakdown'
 import { PersonaFeedbackCard } from '@/components/results/PersonaFeedbackCard'
@@ -25,8 +25,10 @@ const tabs = [
 
 export default function ResultsPage() {
   const params = useParams()
+  const router = useRouter()
   const testId = params.testId as Id<'tests'>
   const [activeTab, setActiveTab] = useState('overview')
+  const [deleting, setDeleting] = useState(false)
 
   const test = useQuery(api.tests.getTest, { testId })
   const feedbacks = useQuery(api.results.getPersonaFeedbacks, { testId })
@@ -34,6 +36,11 @@ export default function ResultsPage() {
   const heatmap = useQuery(api.results.getHeatmap, { testId })
   const fixIts = useQuery(api.results.getFixIts, { testId })
   const benchmarks = useQuery(api.results.getBenchmarks, { testId })
+  const creativeUrl = useQuery(
+    api.creatives.getCreativeUrl,
+    test?.creativeId ? { creativeId: test.creativeId } : "skip"
+  )
+  const deleteTest = useMutation(api.tests.deleteTest)
 
   if (test === undefined) {
     return (
@@ -51,24 +58,56 @@ export default function ResultsPage() {
     )
   }
 
+  async function handleDelete() {
+    if (!confirm('Delete this test and all its results?')) return
+    setDeleting(true)
+    try {
+      await deleteTest({ testId })
+      router.push('/app/results')
+    } catch {
+      setDeleting(false)
+    }
+  }
+
   const dateStr = new Date(test.createdAt).toLocaleDateString()
 
   return (
     <div className="max-w-6xl space-y-6">
-      <div className="flex items-center gap-4">
-        <Link
-          href="/app"
-          className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors"
-        >
-          <ArrowLeft size={20} />
-        </Link>
-        <div>
-          <h1 className="text-2xl font-bold font-heading">{test.name}</h1>
-          <p className="text-sm text-text-muted mt-0.5">
-            {test.personaCount} personas &middot; {test.status} &middot; {dateStr}
-          </p>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <Link
+            href="/app/results"
+            className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors"
+          >
+            <ArrowLeft size={20} />
+          </Link>
+          <div>
+            <h1 className="text-2xl font-bold font-heading">{test.name}</h1>
+            <p className="text-sm text-text-muted mt-0.5">
+              {test.personaCount} personas &middot; {test.status} &middot; {dateStr}
+            </p>
+          </div>
         </div>
+        <button
+          onClick={handleDelete}
+          disabled={deleting}
+          className="p-2 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors cursor-pointer"
+          title="Delete test"
+        >
+          <Trash2 size={18} />
+        </button>
       </div>
+
+      {/* Creative preview */}
+      {creativeUrl && (
+        <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
+          <img
+            src={creativeUrl}
+            alt={test.name}
+            className="w-full h-auto max-h-64 object-contain"
+          />
+        </div>
+      )}
 
       {test.status === 'running' && (
         <div className="rounded-xl bg-surface-700 border border-amber/20 p-6 flex flex-col items-center gap-3">
@@ -80,45 +119,50 @@ export default function ResultsPage() {
 
       {test.status === 'failed' && (
         <div className="rounded-xl bg-danger/10 border border-danger/20 p-6 text-center">
-          <p className="text-sm text-danger">Analysis failed. Please try again.</p>
+          <p className="text-sm text-danger">Analysis failed. You can delete this test and try again.</p>
         </div>
       )}
 
-      <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} />
+      {test.status === 'completed' && (
+        <>
+          <Tabs tabs={tabs} active={activeTab} onChange={setActiveTab} />
 
-      {activeTab === 'overview' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <ScoreBreakdown
-            metrics={test.metrics}
-            overallScore={test.overallScore}
-          />
-          <FixItSuggestions suggestions={fixIts?.suggestions} />
-        </div>
-      )}
-
-      {activeTab === 'feedback' && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {feedbacks?.map((f) => (
-            <PersonaFeedbackCard key={f._id} feedback={f} />
-          ))}
-          {feedbacks?.length === 0 && (
-            <p className="text-sm text-text-muted col-span-2 text-center py-8">
-              No feedback yet — analysis may still be running.
-            </p>
+          {activeTab === 'overview' && (
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ScoreBreakdown
+                metrics={test.metrics}
+                overallScore={test.overallScore}
+              />
+              <FixItSuggestions suggestions={fixIts?.suggestions} />
+            </div>
           )}
-        </div>
-      )}
 
-      {activeTab === 'debate' && (
-        <AgentDebateView exchanges={debate?.exchanges} />
-      )}
+          {activeTab === 'feedback' && (
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {feedbacks && feedbacks.length > 0 ? (
+                feedbacks.map((f) => (
+                  <PersonaFeedbackCard key={f._id} feedback={f} />
+                ))
+              ) : (
+                <p className="text-sm text-text-muted col-span-2 text-center py-8">
+                  No feedback available.
+                </p>
+              )}
+            </div>
+          )}
 
-      {activeTab === 'heatmap' && (
-        <AttentionHeatmap zones={heatmap?.zones} />
-      )}
+          {activeTab === 'debate' && (
+            <AgentDebateView exchanges={debate?.exchanges} />
+          )}
 
-      {activeTab === 'benchmarks' && (
-        <CompetitiveBenchmark entries={benchmarks?.entries} />
+          {activeTab === 'heatmap' && (
+            <AttentionHeatmap zones={heatmap?.zones} />
+          )}
+
+          {activeTab === 'benchmarks' && (
+            <CompetitiveBenchmark entries={benchmarks?.entries} />
+          )}
+        </>
       )}
     </div>
   )

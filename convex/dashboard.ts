@@ -26,9 +26,10 @@ export const stats = query({
           completed.length
         : 0;
 
-    // Count fix-its
+    // Count fix-its efficiently — only check last 20 completed tests max
     let fixItsCount = 0;
-    for (const test of completed) {
+    const recentCompleted = completed.slice(0, 20);
+    for (const test of recentCompleted) {
       const fixIt = await ctx.db
         .query("fixIts")
         .withIndex("testId", (q) => q.eq("testId", test._id))

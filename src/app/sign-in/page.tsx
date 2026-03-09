@@ -2,13 +2,11 @@
 
 import { useState, FormEvent } from 'react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { Input } from '@/components/ui/Input'
 import { Button } from '@/components/ui/Button'
 import { authClient } from '@/lib/auth-client'
 
 export default function SignInPage() {
-  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -77,14 +75,6 @@ export default function SignInPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 text-text-muted cursor-pointer">
-                <input type="checkbox" className="rounded accent-amber" />
-                Remember me
-              </label>
-              <a href="#" className="text-amber hover:underline text-sm">Forgot password?</a>
-            </div>
 
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Signing in...' : 'Sign In'}

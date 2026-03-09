@@ -25,11 +25,9 @@ export function StatsRow({ stats }: StatsRowProps) {
       icon: TrendingUp,
     },
     {
-      label: 'Money Saved',
-      value: stats
-        ? `$${(stats.completedCount * 150).toLocaleString()}`
-        : '—',
-      change: 'Est. wasted spend prevented',
+      label: 'Completed',
+      value: stats ? String(stats.completedCount) : '—',
+      change: 'Successful analyses',
       icon: DollarSign,
     },
     {

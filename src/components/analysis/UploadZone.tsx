@@ -9,7 +9,7 @@ export function UploadZone({ onUpload }: UploadZoneProps) {
     <div>
       <h3 className="text-sm font-semibold font-heading mb-3">Upload Creative</h3>
       <DropZone
-        accept="image/*,video/*"
+        accept="image/*"
         onFiles={onUpload}
       />
     </div>

@@ -1,5 +1,6 @@
 import { query, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
+import { getAuthenticatedAppUser } from "./auth";
 
 // --- Internal mutations (called from AI pipeline) ---
 
@@ -99,11 +100,25 @@ export const saveBenchmarks = internalMutation({
   },
 });
 
-// --- Public queries ---
+// --- Auth helper: verify user owns the test ---
+
+async function verifyTestOwnership(
+  ctx: any,
+  testId: any
+): Promise<boolean> {
+  const user = await getAuthenticatedAppUser(ctx);
+  if (!user) return false;
+  const test = await ctx.db.get(testId);
+  if (!test || test.userId !== user._id) return false;
+  return true;
+}
+
+// --- Public queries (all with auth + ownership checks) ---
 
 export const getPersonaFeedbacks = query({
   args: { testId: v.id("tests") },
   handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return [];
     return await ctx.db
       .query("personaFeedbacks")
       .withIndex("testId", (q) => q.eq("testId", args.testId))
@@ -114,6 +129,7 @@ export const getPersonaFeedbacks = query({
 export const getDebate = query({
   args: { testId: v.id("tests") },
   handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
     return await ctx.db
       .query("debates")
       .withIndex("testId", (q) => q.eq("testId", args.testId))
@@ -124,6 +140,7 @@ export const getDebate = query({
 export const getHeatmap = query({
   args: { testId: v.id("tests") },
   handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
     return await ctx.db
       .query("heatmaps")
       .withIndex("testId", (q) => q.eq("testId", args.testId))
@@ -134,6 +151,7 @@ export const getHeatmap = query({
 export const getFixIts = query({
   args: { testId: v.id("tests") },
   handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
     return await ctx.db
       .query("fixIts")
       .withIndex("testId", (q) => q.eq("testId", args.testId))
@@ -144,6 +162,7 @@ export const getFixIts = query({
 export const getBenchmarks = query({
   args: { testId: v.id("tests") },
   handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
     return await ctx.db
       .query("benchmarks")
       .withIndex("testId", (q) => q.eq("testId", args.testId))

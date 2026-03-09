@@ -50,6 +50,19 @@ export const create = mutation({
   },
 });
 
+export const remove = mutation({
+  args: { id: v.id("personas") },
+  handler: async (ctx, args) => {
+    const user = await getAuthenticatedAppUser(ctx);
+    if (!user) throw new Error("Unauthenticated");
+    const persona = await ctx.db.get(args.id);
+    if (!persona) throw new Error("Not found");
+    if (persona.isPreset) throw new Error("Cannot delete preset personas");
+    if (persona.userId !== user._id) throw new Error("Unauthorized");
+    await ctx.db.delete(args.id);
+  },
+});
+
 export const getByIds = query({
   args: { ids: v.array(v.id("personas")) },
   handler: async (ctx, args) => {
