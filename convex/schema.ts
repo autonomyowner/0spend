@@ -30,6 +30,8 @@ export default defineSchema({
     format: v.string(),
     mimeType: v.string(),
     fileSize: v.number(),
+    sourceUrl: v.optional(v.string()),
+    duration: v.optional(v.number()),
     uploadedAt: v.number(),
   }).index("userId", ["userId"]),
 
@@ -42,6 +44,7 @@ export default defineSchema({
       v.literal("completed"),
       v.literal("failed")
     ),
+    format: v.optional(v.string()),
     overallScore: v.optional(v.number()),
     personaCount: v.number(),
     metrics: v.optional(

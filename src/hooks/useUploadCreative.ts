@@ -7,7 +7,7 @@ export function useUploadCreative() {
   const saveCreative = useMutation(api.creatives.saveCreative);
   const [uploading, setUploading] = useState(false);
 
-  async function upload(file: File, format: string) {
+  async function upload(file: File, format: string, duration?: number) {
     setUploading(true);
     try {
       const uploadUrl = await generateUploadUrl();
@@ -26,6 +26,7 @@ export function useUploadCreative() {
         format,
         mimeType: file.type,
         fileSize: file.size,
+        ...(duration !== undefined && { duration }),
       });
 
       return { storageId, creativeId };

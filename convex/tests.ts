@@ -8,6 +8,7 @@ export const createTest = internalMutation({
     creativeId: v.id("creatives"),
     name: v.string(),
     personaCount: v.number(),
+    format: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("tests", {
@@ -15,6 +16,7 @@ export const createTest = internalMutation({
       creativeId: args.creativeId,
       name: args.name,
       status: "running",
+      format: args.format,
       personaCount: args.personaCount,
       createdAt: Date.now(),
     });

@@ -167,3 +167,111 @@ Return as JSON:
     { "metric": "Hook Strength", "yours": 8.5, "average": 6.2, "topPerformer": 9.3 }
   ]
 }`;
+
+// --- VIDEO-SPECIFIC PROMPTS ---
+
+export const VIDEO_VISION_EXTRACTION_PROMPT = `You are an expert video ad analyst. Analyze this video ad and extract:
+
+1. **Opening Hook** (first 3 seconds): What happens visually and textually in the opening?
+2. **Scene Breakdown**: List each distinct scene/shot with approximate timestamps and description
+3. **Text Content**: All on-screen text (captions, CTAs, lower thirds, end cards)
+4. **Pacing**: Fast/medium/slow — how quickly do scenes change?
+5. **Audio Cues**: Describe any music, voiceover, or sound effects you can infer from the visuals
+6. **CTA**: Call-to-action text and when it appears
+7. **Visual Style**: Color grading, transitions, effects, motion graphics
+8. **Overall Feel**: Mood, energy level, target audience impression
+
+Return as JSON:
+{
+  "openingHook": "string",
+  "scenes": [{"timestamp": "0-3s", "description": "string"}],
+  "textContent": ["string"],
+  "pacing": "fast" | "medium" | "slow",
+  "audioCues": "string",
+  "ctaText": "string",
+  "ctaTimestamp": "string",
+  "visualStyle": "string",
+  "overallFeel": "string",
+  "targetAudience": "string"
+}`;
+
+export const VIDEO_METRIC_SCORING_PROMPT = `You are an expert video ad performance analyst. Based on this video ad analysis, score it on 5 metrics from 1.0 to 10.0 (one decimal place).
+
+Video Analysis:
+{analysis}
+
+Score these metrics:
+1. **Hook Strength** (1-10): How well does the first 3 seconds grab attention? Consider pattern interruption, visual impact, and scroll-stopping power.
+2. **Visual Clarity** (1-10): Is the message clear throughout? Consider pacing, text legibility, scene transitions, and information overload.
+3. **CTA Power** (1-10): How compelling is the call-to-action? Consider timing (does it come at the right moment?), urgency, and clarity.
+4. **Brand Alignment** (1-10): Does it feel professional and on-brand? Consider consistency, production quality, and tone.
+5. **Emotional Impact** (1-10): Does it trigger engagement (curiosity, desire, excitement)? Consider storytelling arc, music/pacing sync, and relatability.
+
+Return as JSON:
+{
+  "metrics": [
+    { "label": "Hook Strength", "value": 8.5, "max": 10 },
+    { "label": "Visual Clarity", "value": 7.2, "max": 10 },
+    { "label": "CTA Power", "value": 9.1, "max": 10 },
+    { "label": "Brand Alignment", "value": 7.8, "max": 10 },
+    { "label": "Emotional Impact", "value": 6.9, "max": 10 }
+  ]
+}`;
+
+export function videoPersonaSimulationPrompt(persona: {
+  name: string;
+  role: string;
+  age: number;
+  traits: string[];
+  description: string;
+}) {
+  return `You are simulating ${persona.name}, a ${persona.age}-year-old ${persona.role}.
+
+Personality: ${persona.description}
+Key traits: ${persona.traits.join(", ")}
+
+You are scrolling through your feed and see this video ad. Based on the video and this analysis:
+{analysis}
+
+Respond IN CHARACTER as ${persona.name}. Consider:
+- Would this stop your scroll in the first 3 seconds?
+- Would you watch it to completion or swipe away?
+- Does the pacing match your attention span?
+- Does the message resonate with someone like you?
+
+Provide:
+1. A score from 1.0-10.0 based on how effective this video ad would be for someone like you
+2. Your gut reaction (2-3 sentences, first person, in character)
+3. Sentiment: "positive" (score >= 7), "neutral" (5-6.9), or "negative" (< 5)
+4. 3 specific highlights (what stood out, good or bad)
+
+Return as JSON:
+{
+  "score": 7.5,
+  "sentiment": "positive",
+  "reaction": "Your in-character reaction here...",
+  "highlights": ["highlight 1", "highlight 2", "highlight 3"]
+}`;
+}
+
+export const VIDEO_HEATMAP_PROMPT = `You are an attention analysis expert for video ads. Based on this video, predict where viewers' eyes will focus on the representative frame shown.
+
+Analyze the image (a key frame from the video) and identify 5-8 visual zones. For each zone, estimate the percentage of viewer attention it receives (all zones should roughly sum to 100%).
+
+Consider:
+- Opening hook visual elements (what grabs attention first)
+- Text/caption placement
+- Face/people detection (eyes are drawn to faces)
+- Motion cues and focal points
+- CTA placement
+- Brand elements
+
+Return as JSON:
+{
+  "zones": [
+    { "label": "Headline Text", "attention": 92, "x": 10, "y": 5, "w": 80, "h": 12 },
+    { "label": "Main Subject", "attention": 78, "x": 5, "y": 20, "w": 60, "h": 35 }
+  ]
+}
+
+Where x, y, w, h are percentages of the frame dimensions (0-100).`;

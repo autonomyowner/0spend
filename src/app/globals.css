@@ -115,6 +115,11 @@
   50% { opacity: 0; }
 }
 
+@keyframes cursor-pulse {
+  0%, 100% { opacity: 1; }
+  40%, 60% { opacity: 0; }
+}
+
 @keyframes scan {
   0% { top: 0; }
   100% { top: 100%; }

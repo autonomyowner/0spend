@@ -7,27 +7,50 @@ import { Button } from '@/components/ui/Button'
 import { authClient } from '@/lib/auth-client'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
-function useTypewriter(text: string, speed = 50, delay = 300) {
+function useTypewriter(text: string, baseSpeed = 50, delay = 300) {
   const [displayed, setDisplayed] = useState('')
   const [done, setDone] = useState(false)
 
   useEffect(() => {
     setDisplayed('')
     setDone(false)
+    let cancelled = false
+
     const timeout = setTimeout(() => {
       let i = 0
-      const interval = setInterval(() => {
-        setDisplayed(text.slice(0, i + 1))
-        i++
-        if (i >= text.length) {
-          clearInterval(interval)
-          setDone(true)
+      let last = performance.now()
+
+      const charDelay = (ch: string) => {
+        if (ch === ' ') return baseSpeed * 1.6
+        if (ch === '—' || ch === '.' || ch === ',') return baseSpeed * 2.2
+        // slight human-like jitter +-15%
+        return baseSpeed * (0.85 + Math.random() * 0.3)
+      }
+
+      let nextAt = charDelay(text[0] ?? '')
+
+      const step = (now: number) => {
+        if (cancelled) return
+        const elapsed = now - last
+        if (elapsed >= nextAt && i < text.length) {
+          i++
+          setDisplayed(text.slice(0, i))
+          last = now
+          if (i < text.length) {
+            nextAt = charDelay(text[i])
+          } else {
+            setDone(true)
+            return
+          }
         }
-      }, speed)
-      return () => clearInterval(interval)
+        requestAnimationFrame(step)
+      }
+
+      requestAnimationFrame(step)
     }, delay)
-    return () => clearTimeout(timeout)
-  }, [text, speed, delay])
+
+    return () => { cancelled = true; clearTimeout(timeout) }
+  }, [text, baseSpeed, delay])
 
   return { displayed, done }
 }
@@ -65,9 +88,16 @@ export function Hero() {
   const isLoggedIn = !isPending && !!session
   const { t, locale } = useLanguage()
 
-  const line1 = useTypewriter(t.hero.headlinePre, 55, 400)
-  const line2 = useTypewriter(t.hero.headlineAccent, 60, 400 + t.hero.headlinePre.length * 55 + 100)
-  const line3 = useTypewriter(t.hero.headlinePost, 45, 400 + t.hero.headlinePre.length * 55 + 100 + t.hero.headlineAccent.length * 60 + 200)
+  const speed1 = 45
+  const speed2 = 50
+  const speed3 = 38
+  const start1 = 500
+  const start2 = start1 + t.hero.headlinePre.length * speed1 + 80
+  const start3 = start2 + t.hero.headlineAccent.length * speed2 + 120
+
+  const line1 = useTypewriter(t.hero.headlinePre, speed1, start1)
+  const line2 = useTypewriter(t.hero.headlineAccent, speed2, start2)
+  const line3 = useTypewriter(t.hero.headlinePost, speed3, start3)
 
   return (
     <section className="relative pt-32 pb-20 sm:pb-28 px-4 overflow-hidden">
@@ -91,7 +121,7 @@ export function Hero() {
             {line2.done && <br />}
             {line3.displayed}
             {!line3.done && (
-              <span className="inline-block w-[3px] h-[0.85em] bg-amber ms-1 align-middle rounded-full" style={{ animation: 'blink 0.8s step-end infinite' }} />
+              <span className="inline-block w-[3px] h-[0.8em] bg-amber ms-1 align-middle rounded-full" style={{ animation: 'cursor-pulse 1s ease-in-out infinite' }} />
             )}
           </h1>
 

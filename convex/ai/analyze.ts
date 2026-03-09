@@ -12,7 +12,13 @@ import {
   FIX_IT_PROMPT,
   HEATMAP_PROMPT,
   BENCHMARK_PROMPT,
+  VIDEO_VISION_EXTRACTION_PROMPT,
+  VIDEO_METRIC_SCORING_PROMPT,
+  videoPersonaSimulationPrompt,
+  VIDEO_HEATMAP_PROMPT,
 } from "./prompts";
+import { parseJSON } from "./utils";
+import { callGemini, callGeminiJSON } from "./gemini";
 
 const MODEL = "anthropic/claude-sonnet-4";
 
@@ -56,47 +62,6 @@ async function callClaude(
 
   const textBlock = response.content.find((b) => b.type === "text");
   return textBlock?.text || "";
-}
-
-function parseJSON<T>(text: string): T {
-  // Try multiple extraction strategies
-  // 1. Try extracting from markdown code blocks
-  const jsonMatch = text.match(/```(?:json)?\s*([\s\S]*?)```/);
-  if (jsonMatch) {
-    try {
-      return JSON.parse(jsonMatch[1]!.trim()) as T;
-    } catch {
-      // Fall through to other strategies
-    }
-  }
-
-  // 2. Try parsing the whole text as JSON
-  try {
-    return JSON.parse(text.trim()) as T;
-  } catch {
-    // Fall through
-  }
-
-  // 3. Try finding JSON object/array in the text
-  const objectMatch = text.match(/\{[\s\S]*\}/);
-  if (objectMatch) {
-    try {
-      return JSON.parse(objectMatch[0]) as T;
-    } catch {
-      // Fall through
-    }
-  }
-
-  const arrayMatch = text.match(/\[[\s\S]*\]/);
-  if (arrayMatch) {
-    try {
-      return JSON.parse(arrayMatch[0]) as T;
-    } catch {
-      // Fall through
-    }
-  }
-
-  throw new Error(`Failed to parse JSON from LLM response: ${text.substring(0, 200)}`);
 }
 
 async function callClaudeJSON<T>(
@@ -167,6 +132,7 @@ export const runAnalysis = action({
       creativeId: args.creativeId,
       name: args.testName,
       personaCount: args.personaIds.length,
+      format: "image",
     });
 
     try {
@@ -336,6 +302,169 @@ export const runAnalysis = action({
     } catch (error) {
       // Mark test as failed
       console.error("[runAnalysis] FAILED:", (error as Error).message, (error as Error).stack);
+      await ctx.runMutation(internal.tests.failTest, { testId });
+      throw error;
+    }
+  },
+});
+
+// --- VIDEO ANALYSIS ---
+
+export const runVideoAnalysis = action({
+  args: {
+    creativeId: v.id("creatives"),
+    personaIds: v.array(v.id("personas")),
+    testName: v.string(),
+  },
+  handler: async (ctx, args): Promise<{ testId: string; status: string }> => {
+    console.log("[runVideoAnalysis] Starting video analysis...");
+    const user = await ctx.runQuery(internal.users.getViewer);
+    if (!user) throw new Error("Unauthenticated");
+
+    const client = getClient();
+
+    // 1. Get creative from storage
+    const creative = await ctx.runQuery(
+      internal.ai.analyzeHelpers.getCreative,
+      { creativeId: args.creativeId }
+    );
+    if (!creative) throw new Error("Creative not found");
+    if (creative.userId !== user._id) throw new Error("Unauthorized");
+
+    const videoUrl = await ctx.storage.getUrl(creative.storageId);
+    if (!videoUrl) throw new Error("Video URL not found");
+    console.log("[runVideoAnalysis] Video URL:", videoUrl);
+
+    // 2. Create test record
+    const testId = await ctx.runMutation(internal.tests.createTest, {
+      userId: user._id,
+      creativeId: args.creativeId,
+      name: args.testName,
+      personaCount: args.personaIds.length,
+      format: "video",
+    });
+
+    try {
+      // 3. Vision extraction (Gemini — supports video)
+      console.log("[runVideoAnalysis] Starting video vision extraction...");
+      const visionResponse = await callGemini(
+        VIDEO_VISION_EXTRACTION_PROMPT,
+        videoUrl,
+        "video"
+      );
+      const analysis = visionResponse;
+      console.log("[runVideoAnalysis] Vision extraction complete");
+
+      // 4. Metric scoring (Gemini with video context)
+      console.log("[runVideoAnalysis] Starting metric scoring...");
+      const metricPrompt = VIDEO_METRIC_SCORING_PROMPT.replace("{analysis}", analysis);
+      const { metrics } = await callGeminiJSON<{
+        metrics: { label: string; value: number; max: number }[];
+      }>(metricPrompt, videoUrl, "video");
+      console.log("[runVideoAnalysis] Metric scoring complete");
+
+      const metricsStr = JSON.stringify(metrics);
+
+      // 5. Persona simulations (Gemini with video, batches of 4)
+      console.log("[runVideoAnalysis] Starting persona simulations...");
+      const personas = await ctx.runQuery(
+        internal.ai.analyzeHelpers.getPersonasByIds,
+        { ids: args.personaIds }
+      );
+
+      const BATCH_SIZE = 4;
+      for (let i = 0; i < personas.length; i += BATCH_SIZE) {
+        const batch = personas.slice(i, i + BATCH_SIZE);
+        await Promise.all(
+          batch.map(async (persona) => {
+            const prompt = videoPersonaSimulationPrompt({
+              name: persona.name,
+              role: persona.role,
+              age: persona.age,
+              traits: persona.traits,
+              description: persona.description,
+            }).replace("{analysis}", analysis);
+
+            try {
+              const result = await callGeminiJSON<{
+                score: number;
+                sentiment: "positive" | "neutral" | "negative";
+                reaction: string;
+                highlights: string[];
+              }>(prompt, videoUrl, "video");
+
+              await ctx.runMutation(internal.results.savePersonaFeedback, {
+                testId,
+                personaId: persona._id,
+                personaName: persona.name,
+                personaRole: `${persona.role}, ${persona.age}`,
+                score: result.score,
+                sentiment: result.sentiment,
+                reaction: result.reaction,
+                highlights: result.highlights,
+              });
+            } catch (err) {
+              await ctx.runMutation(internal.results.savePersonaFeedback, {
+                testId,
+                personaId: persona._id,
+                personaName: persona.name,
+                personaRole: `${persona.role}, ${persona.age}`,
+                score: 0,
+                sentiment: "neutral",
+                reaction: `Analysis failed for this persona: ${(err as Error).message}`,
+                highlights: [],
+              });
+            }
+          })
+        );
+      }
+      console.log("[runVideoAnalysis] Persona simulations complete");
+
+      // 6. Agent debate (Claude — better reasoning, text-only)
+      console.log("[runVideoAnalysis] Starting agent debate...");
+      const debatePrompt = AGENT_DEBATE_PROMPT.replace("{analysis}", analysis).replace("{metrics}", metricsStr);
+      const { exchanges } = await callClaudeJSON<{
+        exchanges: { agent: "buyer" | "skeptic" | "verdict"; text: string }[];
+      }>(client, debatePrompt);
+      await ctx.runMutation(internal.results.saveDebate, { testId, exchanges });
+      console.log("[runVideoAnalysis] Agent debate complete");
+
+      // 7. Fix-it suggestions (Claude — better reasoning)
+      console.log("[runVideoAnalysis] Starting fix-it suggestions...");
+      const fixItPrompt = FIX_IT_PROMPT.replace("{analysis}", analysis).replace("{metrics}", metricsStr);
+      const { suggestions } = await callClaudeJSON<{
+        suggestions: { element: string; current: string; suggested: string; impact: "high" | "medium" | "low" }[];
+      }>(client, fixItPrompt);
+      await ctx.runMutation(internal.results.saveFixIts, { testId, suggestions });
+      console.log("[runVideoAnalysis] Fix-it suggestions complete");
+
+      // 8. Heatmap (Gemini with video for representative frame)
+      console.log("[runVideoAnalysis] Starting heatmap analysis...");
+      const { zones } = await callGeminiJSON<{
+        zones: { label: string; attention: number; x: number; y: number; w: number; h: number }[];
+      }>(VIDEO_HEATMAP_PROMPT, videoUrl, "video");
+      await ctx.runMutation(internal.results.saveHeatmap, { testId, zones });
+      console.log("[runVideoAnalysis] Heatmap analysis complete");
+
+      // 9. Benchmarks (Claude — text-only)
+      console.log("[runVideoAnalysis] Starting benchmarks...");
+      const benchmarkPrompt = BENCHMARK_PROMPT.replace("{metrics}", metricsStr);
+      const { entries } = await callClaudeJSON<{
+        entries: { metric: string; yours: number; average: number; topPerformer: number }[];
+      }>(client, benchmarkPrompt);
+      await ctx.runMutation(internal.results.saveBenchmarks, { testId, entries });
+
+      // 10. Mark test complete
+      const overallScore = metrics.reduce((sum, m) => sum + m.value, 0) / metrics.length;
+      await ctx.runMutation(internal.tests.completeTest, {
+        testId,
+        overallScore: Math.round(overallScore * 10) / 10,
+        metrics,
+      });
+
+      return { testId, status: "completed" };
+    } catch (error) {
+      console.error("[runVideoAnalysis] FAILED:", (error as Error).message, (error as Error).stack);
       await ctx.runMutation(internal.tests.failTest, { testId });
       throw error;
     }
