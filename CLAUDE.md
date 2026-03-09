@@ -15,7 +15,7 @@ No test runner, linter, or formatter is configured.
 
 ## Architecture
 
-**Stack:** Next.js 15 (App Router) + TypeScript + Tailwind CSS 4 + Convex + Better-Auth + Claude Sonnet 4 (via OpenRouter)
+**Stack:** Next.js 15 (App Router) + TypeScript + Tailwind CSS 4 + Convex + Better-Auth + Claude Sonnet 4 + Gemini 2.5 Flash (via OpenRouter)
 
 ### Routing (`src/app/`)
 
@@ -24,7 +24,7 @@ No test runner, linter, or formatter is configured.
 /sign-in                   → Sign in (email + optional Google OAuth)
 /sign-up                   → Sign up (email + optional Google OAuth)
 /app                       → Dashboard (auth-protected)
-/app/analyze               → Upload creative → select personas → run AI analysis
+/app/analyze               → Upload creative (image/video/landing page) → select personas → run AI analysis
 /app/personas              → Persona grid + create custom
 /app/results               → All completed test results
 /app/results/[testId]      → Tabbed results (overview, feedback, debate, heatmap, benchmarks)
@@ -38,8 +38,11 @@ Auth protection: `src/app/app/layout.tsx` checks `useConvexAuth()` and redirects
 9 tables in `convex/schema.ts`: `users`, `personas`, `creatives`, `tests`, `personaFeedbacks`, `debates`, `heatmaps`, `fixIts`, `benchmarks`. All result tables indexed by `testId`.
 
 Key Convex files:
-- `convex/ai/analyze.ts` — `runAnalysis` action: full AI pipeline (vision → metrics → personas → debate → fix-its → heatmap → benchmarks)
-- `convex/ai/prompts.ts` — 7 prompt templates (exports: `VISION_EXTRACTION_PROMPT`, `METRIC_SCORING_PROMPT`, `personaSimulationPrompt`, `AGENT_DEBATE_PROMPT`, `FIX_IT_PROMPT`, `HEATMAP_PROMPT`, `BENCHMARK_PROMPT`)
+- `convex/ai/analyze.ts` — `runAnalysis` (image) + `runVideoAnalysis` (video) actions: full AI pipeline (vision → metrics → personas → debate → fix-its → heatmap → benchmarks)
+- `convex/ai/gemini.ts` — Gemini 2.5 Flash via OpenRouter (`callGemini`, `callGeminiJSON`). Used for video analysis (supports `video_url` with base64 data URLs). Videos must be fetched from Convex storage and converted to `data:video/mp4;base64,...` format — OpenRouter Gemini doesn't accept direct URLs.
+- `convex/ai/screenshot.ts` — `captureScreenshot` action: captures landing page via ScreenshotOne API → uploads to Convex storage → creates creative record. Then normal image analysis runs on it.
+- `convex/ai/prompts.ts` — Image prompts + video-specific prompts (`VIDEO_VISION_EXTRACTION_PROMPT`, `VIDEO_METRIC_SCORING_PROMPT`, `videoPersonaSimulationPrompt`, `VIDEO_HEATMAP_PROMPT`). Text-only steps (debate, fix-its, benchmarks) reuse image prompts.
+- `convex/ai/utils.ts` — Shared `parseJSON<T>()` utility (used by both Claude and Gemini callers)
 - `convex/ai/analyzeHelpers.ts` — Internal queries: `getCreative`, `getPersonasByIds`
 - `convex/auth.ts` — Better-Auth instance, `getAuthenticatedAppUser()` helper (try-catch wrapped, returns null if unauthenticated)
 - `convex/tests.ts` — `createTest`/`completeTest`/`failTest` (internal), `listUserTests`/`getTest` (public)
@@ -47,7 +50,13 @@ Key Convex files:
 
 ### AI Pipeline
 
-Uses `@anthropic-ai/sdk` pointed at **OpenRouter** (`https://openrouter.ai/api/v1`), model `anthropic/claude-sonnet-4`. API key env var: `OPENROUTER_API_KEY`. Max tokens: 2048. Persona simulations run in parallel batches of 4.
+**Image analysis:** Uses `@anthropic-ai/sdk` pointed at **OpenRouter** (`https://openrouter.ai/api`), model `anthropic/claude-sonnet-4`. Max tokens: 2048.
+
+**Video analysis:** Uses `google/gemini-2.5-flash` via OpenRouter REST API (`/api/v1/chat/completions`). Visual steps (vision, metrics, personas, heatmap) use Gemini with video. Text-only steps (debate, fix-its, benchmarks) use Claude for better reasoning. Video heatmap has fallback zones if Gemini returns empty response. Videos are sent as base64 data URLs.
+
+**Landing page analysis:** ScreenshotOne API captures full-page screenshot → stored in Convex → analyzed as image via normal `runAnalysis`.
+
+API key env var: `OPENROUTER_API_KEY` (works for both Claude and Gemini). Persona simulations run in parallel batches of 4.
 
 ### Authentication
 
@@ -137,6 +146,7 @@ Google Fonts loaded in `src/app/layout.tsx`.
 - `BETTER_AUTH_SECRET` — Generate with `openssl rand -base64 32`
 - `SITE_URL` — Frontend URL (e.g., `http://localhost:3000` or production URL)
 - `GOOGLE_CLIENT_ID` / `GOOGLE_CLIENT_SECRET` — Optional Google OAuth
+- `SCREENSHOTONE_API_KEY` — For landing page screenshot capture
 
 ## Production
 
