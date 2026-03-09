@@ -11,8 +11,8 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
       <div
         ref={ref}
         className={cn(
-          'rounded-xl bg-surface-700 border border-surface-500 p-6',
-          hover && 'hover:bg-surface-600 hover:border-amber/20 transition-all duration-200',
+          'rounded-2xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 p-6',
+          hover && 'hover:bg-surface-600/60 hover:border-amber/15 transition-all duration-300 cursor-pointer',
           className
         )}
         {...props}

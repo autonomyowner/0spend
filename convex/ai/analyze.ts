@@ -19,7 +19,7 @@ const MODEL = "anthropic/claude-sonnet-4";
 function getClient() {
   return new Anthropic({
     apiKey: process.env.OPENROUTER_API_KEY!,
-    baseURL: "https://openrouter.ai/api/v1",
+    baseURL: "https://openrouter.ai/api",
   });
 }
 
@@ -130,8 +130,10 @@ export const runAnalysis = action({
   },
   handler: async (ctx, args): Promise<{ testId: string; status: string }> => {
     // Derive userId server-side from auth context
+    console.log("[runAnalysis] Starting analysis...");
     const user = await ctx.runQuery(internal.users.getViewer);
     if (!user) throw new Error("Unauthenticated");
+    console.log("[runAnalysis] User authenticated:", user.email);
 
     const client = getClient();
 
@@ -149,12 +151,15 @@ export const runAnalysis = action({
 
     const imageUrl = await ctx.storage.getUrl(creative.storageId);
     if (!imageUrl) throw new Error("Image URL not found");
+    console.log("[runAnalysis] Image URL:", imageUrl);
 
     // Fetch image and convert to base64
     const imageResponse = await fetch(imageUrl);
+    if (!imageResponse.ok) throw new Error(`Image fetch failed: ${imageResponse.status}`);
     const imageBuffer = await imageResponse.arrayBuffer();
     const imageBase64 = Buffer.from(imageBuffer).toString("base64");
     const imageMimeType = creative.mimeType;
+    console.log("[runAnalysis] Image loaded, size:", Math.round(imageBuffer.byteLength / 1024), "KB, type:", imageMimeType);
 
     // 2. Create test record
     const testId = await ctx.runMutation(internal.tests.createTest, {
@@ -166,23 +171,28 @@ export const runAnalysis = action({
 
     try {
       // 3. Vision extraction
+      console.log("[runAnalysis] Starting vision extraction...");
       const visionResponse = await callClaude(
         client,
         VISION_EXTRACTION_PROMPT,
         imageBase64,
         imageMimeType
       );
+      console.log("[runAnalysis] Vision extraction complete");
       const analysis = visionResponse;
 
       // 4. Metric scoring
+      console.log("[runAnalysis] Starting metric scoring...");
       const metricPrompt = METRIC_SCORING_PROMPT.replace("{analysis}", analysis);
       const { metrics } = await callClaudeJSON<{
         metrics: { label: string; value: number; max: number }[];
       }>(client, metricPrompt);
+      console.log("[runAnalysis] Metric scoring complete");
 
       const metricsStr = JSON.stringify(metrics);
 
       // 5. Persona simulations (parallel, batches of 4)
+      console.log("[runAnalysis] Starting persona simulations...");
       const personas = await ctx.runQuery(
         internal.ai.analyzeHelpers.getPersonasByIds,
         { ids: args.personaIds }
@@ -236,7 +246,10 @@ export const runAnalysis = action({
         );
       }
 
+      console.log("[runAnalysis] Persona simulations complete");
+
       // 6. Agent debate
+      console.log("[runAnalysis] Starting agent debate...");
       const debatePrompt = AGENT_DEBATE_PROMPT.replace(
         "{analysis}",
         analysis
@@ -252,7 +265,10 @@ export const runAnalysis = action({
         exchanges,
       });
 
+      console.log("[runAnalysis] Agent debate complete");
+
       // 7. Fix-it suggestions
+      console.log("[runAnalysis] Starting fix-it suggestions...");
       const fixItPrompt = FIX_IT_PROMPT.replace("{analysis}", analysis).replace(
         "{metrics}",
         metricsStr
@@ -270,7 +286,10 @@ export const runAnalysis = action({
         suggestions,
       });
 
+      console.log("[runAnalysis] Fix-it suggestions complete");
+
       // 8. Attention heatmap
+      console.log("[runAnalysis] Starting heatmap analysis...");
       const { zones } = await callClaudeJSON<{
         zones: {
           label: string;
@@ -286,7 +305,10 @@ export const runAnalysis = action({
         zones,
       });
 
+      console.log("[runAnalysis] Heatmap analysis complete");
+
       // 9. Benchmarks
+      console.log("[runAnalysis] Starting benchmarks...");
       const benchmarkPrompt = BENCHMARK_PROMPT.replace("{metrics}", metricsStr);
       const { entries } = await callClaudeJSON<{
         entries: {
@@ -313,6 +335,7 @@ export const runAnalysis = action({
       return { testId, status: "completed" };
     } catch (error) {
       // Mark test as failed
+      console.error("[runAnalysis] FAILED:", (error as Error).message, (error as Error).stack);
       await ctx.runMutation(internal.tests.failTest, { testId });
       throw error;
     }

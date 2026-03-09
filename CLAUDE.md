@@ -66,15 +66,63 @@ Better-Auth with `@convex-dev/better-auth`. Email/password always enabled. Googl
 
 **Theme:** Pure black background, lime/yellow-green (`#C8FF00`) accent (named `amber` in tokens), white text. Defined in `src/app/globals.css` under `@theme {}` (Tailwind v4).
 
-Key tokens: `--color-bg: #000`, `--color-surface-800: #080808`, `--color-surface-500: #1C1C1C`, `--color-amber: #C8FF00`, `--color-success: #5B9A6B`, `--color-danger: #D4645C`.
+### Color Palette
 
-**Custom utilities:** `glow-amber`, `glow-amber-strong`, `gradient-text-amber`, `text-glow-amber`, `grid-bg`, `noise-overlay`.
+**Surfaces (dark to light):**
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--color-bg` / `--color-surface-900` | `#000000` | Page background |
+| `--color-surface-800` | `#080808` | Sidebar, deep card base |
+| `--color-surface-700` | `#0E0E0E` | Card backgrounds |
+| `--color-surface-600` | `#141414` | Hover states |
+| `--color-surface-500` | `#1C1C1C` | Borders, dividers |
 
-**CTA gradient:** `from-[#FAFF00] via-[#C8FF00] to-[#00FF87]` with black text.
+**Accent:**
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--color-amber` | `#C8FF00` | Primary accent (lime-green) |
+| `--color-amber-glow` | `#C8FF0040` | Glow shadows (25% opacity) |
+| `--color-amber-dim` | `#C8FF0015` | Subtle backgrounds (8% opacity) |
+
+**CTA Gradient:** `from-[#FAFF00] via-[#C8FF00] to-[#00FF87]` with black text.
+
+**Semantic:**
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--color-success` | `#5B9A6B` | Score ≥7, positive states |
+| `--color-danger` | `#D4645C` | Score <5, errors, destructive |
 
 **Score colors:** green (`#5B9A6B`) ≥7, amber (`#C8FF00`) ≥5, red (`#D4645C`) <5.
 
-**Fonts:** Instrument Sans (headings via `--font-heading`), DM Sans (body via `--font-body`) — Google Fonts in `src/app/layout.tsx`.
+**Text:**
+| Token | Hex | Usage |
+|-------|-----|-------|
+| `--color-text-primary` | `#FFFFFF` | Headings, body text |
+| `--color-text-muted` | `#777777` | Secondary/descriptive text |
+| `--color-text-faint` | `#3A3A3A` | Disabled, placeholder |
+
+### Typography
+
+| Role | Font | CSS Variable |
+|------|------|-------------|
+| Headings | **Instrument Sans** | `--font-heading` |
+| Body | **DM Sans** | `--font-body` |
+
+Google Fonts loaded in `src/app/layout.tsx`.
+
+### UI Patterns
+
+**Custom utilities:** `glow-amber`, `glow-amber-strong`, `gradient-text-amber`, `text-glow-amber`, `grid-bg`, `noise-overlay`.
+
+**Animations:** `animate-fade-up`, `animate-fade-in`, `animate-score-fill`, `animate-slide-in-right` — all use `cubic-bezier(0.16, 1, 0.3, 1)` easing. Scroll-reveal via `.reveal` class + `useReveal()` hook (`src/hooks/useReveal.ts`).
+
+**Glassmorphism pattern:** `bg-surface-800/60 backdrop-blur-sm border border-surface-500/60` for cards. Use `/50` or `/60` opacity suffixes on backgrounds and borders — never fully opaque.
+
+**Hover states:** Subtle amber glow overlay (`bg-amber/[0.02]`) + icon color shift to `text-amber/80` with `duration-300`.
+
+**Auth-aware CTAs:** Landing page CTAs (Hero, Pricing, CTA section) check `authClient.useSession()` and show "Go to Dashboard" linking to `/app` when logged in.
+
+**Mobile bottom nav:** `src/components/layout/BottomNav.tsx` — fixed bottom nav bar on mobile (`lg:hidden`) replacing Quick Actions. Layout adds `pb-28 lg:pb-6` padding.
 
 ## Environment Variables
 

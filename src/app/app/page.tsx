@@ -13,7 +13,7 @@ export default function DashboardPage() {
   const scoreTrend = useQuery(api.dashboard.scoreTrend)
 
   return (
-    <div className="space-y-6 max-w-7xl">
+    <div className="space-y-6 sm:space-y-8 max-w-7xl">
       <div>
         <h1 className="text-2xl font-bold font-heading">Dashboard</h1>
         <p className="text-sm text-text-muted mt-1">Overview of your creative testing performance</p>
@@ -21,7 +21,7 @@ export default function DashboardPage() {
 
       <StatsRow stats={stats} />
 
-      <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-5 gap-5 sm:gap-6">
         <div className="lg:col-span-2">
           <ScoreChart data={scoreTrend} />
         </div>

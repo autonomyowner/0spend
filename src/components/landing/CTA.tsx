@@ -1,29 +1,50 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
+import { useReveal } from '@/hooks/useReveal'
+import { authClient } from '@/lib/auth-client'
+import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export function CTA() {
+  const ref = useReveal()
+  const { data: session, isPending } = authClient.useSession()
+  const isLoggedIn = !isPending && !!session
+  const { t, locale } = useLanguage()
+
   return (
-    <section className="relative py-24 px-4">
-      <div className="max-w-3xl mx-auto text-center">
+    <section className="relative py-24 sm:py-32 px-4">
+      <div ref={ref} className="max-w-3xl mx-auto text-center reveal">
         {/* Glow */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber/8 rounded-full blur-[120px] pointer-events-none" />
 
         <div className="relative">
-          <h2 className="text-4xl md:text-5xl font-bold font-heading tracking-tight mb-5">
-            Stop Spending.{' '}
-            <span className="gradient-text-amber">Start Testing.</span>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading tracking-tight mb-5">
+            {t.cta.headlinePre}
+            <span className="gradient-text-amber">{t.cta.headlineAccent}</span>
           </h2>
-          <p className="text-text-muted text-lg max-w-xl mx-auto mb-10">
-            Join thousands of marketers who validate every creative before it touches real budget.
+          <p className="text-text-muted text-base sm:text-lg max-w-xl mx-auto mb-10">
+            {t.cta.description}
           </p>
-          <Link href="/sign-up">
-            <Button size="lg">
-              Get Started Free
-              <ArrowRight size={18} />
-            </Button>
-          </Link>
-          <p className="text-xs text-text-muted mt-4">No credit card required. 14-day free trial.</p>
+          {isLoggedIn ? (
+            <Link href="/app">
+              <Button size="lg">
+                {t.cta.ctaDashboard}
+                <ArrowRight size={18} className={locale === 'ar' ? 'rotate-180' : ''} />
+              </Button>
+            </Link>
+          ) : (
+            <>
+              <Link href="/sign-up">
+                <Button size="lg">
+                  {t.cta.ctaStart}
+                  <ArrowRight size={18} className={locale === 'ar' ? 'rotate-180' : ''} />
+                </Button>
+              </Link>
+              <p className="text-xs text-text-muted mt-5">{t.cta.noCreditCard}</p>
+            </>
+          )}
         </div>
       </div>
     </section>
