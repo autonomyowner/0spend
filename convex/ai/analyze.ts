@@ -14,10 +14,13 @@ import {
   BENCHMARK_PROMPT,
 } from "./prompts";
 
-const MODEL = "claude-sonnet-4-6-20250514";
+const MODEL = "anthropic/claude-sonnet-4";
 
 function getClient() {
-  return new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY! });
+  return new Anthropic({
+    apiKey: process.env.OPENROUTER_API_KEY!,
+    baseURL: "https://openrouter.ai/api/v1",
+  });
 }
 
 async function callClaude(
