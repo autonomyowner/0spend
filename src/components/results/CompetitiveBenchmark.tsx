@@ -1,0 +1,72 @@
+'use client'
+
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
+import { Card } from '@/components/ui/Card'
+
+interface BenchmarkEntry {
+  metric: string
+  yours: number
+  average: number
+  topPerformer: number
+}
+
+interface CompetitiveBenchmarkProps {
+  entries?: BenchmarkEntry[]
+}
+
+export function CompetitiveBenchmark({ entries }: CompetitiveBenchmarkProps) {
+  if (!entries || entries.length === 0) {
+    return (
+      <Card className="p-6 flex items-center justify-center">
+        <p className="text-sm text-text-muted">Benchmarks loading...</p>
+      </Card>
+    )
+  }
+
+  return (
+    <Card className="p-6">
+      <h3 className="text-sm font-semibold font-heading mb-4">Competitive Benchmark</h3>
+      <p className="text-xs text-text-muted mb-6">
+        Compare your creative scores against industry average and top performers.
+      </p>
+
+      <div className="h-80">
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={entries} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+            <CartesianGrid stroke="#1C1C1C" strokeDasharray="3 3" />
+            <XAxis
+              dataKey="metric"
+              tick={{ fill: '#777777', fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+              angle={-15}
+              textAnchor="end"
+              height={60}
+            />
+            <YAxis
+              domain={[0, 10]}
+              tick={{ fill: '#777777', fontSize: 12 }}
+              axisLine={false}
+              tickLine={false}
+            />
+            <Tooltip
+              contentStyle={{
+                backgroundColor: '#0E0E0E',
+                border: '1px solid #1C1C1C',
+                borderRadius: '12px',
+                color: '#FFFFFF',
+                fontSize: '13px',
+              }}
+            />
+            <Legend
+              wrapperStyle={{ fontSize: '12px', color: '#777777' }}
+            />
+            <Bar dataKey="yours" name="Your Score" fill="#C8FF00" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="average" name="Industry Avg" fill="#3A3A3A" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="topPerformer" name="Top Performer" fill="#5B9A6B" radius={[4, 4, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    </Card>
+  )
+}

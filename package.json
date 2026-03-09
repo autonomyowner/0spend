@@ -1,0 +1,32 @@
+{
+  "name": "0spend",
+  "private": true,
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.78.0",
+    "@convex-dev/better-auth": "^0.10.13",
+    "better-auth": "^1.4.9",
+    "clsx": "^2.1.1",
+    "convex": "^1.32.0",
+    "framer-motion": "^11.15.0",
+    "lucide-react": "^0.468.0",
+    "next": "^15.1.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "recharts": "^2.15.0",
+    "tailwind-merge": "^2.6.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.0.0",
+    "@types/node": "^25.3.5",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
+    "tailwindcss": "^4.0.0",
+    "typescript": "~5.6.2"
+  }
+}
