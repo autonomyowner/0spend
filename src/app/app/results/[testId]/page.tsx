@@ -14,6 +14,8 @@ import { AgentDebateView } from '@/components/results/AgentDebateView'
 import { FixItSuggestions } from '@/components/results/FixItSuggestions'
 import { AttentionHeatmap } from '@/components/results/AttentionHeatmap'
 import { CompetitiveBenchmark } from '@/components/results/CompetitiveBenchmark'
+import { EmotionalProfile } from '@/components/results/EmotionalProfile'
+import { PredictedPerformance } from '@/components/results/PredictedPerformance'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function ResultsPage() {
@@ -24,6 +26,8 @@ export default function ResultsPage() {
     { id: 'feedback', label: t.app.resultsDetail.feedback },
     { id: 'debate', label: t.app.resultsDetail.debate },
     { id: 'heatmap', label: t.app.resultsDetail.heatmap },
+    { id: 'predictions', label: t.app.resultsDetail.predictions },
+    { id: 'emotions', label: t.app.resultsDetail.emotions },
     { id: 'benchmarks', label: t.app.resultsDetail.benchmarks },
   ]
   const params = useParams()
@@ -38,6 +42,8 @@ export default function ResultsPage() {
   const heatmap = useQuery(api.results.getHeatmap, { testId })
   const fixIts = useQuery(api.results.getFixIts, { testId })
   const benchmarks = useQuery(api.results.getBenchmarks, { testId })
+  const emotionalProfile = useQuery(api.results.getEmotionalProfile, { testId })
+  const predictedPerformance = useQuery(api.results.getPredictedPerformance, { testId })
   const creative = useQuery(
     api.creatives.getCreative,
     test?.creativeId ? { creativeId: test.creativeId } : "skip"
@@ -89,13 +95,23 @@ export default function ResultsPage() {
           </Link>
           <div>
             <h1 className="text-2xl font-bold font-heading">{test.name}</h1>
-            <p className="text-sm text-text-muted mt-0.5">
+            <p className="text-sm text-text-muted mt-0.5 flex flex-wrap items-center gap-1.5">
               {test.format && test.format !== 'image' && (
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500 me-2">
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500">
                   {test.format === 'landing_page' ? 'Page' : test.format}
                 </span>
               )}
-              {test.personaCount} {t.app.recentTests.personas} &middot; {t.app.status[test.status as keyof typeof t.app.status] || test.status} &middot; {dateStr}
+              {test.platform && test.platform !== 'generic' && (
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-amber/8 text-amber/70 border border-amber/15">
+                  {test.platform.replace('_', ' ')}
+                </span>
+              )}
+              {test.objective && test.objective !== 'conversion' && (
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500">
+                  {test.objective.replace('_', ' ')}
+                </span>
+              )}
+              <span>{test.personaCount} {t.app.recentTests.personas} &middot; {t.app.status[test.status as keyof typeof t.app.status] || test.status} &middot; {dateStr}</span>
             </p>
           </div>
         </div>
@@ -188,6 +204,24 @@ export default function ResultsPage() {
 
           {activeTab === 'heatmap' && (
             <AttentionHeatmap zones={heatmap?.zones} />
+          )}
+
+          {activeTab === 'predictions' && (
+            <PredictedPerformance
+              predictions={predictedPerformance?.predictions}
+              overallVerdict={predictedPerformance?.overallVerdict}
+              spendEfficiency={predictedPerformance?.spendEfficiency}
+              confidence={predictedPerformance?.confidence}
+            />
+          )}
+
+          {activeTab === 'emotions' && (
+            <EmotionalProfile
+              emotions={emotionalProfile?.emotions}
+              dominantEmotion={emotionalProfile?.dominantEmotion}
+              emotionalTone={emotionalProfile?.emotionalTone}
+              recommendations={emotionalProfile?.recommendations}
+            />
           )}
 
           {activeTab === 'benchmarks' && (

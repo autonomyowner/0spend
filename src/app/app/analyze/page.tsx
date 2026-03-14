@@ -7,6 +7,8 @@ import { api } from '../../../../convex/_generated/api'
 import { Id } from '../../../../convex/_generated/dataModel'
 import { UploadZone } from '@/components/analysis/UploadZone'
 import { FormatSelector } from '@/components/analysis/FormatSelector'
+import { PlatformSelector } from '@/components/analysis/PlatformSelector'
+import { ObjectiveSelector } from '@/components/analysis/ObjectiveSelector'
 import { UrlInput } from '@/components/analysis/UrlInput'
 import { Button } from '@/components/ui/Button'
 import { DropZone } from '@/components/ui/DropZone'
@@ -25,6 +27,8 @@ export default function AnalysisPage() {
   const captureScreenshot = useAction(api.ai.screenshot.captureScreenshot)
 
   const [format, setFormat] = useState('image')
+  const [platform, setPlatform] = useState('generic')
+  const [objective, setObjective] = useState('conversion')
   const [file, setFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string | null>(null)
   const [creativeId, setCreativeId] = useState<Id<'creatives'> | null>(null)
@@ -148,12 +152,16 @@ export default function AnalysisPage() {
           creativeId,
           personaIds: selectedPersonas,
           testName,
+          platform,
+          objective,
         })
       } else {
         result = await runAnalysis({
           creativeId,
           personaIds: selectedPersonas,
           testName,
+          platform,
+          objective,
         })
       }
 
@@ -183,6 +191,8 @@ export default function AnalysisPage() {
         {/* Left: Format + Upload/URL */}
         <div className="space-y-6">
           <FormatSelector value={format} onChange={handleFormatChange} />
+          <PlatformSelector value={platform} onChange={setPlatform} />
+          <ObjectiveSelector value={objective} onChange={setObjective} />
 
           {format === 'image' && !previewUrl && (
             <UploadZone onUpload={handleImageUpload} />

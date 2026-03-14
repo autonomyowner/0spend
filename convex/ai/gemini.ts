@@ -42,7 +42,7 @@ export async function callGemini(
     },
     body: JSON.stringify({
       model: GEMINI_MODEL,
-      max_tokens: 4096,
+      max_tokens: 8192,
       messages: [{ role: "user", content }],
     }),
   });
@@ -73,7 +73,6 @@ export async function callGeminiJSON<T>(
       return parseJSON<T>(text);
     } catch (err) {
       lastError = err as Error;
-      console.error(`[callGeminiJSON] Attempt ${i + 1} failed:`, (err as Error).message);
       if (i < retries) {
         await new Promise((r) => setTimeout(r, 1000));
       }

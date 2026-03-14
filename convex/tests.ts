@@ -9,6 +9,8 @@ export const createTest = internalMutation({
     name: v.string(),
     personaCount: v.number(),
     format: v.optional(v.string()),
+    platform: v.optional(v.string()),
+    objective: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     return await ctx.db.insert("tests", {
@@ -17,6 +19,8 @@ export const createTest = internalMutation({
       name: args.name,
       status: "running",
       format: args.format,
+      platform: args.platform,
+      objective: args.objective,
       personaCount: args.personaCount,
       createdAt: Date.now(),
     });
@@ -32,6 +36,7 @@ export const completeTest = internalMutation({
         label: v.string(),
         value: v.number(),
         max: v.number(),
+        confidence: v.optional(v.string()),
       })
     ),
   },

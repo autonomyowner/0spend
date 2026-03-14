@@ -8,11 +8,26 @@ interface MetricScore {
   label: string
   value: number
   max: number
+  confidence?: string
 }
 
 interface ScoreBreakdownProps {
   metrics?: MetricScore[]
   overallScore?: number
+}
+
+function ConfidenceBadge({ confidence }: { confidence?: string }) {
+  if (!confidence) return null
+  const colors: Record<string, string> = {
+    high: 'bg-success/15 text-success border-success/20',
+    medium: 'bg-amber/10 text-amber border-amber/20',
+    low: 'bg-surface-500/30 text-text-muted border-surface-500',
+  }
+  return (
+    <span className={`text-[10px] px-1.5 py-0.5 rounded-md border ${colors[confidence] || colors.low}`}>
+      {confidence}
+    </span>
+  )
 }
 
 export function ScoreBreakdown({ metrics, overallScore }: ScoreBreakdownProps) {
@@ -68,12 +83,16 @@ export function ScoreBreakdown({ metrics, overallScore }: ScoreBreakdownProps) {
 
       <div className="space-y-3">
         {displayMetrics.map((m) => (
-          <ProgressBar
-            key={m.label}
-            label={m.label}
-            value={m.value}
-            max={m.max}
-          />
+          <div key={m.label} className="flex items-center gap-2">
+            <div className="flex-1">
+              <ProgressBar
+                label={m.label}
+                value={m.value}
+                max={m.max}
+              />
+            </div>
+            <ConfidenceBadge confidence={m.confidence} />
+          </div>
         ))}
       </div>
     </Card>

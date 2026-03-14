@@ -19,6 +19,13 @@ export default defineSchema({
     description: v.string(),
     systemPrompt: v.optional(v.string()),
     isPreset: v.boolean(),
+    incomeRange: v.optional(v.string()),
+    dailyScreenTime: v.optional(v.string()),
+    platformsUsed: v.optional(v.array(v.string())),
+    purchaseFrequency: v.optional(v.string()),
+    adTolerance: v.optional(v.string()),
+    attentionSpan: v.optional(v.string()),
+    brandAffinityExamples: v.optional(v.array(v.string())),
   })
     .index("userId", ["userId"])
     .index("isPreset", ["isPreset"]),
@@ -45,6 +52,8 @@ export default defineSchema({
       v.literal("failed")
     ),
     format: v.optional(v.string()),
+    platform: v.optional(v.string()),
+    objective: v.optional(v.string()),
     overallScore: v.optional(v.number()),
     personaCount: v.number(),
     metrics: v.optional(
@@ -53,6 +62,7 @@ export default defineSchema({
           label: v.string(),
           value: v.number(),
           max: v.number(),
+          confidence: v.optional(v.string()),
         })
       )
     ),
@@ -61,6 +71,7 @@ export default defineSchema({
   })
     .index("userId", ["userId"])
     .index("userId_createdAt", ["userId", "createdAt"])
+    .index("userId_platform", ["userId", "platform"])
     .index("status", ["status"]),
 
   personaFeedbacks: defineTable({
@@ -130,7 +141,41 @@ export default defineSchema({
         yours: v.number(),
         average: v.number(),
         topPerformer: v.number(),
+        source: v.optional(v.string()),
+        confidence: v.optional(v.string()),
       })
     ),
+  }).index("testId", ["testId"]),
+
+  emotionalProfiles: defineTable({
+    testId: v.id("tests"),
+    emotions: v.array(
+      v.object({
+        emotion: v.string(),
+        intensity: v.number(),
+        confidence: v.optional(v.string()),
+      })
+    ),
+    dominantEmotion: v.string(),
+    emotionalTone: v.string(),
+    recommendations: v.array(v.string()),
+  }).index("testId", ["testId"]),
+
+  predictedPerformance: defineTable({
+    testId: v.id("tests"),
+    predictions: v.array(
+      v.object({
+        metric: v.string(),
+        value: v.number(),
+        unit: v.string(),
+        benchmarkAvg: v.number(),
+        benchmarkTop: v.number(),
+        percentile: v.number(),
+        reasoning: v.string(),
+      })
+    ),
+    overallVerdict: v.string(),
+    spendEfficiency: v.string(),
+    confidence: v.string(),
   }).index("testId", ["testId"]),
 });

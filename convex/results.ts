@@ -92,11 +92,55 @@ export const saveBenchmarks = internalMutation({
         yours: v.number(),
         average: v.number(),
         topPerformer: v.number(),
+        source: v.optional(v.string()),
+        confidence: v.optional(v.string()),
       })
     ),
   },
   handler: async (ctx, args) => {
     await ctx.db.insert("benchmarks", args);
+  },
+});
+
+export const saveEmotionalProfile = internalMutation({
+  args: {
+    testId: v.id("tests"),
+    emotions: v.array(
+      v.object({
+        emotion: v.string(),
+        intensity: v.number(),
+        confidence: v.optional(v.string()),
+      })
+    ),
+    dominantEmotion: v.string(),
+    emotionalTone: v.string(),
+    recommendations: v.array(v.string()),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("emotionalProfiles", args);
+  },
+});
+
+export const savePredictedPerformance = internalMutation({
+  args: {
+    testId: v.id("tests"),
+    predictions: v.array(
+      v.object({
+        metric: v.string(),
+        value: v.number(),
+        unit: v.string(),
+        benchmarkAvg: v.number(),
+        benchmarkTop: v.number(),
+        percentile: v.number(),
+        reasoning: v.string(),
+      })
+    ),
+    overallVerdict: v.string(),
+    spendEfficiency: v.string(),
+    confidence: v.string(),
+  },
+  handler: async (ctx, args) => {
+    await ctx.db.insert("predictedPerformance", args);
   },
 });
 
@@ -165,6 +209,28 @@ export const getBenchmarks = query({
     if (!(await verifyTestOwnership(ctx, args.testId))) return null;
     return await ctx.db
       .query("benchmarks")
+      .withIndex("testId", (q) => q.eq("testId", args.testId))
+      .first();
+  },
+});
+
+export const getEmotionalProfile = query({
+  args: { testId: v.id("tests") },
+  handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
+    return await ctx.db
+      .query("emotionalProfiles")
+      .withIndex("testId", (q) => q.eq("testId", args.testId))
+      .first();
+  },
+});
+
+export const getPredictedPerformance = query({
+  args: { testId: v.id("tests") },
+  handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
+    return await ctx.db
+      .query("predictedPerformance")
       .withIndex("testId", (q) => q.eq("testId", args.testId))
       .first();
   },

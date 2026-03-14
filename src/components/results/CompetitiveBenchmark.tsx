@@ -9,6 +9,8 @@ interface BenchmarkEntry {
   yours: number
   average: number
   topPerformer: number
+  source?: string
+  confidence?: string
 }
 
 interface CompetitiveBenchmarkProps {
@@ -25,6 +27,9 @@ export function CompetitiveBenchmark({ entries }: CompetitiveBenchmarkProps) {
       </Card>
     )
   }
+
+  const hasHistorical = entries.some((e) => e.source === 'historical')
+  const avgLabel = hasHistorical ? t.app.benchmark.yourAverage : t.app.benchmark.industryAvg
 
   return (
     <Card className="p-6">
@@ -65,11 +70,15 @@ export function CompetitiveBenchmark({ entries }: CompetitiveBenchmarkProps) {
               wrapperStyle={{ fontSize: '12px', color: '#777777' }}
             />
             <Bar dataKey="yours" name={t.app.benchmark.yourScore} fill="#C8FF00" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="average" name={t.app.benchmark.industryAvg} fill="#3A3A3A" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="average" name={avgLabel} fill="#3A3A3A" radius={[4, 4, 0, 0]} />
             <Bar dataKey="topPerformer" name={t.app.benchmark.topPerformer} fill="#5B9A6B" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </div>
+
+      <p className="text-[10px] text-text-faint mt-3">
+        {hasHistorical ? t.app.benchmark.sourceHistorical : t.app.benchmark.sourceEstimated}
+      </p>
     </Card>
   )
 }

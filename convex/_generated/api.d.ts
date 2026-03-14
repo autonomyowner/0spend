@@ -11,6 +11,7 @@
 import type * as ai_analyze from "../ai/analyze.js";
 import type * as ai_analyzeHelpers from "../ai/analyzeHelpers.js";
 import type * as ai_gemini from "../ai/gemini.js";
+import type * as ai_platformContext from "../ai/platformContext.js";
 import type * as ai_prompts from "../ai/prompts.js";
 import type * as ai_screenshot from "../ai/screenshot.js";
 import type * as ai_utils from "../ai/utils.js";
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   "ai/analyze": typeof ai_analyze;
   "ai/analyzeHelpers": typeof ai_analyzeHelpers;
   "ai/gemini": typeof ai_gemini;
+  "ai/platformContext": typeof ai_platformContext;
   "ai/prompts": typeof ai_prompts;
   "ai/screenshot": typeof ai_screenshot;
   "ai/utils": typeof ai_utils;
