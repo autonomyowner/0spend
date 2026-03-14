@@ -20,6 +20,7 @@ $ProjectDir = "D:\wahab\10xspend"
 $PauseBetweenSessions = 30
 $MaxTurns = 75
 $SessionNum = 0
+$script:Running = $true
 
 if ($Once) {
     $MaxSessions = 1
@@ -27,6 +28,22 @@ if ($Once) {
     $MaxSessions = $Sessions
 } else {
     $MaxSessions = 999999
+}
+
+# --- Ctrl+C handler: kill claude and exit cleanly ---
+[Console]::TreatControlCAsInput = $false
+$null = Register-EngineEvent -SourceIdentifier PowerShell.Exiting -Action {
+    Get-Process -Name "claude*" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+}
+
+trap {
+    Write-Host ""
+    Write-Host "  Spirit stopping... killing claude process..." -ForegroundColor Red
+    Get-Process -Name "claude*" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
+    Write-Host "  Spirit paused after $SessionNum sessions." -ForegroundColor Yellow
+    Write-Host "  Check docs/spirit-log.md for details." -ForegroundColor DarkGray
+    $script:Running = $false
+    break
 }
 
 Set-Location $ProjectDir
@@ -44,11 +61,11 @@ Write-Host "  |  Max turns: $MaxTurns per session" -ForegroundColor Cyan
 Write-Host "  |  Auto-deploy: git push + convex deploy             |" -ForegroundColor Green
 Write-Host "  |  Vercel: auto-redeploys from GitHub push           |" -ForegroundColor Green
 Write-Host "  |                                                    |" -ForegroundColor DarkGray
-Write-Host "  |  Press Ctrl+C to stop The Spirit                   |" -ForegroundColor Red
+Write-Host "  |  Press Ctrl+C to stop (kills claude + exits)       |" -ForegroundColor Red
 Write-Host "  +===================================================+" -ForegroundColor Yellow
 Write-Host ""
 
-while ($SessionNum -lt $MaxSessions) {
+while ($script:Running -and $SessionNum -lt $MaxSessions) {
     $SessionNum++
     $Timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
 
@@ -102,17 +119,49 @@ RULES:
 - BE EFFICIENT. Don't waste turns reading files you don't need. Build fast, ship fast.
 "@
 
-    claude -p $Prompt --dangerously-skip-permissions --max-turns $MaxTurns 2>&1 | Tee-Object -FilePath "$ProjectDir\docs\spirit-session-$SessionNum.log"
+    try {
+        $process = Start-Process -FilePath "claude" -ArgumentList "-p", $Prompt, "--dangerously-skip-permissions", "--max-turns", $MaxTurns -NoNewWindow -PassThru -RedirectStandardOutput "$ProjectDir\docs\spirit-session-$SessionNum.log" -RedirectStandardError "$ProjectDir\docs\spirit-session-$SessionNum.err"
+
+        # Wait for process but check for Running flag
+        while (-not $process.HasExited -and $script:Running) {
+            Start-Sleep -Milliseconds 500
+        }
+
+        # If we stopped while process was running, kill it
+        if (-not $process.HasExited) {
+            $process | Stop-Process -Force -ErrorAction SilentlyContinue
+            Write-Host "  Claude process killed." -ForegroundColor Red
+        }
+
+        # Show output
+        if (Test-Path "$ProjectDir\docs\spirit-session-$SessionNum.log") {
+            $output = Get-Content "$ProjectDir\docs\spirit-session-$SessionNum.log" -Raw -ErrorAction SilentlyContinue
+            if ($output) {
+                Write-Host $output
+            }
+        }
+    }
+    catch {
+        Write-Host "  Session error: $_" -ForegroundColor Red
+    }
+
+    if (-not $script:Running) { break }
 
     Write-Host ""
     Write-Host "  Session #$SessionNum completed at $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')" -ForegroundColor Green
 
-    if ($SessionNum -lt $MaxSessions) {
-        Write-Host "  Cooling down for ${PauseBetweenSessions}s before next session..." -ForegroundColor DarkGray
+    if ($SessionNum -lt $MaxSessions -and $script:Running) {
+        Write-Host "  Cooling down for ${PauseBetweenSessions}s... (Ctrl+C to stop)" -ForegroundColor DarkGray
+        for ($i = 0; $i -lt $PauseBetweenSessions; $i++) {
+            if (-not $script:Running) { break }
+            Start-Sleep -Seconds 1
+        }
         Write-Host ""
-        Start-Sleep -Seconds $PauseBetweenSessions
     }
 }
+
+# Cleanup
+Get-Process -Name "claude*" -ErrorAction SilentlyContinue | Stop-Process -Force -ErrorAction SilentlyContinue
 
 Write-Host ""
 Write-Host "  +===================================================+" -ForegroundColor Yellow
