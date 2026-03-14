@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, FlaskConical, Users, BarChart3 } from 'lucide-react'
+import { LayoutDashboard, FlaskConical, Users, BarChart3, GitCompareArrows } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
@@ -15,6 +15,7 @@ export function BottomNav() {
     { label: t.app.bottomNav.analyze, href: '/app/analyze', icon: FlaskConical },
     { label: t.app.bottomNav.personas, href: '/app/personas', icon: Users },
     { label: t.app.bottomNav.results, href: '/app/results', icon: BarChart3 },
+    { label: t.app.bottomNav.compare, href: '/app/compare', icon: GitCompareArrows },
   ]
 
   return (

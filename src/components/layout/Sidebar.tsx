@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, FlaskConical, Users, BarChart3, PanelLeftClose, PanelLeft, LogOut } from 'lucide-react'
+import { LayoutDashboard, FlaskConical, Users, BarChart3, GitCompareArrows, PanelLeftClose, PanelLeft, LogOut } from 'lucide-react'
 import { cn } from '@/lib/cn'
 import { authClient } from '@/lib/auth-client'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
@@ -21,12 +21,13 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
     { label: t.app.sidebar.analyze, href: '/app/analyze', icon: FlaskConical },
     { label: t.app.sidebar.personas, href: '/app/personas', icon: Users },
     { label: t.app.sidebar.results, href: '/app/results', icon: BarChart3 },
+    { label: t.app.sidebar.compare, href: '/app/compare', icon: GitCompareArrows },
   ]
 
   return (
     <aside
       className={cn(
-        'fixed start-0 top-0 bottom-0 z-40 flex flex-col bg-surface-800 border-e border-surface-500 transition-[width] duration-200',
+        'fixed start-0 top-0 bottom-0 z-40 flex flex-col bg-surface-800/95 backdrop-blur-sm border-e border-surface-500/60 transition-[width] duration-200',
         collapsed ? 'w-16' : 'w-60'
       )}
     >

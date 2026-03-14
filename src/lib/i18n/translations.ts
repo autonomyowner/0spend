@@ -151,6 +151,7 @@ export const translations = {
         analyze: 'Analyze',
         personas: 'Personas',
         results: 'Results',
+        compare: 'Compare',
       },
       topBar: {
         app: 'App',
@@ -164,6 +165,7 @@ export const translations = {
         analyze: 'Analyze',
         personas: 'Personas',
         results: 'Results',
+        compare: 'Compare',
       },
 
       // Dashboard page
@@ -408,6 +410,31 @@ export const translations = {
         completed: 'completed',
         failed: 'failed',
       },
+
+      // Share results
+      share: {
+        shareResults: 'Share Results',
+        downloadCard: 'Download Card',
+        copyLink: 'Copy Link',
+        linkCopied: 'Link copied!',
+        overallScore: 'Overall Score',
+        poweredBy: 'Powered by',
+        aiAdTesting: 'AI Ad Testing',
+        testedOn: 'Tested on',
+      },
+
+      // Compare
+      compare: {
+        title: 'Compare Creatives',
+        subtitle: 'Select 2-4 completed tests to compare side-by-side',
+        selectTests: 'Select tests to compare',
+        noCompleted: 'No completed tests yet. Run some analyses first!',
+        emptyState: 'Select at least 2 tests above to see a side-by-side comparison',
+        winner: 'Winner',
+        metricBreakdown: 'Metric-by-Metric Breakdown',
+        metric: 'Metric',
+        verdict: 'Ranking',
+      },
     },
 
     // Auth pages
@@ -591,6 +618,7 @@ export const translations = {
         analyze: 'تحليل',
         personas: 'الشخصيات',
         results: 'النتائج',
+        compare: 'مقارنة',
       },
       topBar: {
         app: 'التطبيق',
@@ -604,6 +632,7 @@ export const translations = {
         analyze: 'تحليل',
         personas: 'الشخصيات',
         results: 'النتائج',
+        compare: 'مقارنة',
       },
 
       dashboard: {
@@ -828,6 +857,29 @@ export const translations = {
         running: 'قيد التنفيذ',
         completed: 'مكتمل',
         failed: 'فشل',
+      },
+
+      share: {
+        shareResults: 'مشاركة النتائج',
+        downloadCard: 'تحميل البطاقة',
+        copyLink: 'نسخ الرابط',
+        linkCopied: 'تم نسخ الرابط!',
+        overallScore: 'الدرجة الإجمالية',
+        poweredBy: 'مدعوم بواسطة',
+        aiAdTesting: 'اختبار إعلانات بالذكاء الاصطناعي',
+        testedOn: 'تم الاختبار على',
+      },
+
+      compare: {
+        title: 'مقارنة الإبداعات',
+        subtitle: 'اختر 2-4 اختبارات مكتملة للمقارنة جنبًا إلى جنب',
+        selectTests: 'اختر الاختبارات للمقارنة',
+        noCompleted: 'لا توجد اختبارات مكتملة بعد. قم بتشغيل بعض التحليلات أولاً!',
+        emptyState: 'اختر اختبارين على الأقل أعلاه لرؤية المقارنة',
+        winner: 'الفائز',
+        metricBreakdown: 'تحليل المقاييس',
+        metric: 'المقياس',
+        verdict: 'الترتيب',
       },
     },
 

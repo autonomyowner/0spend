@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useQuery, useMutation } from 'convex/react'
 import { api } from '../../../../../convex/_generated/api'
 import { Id } from '../../../../../convex/_generated/dataModel'
-import { ArrowLeft, Trash2 } from 'lucide-react'
+import { ArrowLeft, Trash2, Share2 } from 'lucide-react'
 import { Tabs } from '@/components/ui/Tabs'
 import { ScoreBreakdown } from '@/components/results/ScoreBreakdown'
 import { PersonaFeedbackCard } from '@/components/results/PersonaFeedbackCard'
@@ -16,6 +16,7 @@ import { AttentionHeatmap } from '@/components/results/AttentionHeatmap'
 import { CompetitiveBenchmark } from '@/components/results/CompetitiveBenchmark'
 import { EmotionalProfile } from '@/components/results/EmotionalProfile'
 import { PredictedPerformance } from '@/components/results/PredictedPerformance'
+import { ShareResultsCard } from '@/components/results/ShareResultsCard'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function ResultsPage() {
@@ -35,6 +36,7 @@ export default function ResultsPage() {
   const testId = params.testId as Id<'tests'>
   const [activeTab, setActiveTab] = useState('overview')
   const [deleting, setDeleting] = useState(false)
+  const [shareOpen, setShareOpen] = useState(false)
 
   const test = useQuery(api.tests.getTest, { testId })
   const feedbacks = useQuery(api.results.getPersonaFeedbacks, { testId })
@@ -115,14 +117,23 @@ export default function ResultsPage() {
             </p>
           </div>
         </div>
-        <button
-          onClick={handleDelete}
-          disabled={deleting}
-          className="p-2 rounded-xl text-text-muted hover:text-danger hover:bg-danger/10 transition-all duration-200 cursor-pointer"
-          title="Delete test"
-        >
-          <Trash2 size={18} />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setShareOpen(true)}
+            className="p-2 rounded-xl text-text-muted hover:text-amber hover:bg-amber/10 transition-all duration-200 cursor-pointer"
+            title={t.app.share.shareResults}
+          >
+            <Share2 size={18} />
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={deleting}
+            className="p-2 rounded-xl text-text-muted hover:text-danger hover:bg-danger/10 transition-all duration-200 cursor-pointer"
+            title="Delete test"
+          >
+            <Trash2 size={18} />
+          </button>
+        </div>
       </div>
 
       {/* Creative preview */}
@@ -229,6 +240,16 @@ export default function ResultsPage() {
           )}
         </>
       )}
+
+      <ShareResultsCard
+        testName={test.name}
+        overallScore={test.overallScore}
+        metrics={test.metrics}
+        platform={test.platform}
+        personaCount={test.personaCount}
+        open={shareOpen}
+        onClose={() => setShareOpen(false)}
+      />
     </div>
   )
 }

@@ -51,7 +51,7 @@ export default function SignUpPage() {
           </span>
         </Link>
 
-        <div className="rounded-2xl bg-surface-800 border border-surface-500 p-8">
+        <div className="rounded-2xl bg-surface-800/90 backdrop-blur-sm border border-surface-500/60 p-6 sm:p-8">
           <h1 className="text-2xl font-bold font-heading mb-1 text-center">{t.auth.signUp.title}</h1>
           <p className="text-sm text-text-muted mb-8 text-center">{t.auth.signUp.subtitle}</p>
 
@@ -97,7 +97,7 @@ export default function SignUpPage() {
               <div className="w-full border-t border-surface-500" />
             </div>
             <div className="relative flex justify-center text-xs">
-              <span className="bg-surface-800 px-3 text-text-muted">{t.auth.signUp.orContinue}</span>
+              <span className="bg-surface-800/90 px-3 text-text-muted">{t.auth.signUp.orContinue}</span>
             </div>
           </div>
 
