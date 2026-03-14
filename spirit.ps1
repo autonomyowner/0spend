@@ -18,7 +18,7 @@ param(
 
 $ProjectDir = "D:\wahab\10xspend"
 $PauseBetweenSessions = 30
-$MaxTurns = 30
+$MaxTurns = 50
 $SessionNum = 0
 
 if ($Once) {
