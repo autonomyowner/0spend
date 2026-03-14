@@ -30,7 +30,7 @@ export function FeaturesGrid() {
             return (
               <div
                 key={i}
-                className="group relative rounded-2xl bg-surface-800/50 backdrop-blur-sm border border-surface-500/50 p-7 hover:border-amber/15 transition-all duration-300 cursor-default"
+                className="group relative rounded-2xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/60 p-7 hover:border-amber/15 transition-all duration-300 cursor-default"
               >
                 {/* Hover glow */}
                 <div className="absolute inset-0 rounded-2xl bg-amber/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />

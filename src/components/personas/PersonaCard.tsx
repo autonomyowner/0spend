@@ -20,7 +20,7 @@ export function PersonaCard({ persona }: PersonaCardProps) {
   const { t } = useLanguage()
 
   return (
-    <div className="rounded-xl bg-surface-700 border border-surface-500 p-5 hover:border-amber/20 transition-all duration-200">
+    <div className="rounded-2xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 p-5 hover:border-amber/20 hover:bg-amber/[0.02] transition-all duration-300">
       <div className="flex items-start gap-3 mb-4">
         <Avatar name={persona.name} size="md" />
         <div className="flex-1 min-w-0">

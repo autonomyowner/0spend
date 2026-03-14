@@ -191,7 +191,7 @@ export function Hero() {
 
               {/* Insights row */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <div className="group rounded-2xl bg-surface-700/50 border border-surface-500/50 p-4 hover:border-amber/20 transition-all duration-300 animate-fade-up" style={{ animationDelay: '0.95s' }}>
+                <div className="group rounded-2xl bg-surface-700/60 border border-surface-500/60 p-4 hover:border-amber/20 transition-all duration-300 animate-fade-up" style={{ animationDelay: '0.95s' }}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-6 h-6 rounded-lg bg-amber/10 flex items-center justify-center">
                       <Zap size={12} className="text-amber" />
@@ -203,7 +203,7 @@ export function Hero() {
                   </p>
                 </div>
 
-                <div className="group rounded-2xl bg-surface-700/50 border border-surface-500/50 p-4 hover:border-success/20 transition-all duration-300 animate-fade-up" style={{ animationDelay: '1.05s' }}>
+                <div className="group rounded-2xl bg-surface-700/60 border border-surface-500/60 p-4 hover:border-success/20 transition-all duration-300 animate-fade-up" style={{ animationDelay: '1.05s' }}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-6 h-6 rounded-lg bg-success/10 flex items-center justify-center">
                       <TrendingUp size={12} className="text-success" />
@@ -215,7 +215,7 @@ export function Hero() {
                   </p>
                 </div>
 
-                <div className="group rounded-2xl bg-surface-700/50 border border-surface-500/50 p-4 hover:border-surface-500 transition-all duration-300 animate-fade-up" style={{ animationDelay: '1.15s' }}>
+                <div className="group rounded-2xl bg-surface-700/60 border border-surface-500/60 p-4 hover:border-surface-500 transition-all duration-300 animate-fade-up" style={{ animationDelay: '1.15s' }}>
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-6 h-6 rounded-lg bg-surface-500/50 flex items-center justify-center">
                       <Eye size={12} className="text-text-muted" />

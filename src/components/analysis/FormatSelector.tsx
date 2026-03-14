@@ -25,7 +25,7 @@ export function FormatSelector({ value, onChange }: FormatSelectorProps) {
               'flex flex-col items-center gap-1.5 rounded-xl border p-3 text-sm font-medium transition-all duration-200 cursor-pointer',
               value === f.id
                 ? 'border-amber/40 bg-amber/5 text-amber'
-                : 'border-surface-500 bg-surface-700 text-text-muted hover:border-amber/20 hover:text-text-primary'
+                : 'border-surface-500/60 bg-surface-700/60 backdrop-blur-sm text-text-muted hover:border-amber/20 hover:bg-amber/[0.02] hover:text-text-primary'
             )}
           >
             <f.icon size={20} />

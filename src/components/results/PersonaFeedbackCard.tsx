@@ -24,7 +24,7 @@ export function PersonaFeedbackCard({ feedback }: PersonaFeedbackCardProps) {
   const scoreColor = feedback.score >= 7 ? 'text-success' : feedback.score >= 5 ? 'text-amber' : 'text-danger'
 
   return (
-    <div className="rounded-xl bg-surface-700 border border-surface-500 p-5">
+    <div className="rounded-2xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 p-5">
       <div className="flex items-start gap-3 mb-3">
         <Avatar name={feedback.personaName} />
         <div className="flex-1 min-w-0">

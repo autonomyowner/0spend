@@ -56,7 +56,7 @@ export function AgentDebateView({ exchanges }: AgentDebateViewProps) {
             <div
               key={i}
               className={cn(
-                'rounded-xl border p-4',
+                'rounded-xl border p-4 backdrop-blur-sm',
                 style.bg,
                 style.border
               )}

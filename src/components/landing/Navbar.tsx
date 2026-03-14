@@ -92,6 +92,7 @@ export function Navbar() {
               onClick={() => setOpen(!open)}
               className="p-2 rounded-lg text-text-muted hover:text-text-primary cursor-pointer"
               aria-label="Toggle menu"
+              aria-expanded={open}
             >
               {open ? <X size={20} /> : <Menu size={20} />}
             </button>

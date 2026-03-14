@@ -31,7 +31,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
       <div className="flex items-center gap-3">
         <button
           onClick={onMenuClick}
-          className="lg:hidden p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors cursor-pointer"
+          className="lg:hidden p-2 rounded-xl text-text-muted hover:text-text-primary hover:bg-surface-700/60 transition-all duration-200 cursor-pointer"
         >
           <Menu size={20} />
         </button>
@@ -42,7 +42,7 @@ export function TopBar({ onMenuClick }: TopBarProps) {
         </div>
       </div>
       <div className="flex items-center gap-3">
-        <button className="relative p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors cursor-pointer">
+        <button className="relative p-2 rounded-xl text-text-muted hover:text-text-primary hover:bg-surface-700/60 transition-all duration-200 cursor-pointer">
           <Bell size={18} />
           <span className="absolute top-1.5 end-1.5 w-2 h-2 rounded-full bg-amber" />
         </button>

@@ -27,7 +27,7 @@ export function ScoreChart({ data }: ScoreChartProps) {
         <h3 className="text-sm font-semibold font-heading">{t.app.scoreChart.title}</h3>
       </div>
       {(!data || data.length === 0) ? (
-        <div className="h-56 sm:h-64 flex items-center justify-center rounded-xl bg-surface-800/40 border border-surface-500/30">
+        <div className="h-56 sm:h-64 flex items-center justify-center rounded-xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/40">
           <p className="text-sm text-text-muted">{t.app.scoreChart.empty}</p>
         </div>
       ) : (

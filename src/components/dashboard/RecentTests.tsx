@@ -44,7 +44,7 @@ export function RecentTests({ tests }: RecentTestsProps) {
         <Link href="/app/results" className="text-xs text-amber hover:text-amber/80 transition-colors">{t.app.recentTests.viewAll}</Link>
       </div>
       {(!tests || tests.length === 0) ? (
-        <div className="py-8 text-center rounded-xl bg-surface-800/40 border border-surface-500/30">
+        <div className="py-8 text-center rounded-xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/40">
           <p className="text-sm text-text-muted">{t.app.recentTests.empty}</p>
         </div>
       ) : (
@@ -53,7 +53,7 @@ export function RecentTests({ tests }: RecentTestsProps) {
             <Link
               key={test._id}
               href={`/app/results/${test._id}`}
-              className="flex items-center gap-4 p-3 sm:p-3.5 rounded-xl hover:bg-surface-600/40 transition-all duration-200 group cursor-pointer"
+              className="flex items-center gap-4 p-3 sm:p-3.5 rounded-xl hover:bg-surface-600/60 transition-all duration-200 group cursor-pointer"
             >
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate group-hover:text-white transition-colors">{test.name}</p>

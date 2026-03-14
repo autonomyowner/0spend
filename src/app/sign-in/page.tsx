@@ -50,7 +50,7 @@ export default function SignInPage() {
           </span>
         </Link>
 
-        <div className="rounded-2xl bg-surface-800 border border-surface-500 p-8">
+        <div className="rounded-2xl bg-surface-800/90 backdrop-blur-sm border border-surface-500/60 p-6 sm:p-8">
           <h1 className="text-2xl font-bold font-heading mb-1 text-center">{t.auth.signIn.title}</h1>
           <p className="text-sm text-text-muted mb-8 text-center">{t.auth.signIn.subtitle}</p>
 

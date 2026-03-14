@@ -42,7 +42,7 @@ export function AttentionHeatmap({ zones }: AttentionHeatmapProps) {
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Heatmap */}
-        <div className="relative w-full max-w-sm mx-auto aspect-[3/4] rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
+        <div className="relative w-full max-w-sm mx-auto aspect-[3/4] rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 overflow-hidden">
           {zones.map((zone) => (
             <div
               key={zone.label}

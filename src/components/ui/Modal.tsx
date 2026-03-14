@@ -17,7 +17,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -31,7 +31,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
             exit={{ opacity: 0, scale: 0.95, y: 10 }}
             transition={{ duration: 0.2 }}
             className={cn(
-              'relative w-full max-w-lg rounded-2xl bg-surface-800 border border-surface-500 p-6 shadow-2xl',
+              'relative w-full max-w-lg rounded-2xl bg-surface-800/90 backdrop-blur-sm border border-surface-500/60 p-6 shadow-2xl',
               className
             )}
           >
@@ -42,6 +42,7 @@ export function Modal({ open, onClose, title, children, className }: ModalProps)
               <button
                 onClick={onClose}
                 className="ml-auto p-1.5 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors cursor-pointer"
+                aria-label="Close"
               >
                 <X size={18} />
               </button>

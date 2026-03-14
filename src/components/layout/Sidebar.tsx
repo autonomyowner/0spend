@@ -54,7 +54,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
                 'flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200',
                 isActive
                   ? 'bg-amber/10 text-amber'
-                  : 'text-text-muted hover:text-text-primary hover:bg-surface-700'
+                  : 'text-text-muted hover:text-text-primary hover:bg-surface-700/60'
               )}
             >
               <item.icon size={20} className="flex-shrink-0" />
@@ -68,7 +68,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
       <div className="px-2 py-4 border-t border-surface-500 flex flex-col gap-1">
         <button
           onClick={onToggle}
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors w-full cursor-pointer"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-text-primary hover:bg-surface-700/60 transition-all duration-200 w-full cursor-pointer"
         >
           {collapsed ? <PanelLeft size={20} className="rtl:-scale-x-100" /> : <PanelLeftClose size={20} className="rtl:-scale-x-100" />}
           {!collapsed && <span>{t.app.sidebar.collapse}</span>}
@@ -78,7 +78,7 @@ export function Sidebar({ collapsed, onToggle }: SidebarProps) {
             await authClient.signOut()
             window.location.href = '/'
           }}
-          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-danger hover:bg-danger/5 transition-colors w-full cursor-pointer"
+          className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm text-text-muted hover:text-danger hover:bg-danger/5 transition-all duration-200 w-full cursor-pointer"
         >
           <LogOut size={20} className="flex-shrink-0" />
           {!collapsed && <span>{t.app.sidebar.signOut}</span>}

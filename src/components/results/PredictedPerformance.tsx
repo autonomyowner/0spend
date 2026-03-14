@@ -113,7 +113,7 @@ export function PredictedPerformance({
               <h3 className="text-sm font-semibold font-heading mb-2">{t.app.predictions.verdict}</h3>
               <p className="text-sm text-text-primary leading-relaxed">{overallVerdict}</p>
               {spendEfficiency && (
-                <p className="text-xs text-text-muted mt-3 leading-relaxed p-3 rounded-xl bg-surface-800/60 border border-surface-500/40">
+                <p className="text-xs text-text-muted mt-3 leading-relaxed p-3 rounded-xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/60">
                   <DollarSign className="w-3.5 h-3.5 inline-block mr-1 text-amber/70" />
                   {spendEfficiency}
                 </p>

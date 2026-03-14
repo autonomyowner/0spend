@@ -36,7 +36,7 @@ export default function ResultsListPage() {
           <Link
             key={test._id}
             href={`/app/results/${test._id}`}
-            className="flex items-center gap-4 p-4 rounded-xl bg-surface-700 border border-surface-500 hover:border-amber/20 transition-all"
+            className="flex items-center gap-4 p-4 rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 hover:border-amber/20 hover:bg-amber/[0.02] transition-all duration-300"
           >
             <div className="flex-1 min-w-0">
               <p className="text-sm font-medium truncate">{test.name}</p>
@@ -46,7 +46,7 @@ export default function ResultsListPage() {
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
               {test.format && test.format !== 'image' && (
-                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500">
+                <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-lg bg-surface-600/60 text-text-muted border border-surface-500/60">
                   {test.format === 'landing_page' ? 'Page' : test.format}
                 </span>
               )}

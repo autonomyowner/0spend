@@ -89,7 +89,7 @@ export default function ResultsPage() {
         <div className="flex items-center gap-4">
           <Link
             href="/app/results"
-            className="p-2 rounded-lg text-text-muted hover:text-text-primary hover:bg-surface-700 transition-colors"
+            className="p-2 rounded-xl text-text-muted hover:text-text-primary hover:bg-surface-700/60 transition-all duration-200"
           >
             <ArrowLeft size={20} className={locale === 'ar' ? 'rotate-180' : ''} />
           </Link>
@@ -97,17 +97,17 @@ export default function ResultsPage() {
             <h1 className="text-2xl font-bold font-heading">{test.name}</h1>
             <p className="text-sm text-text-muted mt-0.5 flex flex-wrap items-center gap-1.5">
               {test.format && test.format !== 'image' && (
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500">
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-lg bg-surface-600/60 text-text-muted border border-surface-500/60">
                   {test.format === 'landing_page' ? 'Page' : test.format}
                 </span>
               )}
               {test.platform && test.platform !== 'generic' && (
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-amber/8 text-amber/70 border border-amber/15">
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-lg bg-amber/8 text-amber/70 border border-amber/15">
                   {test.platform.replace('_', ' ')}
                 </span>
               )}
               {test.objective && test.objective !== 'conversion' && (
-                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-md bg-surface-600 text-text-muted border border-surface-500">
+                <span className="text-[10px] uppercase tracking-wider px-1.5 py-0.5 rounded-lg bg-surface-600/60 text-text-muted border border-surface-500/60">
                   {test.objective.replace('_', ' ')}
                 </span>
               )}
@@ -118,7 +118,7 @@ export default function ResultsPage() {
         <button
           onClick={handleDelete}
           disabled={deleting}
-          className="p-2 rounded-lg text-text-muted hover:text-danger hover:bg-danger/10 transition-colors cursor-pointer"
+          className="p-2 rounded-xl text-text-muted hover:text-danger hover:bg-danger/10 transition-all duration-200 cursor-pointer"
           title="Delete test"
         >
           <Trash2 size={18} />
@@ -127,7 +127,7 @@ export default function ResultsPage() {
 
       {/* Creative preview */}
       {creativeUrl && (
-        <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
+        <div className="rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 overflow-hidden">
           {test.format === 'video' ? (
             <video
               src={creativeUrl}
@@ -157,7 +157,7 @@ export default function ResultsPage() {
       )}
 
       {test.status === 'running' && (
-        <div className="rounded-xl bg-surface-700 border border-amber/20 p-6 flex flex-col items-center gap-3">
+        <div className="rounded-xl bg-surface-700/60 backdrop-blur-sm border border-amber/20 p-6 flex flex-col items-center gap-3">
           <div className="w-10 h-10 rounded-full border-2 border-amber border-t-transparent animate-spin" />
           <p className="text-sm text-text-primary font-medium">{t.app.resultsDetail.inProgress}</p>
           <p className="text-xs text-text-muted">{t.app.resultsDetail.resultsWillAppear}</p>

@@ -40,7 +40,7 @@ export function Pricing() {
                   'group relative rounded-3xl border p-7 sm:p-8 flex flex-col transition-all duration-300',
                   tier.popular
                     ? 'bg-surface-700/60 backdrop-blur-sm border-amber/30 glow-amber-strong hover:border-amber/50'
-                    : 'bg-surface-800/50 backdrop-blur-sm border-surface-500/50 hover:border-surface-500'
+                    : 'bg-surface-800/60 backdrop-blur-sm border-surface-500/60 hover:border-amber/15'
                 )}
               >
                 {tier.popular && (

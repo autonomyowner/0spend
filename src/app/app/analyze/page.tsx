@@ -215,7 +215,7 @@ export default function AnalysisPage() {
 
           {/* Image preview */}
           {format === 'image' && previewUrl && (
-            <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
+            <div className="rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 overflow-hidden">
               <img
                 src={previewUrl}
                 alt="Creative preview"
@@ -241,7 +241,7 @@ export default function AnalysisPage() {
 
           {/* Video preview */}
           {format === 'video' && previewUrl && (
-            <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
+            <div className="rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 overflow-hidden">
               <video
                 ref={videoRef}
                 src={previewUrl}
@@ -269,9 +269,9 @@ export default function AnalysisPage() {
 
           {/* Landing page preview */}
           {format === 'landing_page' && creativeId && (
-            <div className="rounded-xl bg-surface-700 border border-surface-500 overflow-hidden">
+            <div className="rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 overflow-hidden">
               <div className="p-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-lg bg-amber/10 flex items-center justify-center text-lg">
+                <div className="w-10 h-10 rounded-xl bg-amber/10 flex items-center justify-center text-lg">
                   🌐
                 </div>
                 <div className="flex-1 min-w-0">
@@ -308,7 +308,7 @@ export default function AnalysisPage() {
                   className={`text-left p-3 rounded-xl border text-sm transition-all cursor-pointer ${
                     selectedPersonas.includes(persona._id)
                       ? 'border-amber/40 bg-amber/5 text-amber'
-                      : 'border-surface-500 bg-surface-700 text-text-muted hover:border-amber/20'
+                      : 'border-surface-500/60 bg-surface-700/60 backdrop-blur-sm text-text-muted hover:border-amber/20 hover:bg-amber/[0.02]'
                   }`}
                 >
                   <p className="font-medium text-text-primary text-sm">{persona.name}</p>
@@ -341,7 +341,7 @@ export default function AnalysisPage() {
           </Button>
 
           {running && (
-            <div className="rounded-xl bg-surface-700 border border-surface-500 p-6">
+            <div className="rounded-xl bg-surface-700/60 backdrop-blur-sm border border-surface-500/60 p-6">
               <div className="flex flex-col items-center gap-3 py-4">
                 <div className="w-10 h-10 rounded-full border-2 border-amber border-t-transparent animate-spin" />
                 <p className="text-sm text-text-primary font-medium">
