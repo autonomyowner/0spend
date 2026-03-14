@@ -63,7 +63,7 @@ export default function AppLayout({
       </div>
 
       {/* Main content */}
-      <div className={cn('transition-all duration-200', sidebarWidth)}>
+      <div className={cn('transition-[padding-inline-start] duration-200', sidebarWidth)}>
         <TopBar onMenuClick={() => setMobileOpen(true)} />
         <main className="p-6 pb-28 lg:pb-6">
           {children}
