@@ -1,6 +1,7 @@
 #!/bin/bash
 # ============================================================
 # THE SPIRIT — Autonomous Evolution Loop for 10xSpend
+# Powered by Claude Opus 4.6 (The Founder)
 # Goal: $1M MRR by end of 2027
 #
 # Usage:
@@ -9,12 +10,13 @@
 #   bash spirit.sh --sessions 5 # Run exactly 5 sessions
 #
 # Leave this terminal open. Go to sleep. The Spirit works.
+# Every change gets: build → commit → push → Convex deploy → Vercel auto-deploys from GitHub
 # ============================================================
 
 PROJECT_DIR="D:/wahab/10xspend"
 LOG_FILE="$PROJECT_DIR/docs/spirit-log.md"
 PAUSE_BETWEEN_SESSIONS=30  # seconds between sessions (cooldown)
-MAX_TURNS=25               # max agent turns per session
+MAX_TURNS=30               # max agent turns per session
 SESSION_NUM=0
 
 # Parse arguments
@@ -31,13 +33,16 @@ cd "$PROJECT_DIR" || { echo "Project directory not found!"; exit 1; }
 
 echo ""
 echo "  ╔═══════════════════════════════════════════════════╗"
-echo "  ║         THE SPIRIT — Autonomous Evolution         ║"
-echo "  ║         Goal: \$1M MRR by end of 2027             ║"
-echo "  ║         Project: 10xSpend                         ║"
+echo "  ║     THE SPIRIT — Autonomous Evolution System      ║"
+echo "  ║     Powered by Claude Opus 4.6 (The Founder)     ║"
+echo "  ║     Goal: \$1M MRR by end of 2027                ║"
+echo "  ║     Project: 10xSpend                             ║"
 echo "  ║─────────────────────────────────────────────────── ║"
 echo "  ║  Mode: $(printf '%-42s' "$MODE (max: $MAX_SESSIONS sessions)")║"
 echo "  ║  Cooldown: ${PAUSE_BETWEEN_SESSIONS}s between sessions              ║"
 echo "  ║  Max turns: $MAX_TURNS per session                    ║"
+echo "  ║  Auto-deploy: git push + convex deploy            ║"
+echo "  ║  Vercel: auto-redeploys from GitHub push           ║"
 echo "  ║                                                   ║"
 echo "  ║  Press Ctrl+C to stop The Spirit                  ║"
 echo "  ╚═══════════════════════════════════════════════════╝"
@@ -58,6 +63,7 @@ while [ $SESSION_NUM -lt $MAX_SESSIONS ]; do
   # Run The Spirit session
   claude -p "
 THE SPIRIT — SESSION #$SESSION_NUM — $TIMESTAMP
+Powered by Claude Opus 4.6
 
 You are The Founder (CEO Agent) of 10xSpend. Your mission: drive this SaaS to \$1M MRR by end of 2027.
 
@@ -68,10 +74,22 @@ INSTRUCTIONS:
 4. Determine which agent should run this session (follow rotation, or override if urgent)
 5. Execute that agent's full playbook — research, fix, build, improve
 6. Run 'npm run build' to verify nothing is broken
-7. If build passes: commit changes with descriptive message, push to git
-8. If build passes and changes are significant: deploy (npx convex deploy --yes)
-9. Update docs/spirit-log.md with a detailed entry for this session
-10. Update docs/enhancement-backlog.md if needed
+
+MANDATORY DEPLOY SEQUENCE (after every meaningful change):
+7. Stage changed files: git add <specific files>
+8. Commit with descriptive message: git commit -m 'description'
+9. Push to GitHub: git push origin master
+   → This triggers Vercel auto-redeploy (no manual Vercel deploy needed)
+10. Deploy Convex if schema/functions changed: npx convex deploy --yes
+11. Update docs/spirit-log.md with what was shipped and deployed
+12. Update docs/enhancement-backlog.md if needed
+
+DEPLOY RULES:
+- ALWAYS push to GitHub after committing — this triggers Vercel auto-deploy
+- ALWAYS run 'npx convex deploy --yes' if you changed ANY file in convex/
+- The deploy sequence is: build passes → commit → push → convex deploy → done
+- Vercel watches the GitHub repo and auto-deploys on every push — no manual step needed
+- Log every deploy in spirit-log.md with timestamp
 
 AUTONOMY RULES:
 - Auto-fix: build errors, type errors, broken imports, dead code, null checks, UI glitches

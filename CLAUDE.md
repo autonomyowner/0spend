@@ -280,8 +280,20 @@ Agents rotate by default: 1 → 2 → 3 → 4 → 5 → 1... The Founder can ove
 |------|--------|----------|
 | **Auto-fix** (no approval) | Fix anything broken | Build errors, type errors, broken imports, dead code, null checks, missing error handling |
 | **Auto-improve** (no approval) | Polish what exists | CSS fixes, copy tweaks, accessibility, SEO meta tags, performance optimization, mobile fixes |
-| **Auto-ship** (no approval) | Deploy when ready | `npm run build` passes → commit → push → `npx convex deploy --yes` → `npx vercel --prod` |
+| **Auto-ship** (no approval) | Deploy when ready | `npm run build` passes → `git add` → `git commit` → `git push origin master` (triggers Vercel auto-deploy) → `npx convex deploy --yes` (if convex/ files changed) |
 | **Propose first** (ask user) | Major changes only | New features, schema changes, new npm dependencies, new pages/routes, architectural shifts, pricing changes |
+
+### Mandatory Deploy Sequence
+
+After every meaningful change, execute this sequence in order:
+1. `npm run build` — must pass with zero errors
+2. `git add <specific files>` — stage only changed files
+3. `git commit -m "descriptive message"` — clear commit message
+4. `git push origin master` — this triggers Vercel auto-redeploy (no manual Vercel deploy needed)
+5. `npx convex deploy --yes` — ONLY if any file in `convex/` was changed
+6. Log the deploy in `docs/spirit-log.md` with timestamp
+
+**Vercel auto-deploys from GitHub.** Every push to master triggers a production build. No need to run `npx vercel --prod` manually.
 
 ### Quality Gates (before any deploy)
 
