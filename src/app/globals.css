@@ -15,8 +15,10 @@
   --color-text-primary: #FFFFFF;
   --color-text-muted: #777777;
   --color-text-faint: #3A3A3A;
-  --font-heading: 'Instrument Sans', system-ui, sans-serif;
-  --font-body: 'DM Sans', system-ui, sans-serif;
+  --font-heading: 'Barlow Condensed', sans-serif;
+  --font-body: 'Syne', sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, serif;
+  --ease-out: cubic-bezier(0.19, 1, 0.22, 1);
 }
 
 @layer base {
@@ -200,4 +202,353 @@
     opacity: 1;
     transform: none;
   }
+}
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Cursor
+══════════════════════════════════════ */
+.cur-dot, .cur-ring {
+  position: fixed;
+  top: 0; left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  border-radius: 50%;
+  mix-blend-mode: difference;
+}
+.cur-dot {
+  width: 8px; height: 8px;
+  background: #fff;
+  will-change: transform;
+  margin: 0;
+}
+.cur-ring {
+  width: 40px; height: 40px;
+  border: 1px solid rgba(255,255,255,0.45);
+  will-change: transform;
+  transition: width 0.3s var(--ease-out), height 0.3s var(--ease-out), border-color 0.3s;
+}
+.axiom-page:has(a:hover) .cur-ring,
+.axiom-page:has(button:hover) .cur-ring {
+  width: 56px; height: 56px;
+  border-color: var(--color-amber);
+}
+
+/* Cascade cursor: none to all interactive children */
+.axiom-page a,
+.axiom-page button,
+.axiom-page input,
+.axiom-page textarea,
+.axiom-page select,
+.axiom-page [role="button"] {
+  cursor: none;
+}
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Section tag
+══════════════════════════════════════ */
+.axm-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 1.5rem;
+}
+.axm-tag::before {
+  content: '';
+  width: 22px; height: 1px;
+  background: var(--color-text-muted);
+  flex-shrink: 0;
+}
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Marquee
+══════════════════════════════════════ */
+.axm-mq-wrap {
+  border-top: 1px solid var(--color-surface-500);
+  border-bottom: 1px solid var(--color-surface-500);
+  padding: 1.1rem 0;
+  overflow: hidden;
+  position: relative;
+  z-index: 2;
+}
+.axm-mq-track {
+  display: flex;
+  width: max-content;
+  animation: axm-marquee 26s linear infinite;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+.axm-mq-track span { padding: 0 1.6rem; white-space: nowrap; }
+.axm-mq-track i { color: var(--color-amber); font-style: normal; }
+@keyframes axm-marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Nav
+══════════════════════════════════════ */
+.axm-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.8rem 4rem;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.4s, background 0.4s;
+}
+.axm-nav.scrolled {
+  border-color: var(--color-surface-500);
+  background: rgba(8,8,8,0.92);
+  backdrop-filter: blur(16px);
+}
+.axm-nav-logo {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: 1.35rem;
+  letter-spacing: 0.1em;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.axm-nav-logo sup {
+  font-size: 0.5em;
+  opacity: 0.45;
+  vertical-align: super;
+}
+.axm-nav-link {
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  transition: color 0.3s;
+  position: relative;
+}
+.axm-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px; left: 0;
+  width: 0; height: 1px;
+  background: #fff;
+  transition: width 0.4s var(--ease-out);
+}
+.axm-nav-link:hover { color: #fff; }
+.axm-nav-link:hover::after { width: 100%; }
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Hero
+══════════════════════════════════════ */
+.axm-hero {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  /* No padding here — let Tailwind classes handle it */
+}
+.axm-hero-h1 {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(5rem, 14vw, 17rem);
+  line-height: 0.88;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+  display: flex;
+  flex-direction: column;
+}
+.axm-hero-line {
+  display: block;
+  overflow: hidden;
+}
+.axm-hero-line--stroke {
+  color: transparent;
+  font-family: var(--font-serif);
+  font-weight: 300;
+  font-style: italic;
+  -webkit-text-stroke: 1px rgba(240,237,228,0.9);
+}
+.axm-hero-ghost {
+  position: absolute;
+  bottom: -0.06em;
+  right: -0.05em;
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(14rem, 40vw, 60rem);
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(200,255,0,0.04);
+  pointer-events: none;
+  white-space: nowrap;
+  user-select: none;
+  z-index: 0;
+}
+.axm-scroll-track {
+  width: 1px; height: 56px;
+  background: var(--color-surface-500);
+  overflow: hidden;
+  position: relative;
+}
+.axm-scroll-thumb {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 50%;
+  background: var(--color-amber);
+  animation: axm-scroll-bounce 2s ease-in-out infinite;
+}
+@keyframes axm-scroll-bounce {
+  0%   { transform: translateY(-100%); }
+  50%  { transform: translateY(100%); }
+  100% { transform: translateY(300%); }
+}
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Service Rows
+══════════════════════════════════════ */
+.axm-row {
+  display: grid;
+  grid-template-columns: 3.5rem 1fr 2fr auto;
+  align-items: center;
+  gap: 2rem;
+  padding: 2rem 0;
+  border-bottom: 1px solid var(--color-surface-500);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s;
+}
+.axm-row::after {
+  content: '';
+  position: absolute;
+  bottom: -1px; left: 0;
+  width: 0; height: 1px;
+  background: var(--color-amber);
+  transition: width 0.6s var(--ease-out);
+}
+.axm-row:hover::after { width: 100%; }
+.axm-row-num {
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  color: var(--color-text-faint);
+}
+.axm-row-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2.2vw, 1.7rem);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  transition: color 0.3s;
+}
+.axm-row:hover .axm-row-title { color: var(--color-amber); }
+.axm-row-desc {
+  font-size: 0.85rem;
+  line-height: 1.65;
+  color: var(--color-text-muted);
+}
+.axm-row-arr {
+  font-size: 1.3rem;
+  color: var(--color-text-muted);
+  transition: transform 0.4s var(--ease-out), color 0.3s;
+}
+.axm-row:hover .axm-row-arr { transform: translate(3px, -3px); color: var(--color-amber); }
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Stats bar
+══════════════════════════════════════ */
+.axm-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--color-surface-500);
+  gap: 1px;
+}
+.axm-stat {
+  background: var(--color-bg);
+  padding: 4rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+.axm-stat-n {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 5.5vw, 5.5rem);
+  line-height: 1;
+  color: var(--color-amber);
+}
+.axm-stat-n em { font-style: normal; font-size: 0.58em; opacity: 0.75; }
+.axm-stat-l {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Magnetic CTA btn
+══════════════════════════════════════ */
+.axm-mag-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 1.3rem 3rem;
+  border: 1px solid rgba(240,237,228,0.7);
+  border-radius: 100px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #fff;
+  transition: background 0.4s var(--ease-out), border-color 0.4s, color 0.4s, transform 0.4s var(--ease-out);
+  cursor: none;
+}
+.axm-mag-btn:hover {
+  background: var(--color-amber);
+  border-color: var(--color-amber);
+  color: #000;
+}
+.axm-mag-btn-arr {
+  display: inline-block;
+  transition: transform 0.4s var(--ease-out);
+}
+.axm-mag-btn:hover .axm-mag-btn-arr { transform: translate(3px, -3px); }
+
+/* ══════════════════════════════════════
+   AXIOM DESIGN SYSTEM — Section heading
+══════════════════════════════════════ */
+.axm-section-h2 {
+  font-family: var(--font-heading);
+  font-weight: 900;
+  font-size: clamp(2.8rem, 6vw, 6rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  letter-spacing: -0.01em;
+}
+.axm-section-h2 em {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 300;
+  color: var(--color-amber);
+}
+
+/* ══════════════════════════════════════
+   AXIOM — Responsive
+══════════════════════════════════════ */
+@media (max-width: 900px) {
+  .axm-nav { padding: 1.4rem 1.5rem; }
+  .axm-hero { min-height: auto; }
+  .axm-row { grid-template-columns: 2.5rem 1fr; }
+  .axm-row-desc, .axm-row-arr { display: none; }
+  .axm-stats { grid-template-columns: repeat(2, 1fr); }
+  .axm-stat { padding: 2.5rem 1.5rem; }
 }

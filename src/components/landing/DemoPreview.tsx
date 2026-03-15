@@ -29,55 +29,58 @@ export function DemoPreview() {
   const { t } = useLanguage()
 
   return (
-    <section className="relative py-24 sm:py-32 px-4 grid-bg">
+    <section className="relative py-24 sm:py-32 px-4 sm:px-16" style={{ background: 'linear-gradient(180deg, transparent 0%, rgba(200,255,0,0.02) 50%, transparent 100%)' }}>
       <div ref={ref} className="max-w-5xl mx-auto reveal">
-        <div className="text-center mb-12">
-          <p className="text-sm font-medium text-amber uppercase tracking-wider mb-3">{t.demo.badge}</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading tracking-tight mb-5">
+
+        <div className="mb-12">
+          <div className="axm-tag">{t.demo.badge}</div>
+          <h2 className="axm-section-h2">
             {t.demo.headlinePre}
-            <span className="gradient-text-amber">{t.demo.headlineAccent}</span>
+            <em>{t.demo.headlineAccent}</em>
           </h2>
         </div>
 
-        {/* Tabs */}
-        <div className="flex justify-center mb-8">
-          <div className="inline-flex gap-1 rounded-2xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/40 p-1.5">
-            {t.demo.tabs.map((tab, i) => (
-              <button
-                key={i}
-                onClick={() => setActive(i)}
-                className={cn(
-                  'px-4 sm:px-5 py-2.5 rounded-xl text-sm font-medium transition-all duration-250 cursor-pointer',
-                  active === i
-                    ? 'bg-amber/10 text-amber shadow-[0_0_12px_rgba(200,255,0,0.08)]'
-                    : 'text-text-muted hover:text-text-primary'
-                )}
-              >
-                {tab}
-              </button>
-            ))}
-          </div>
+        {/* Tabs — Axiom style */}
+        <div className="flex gap-0 mb-8 border-b border-surface-500">
+          {t.demo.tabs.map((tab, i) => (
+            <button
+              key={i}
+              onClick={() => setActive(i)}
+              className={cn(
+                'px-6 py-3 text-sm font-heading font-bold uppercase tracking-wider transition-all duration-250 cursor-none relative',
+                active === i
+                  ? 'text-amber'
+                  : 'text-text-muted hover:text-white'
+              )}
+            >
+              {tab}
+              {active === i && (
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-amber" />
+              )}
+            </button>
+          ))}
         </div>
 
-        {/* Content */}
-        <div className="rounded-3xl bg-surface-800/50 backdrop-blur-sm border border-surface-500/50 p-6 sm:p-8 min-h-[400px]">
+        {/* Content panel */}
+        <div className="rounded-2xl bg-surface-800/50 border border-surface-500/50 p-6 sm:p-8 min-h-[400px]">
           {active === 0 && (
             <div className="space-y-4">
               {t.demo.personas.map((p, i) => (
-                <div key={i} className="flex items-start gap-4 p-4 sm:p-5 rounded-2xl bg-surface-700/40 border border-surface-500/40 hover:border-surface-500/70 transition-all duration-300">
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-semibold flex-shrink-0 border" style={{ backgroundColor: personaColors[i] + '12', color: personaColors[i], borderColor: personaColors[i] + '25' }}>
+                <div key={i} className="flex items-start gap-4 p-4 rounded-xl bg-surface-700/40 border border-surface-500/40 hover:border-surface-500 transition-all duration-300">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-heading font-bold flex-shrink-0 border"
+                    style={{ backgroundColor: personaColors[i] + '12', color: personaColors[i], borderColor: personaColors[i] + '25' }}>
                     {p.name[0]}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center justify-between mb-2.5">
+                    <div className="flex items-center justify-between mb-2">
                       <div>
-                        <span className="font-medium text-sm">{p.name}</span>
-                        <span className="text-text-muted text-xs ms-2">{p.role}</span>
+                        <span className="font-heading font-bold text-sm tracking-wide">{p.name}</span>
+                        <span className="text-text-muted text-xs ml-2">{p.role}</span>
                       </div>
                       <span className="text-sm font-bold font-heading" style={{ color: personaColors[i] }}>{personaScores[i]}/10</span>
                     </div>
-                    <div className="h-1.5 rounded-full bg-surface-600/60 overflow-hidden mb-2.5">
-                      <div className="h-full rounded-full transition-all duration-500 ease-out" style={{ width: `${personaScores[i] * 10}%`, backgroundColor: personaColors[i] }} />
+                    <div className="h-1 rounded-full bg-surface-600 overflow-hidden mb-2">
+                      <div className="h-full rounded-full transition-all duration-700" style={{ width: `${personaScores[i] * 10}%`, backgroundColor: personaColors[i] }} />
                     </div>
                     <p className="text-text-muted text-xs leading-relaxed">{p.comment}</p>
                   </div>
@@ -89,16 +92,12 @@ export function DemoPreview() {
           {active === 1 && (
             <div className="space-y-4">
               {t.demo.debate.map((d, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    'p-4 sm:p-5 rounded-2xl border transition-all duration-300',
-                    d.agent === t.demo.debate[3].agent
-                      ? 'bg-success/5 border-success/20'
-                      : 'bg-surface-700/40 border-surface-500/40'
-                  )}
-                >
-                  <span className="text-xs font-semibold mb-2 block" style={{ color: debateColors[i] }}>
+                <div key={i} className={cn('p-4 rounded-xl border transition-all duration-300',
+                  d.agent === t.demo.debate[3].agent
+                    ? 'bg-success/5 border-success/20'
+                    : 'bg-surface-700/40 border-surface-500/40'
+                )}>
+                  <span className="text-xs font-heading font-bold mb-2 block uppercase tracking-wider" style={{ color: debateColors[i] }}>
                     {d.agent}
                   </span>
                   <p className="text-sm text-text-primary leading-relaxed">{d.text}</p>
@@ -108,23 +107,12 @@ export function DemoPreview() {
           )}
 
           {active === 2 && (
-            <div className="relative w-full aspect-[4/5] max-w-sm mx-auto rounded-2xl bg-surface-700/40 border border-surface-500/40 overflow-hidden">
+            <div className="relative w-full aspect-[4/5] max-w-sm mx-auto rounded-xl bg-surface-700/40 border border-surface-500/40 overflow-hidden">
               {heatmapPositions.map((zone, i) => (
-                <div
-                  key={i}
-                  className={cn(
-                    'absolute rounded-xl border flex items-center justify-center transition-all duration-300 hover:scale-[1.02]',
-                    getHeatColor(zone.attention)
-                  )}
-                  style={{
-                    left: `${zone.x}%`,
-                    top: `${zone.y}%`,
-                    width: `${zone.w}%`,
-                    height: `${zone.h}%`,
-                  }}
-                >
+                <div key={i} className={cn('absolute rounded-lg border flex items-center justify-center transition-all duration-300 hover:scale-[1.02]', getHeatColor(zone.attention))}
+                  style={{ left: `${zone.x}%`, top: `${zone.y}%`, width: `${zone.w}%`, height: `${zone.h}%` }}>
                   <div className="text-center">
-                    <span className="text-xs font-medium text-text-primary block">{t.demo.heatmapZones[i].label}</span>
+                    <span className="text-xs font-heading font-bold text-text-primary block">{t.demo.heatmapZones[i].label}</span>
                     <span className="text-xs text-text-muted">{zone.attention}%</span>
                   </div>
                 </div>

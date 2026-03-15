@@ -21,115 +21,86 @@ export function FeaturesGrid() {
   const ref = useReveal()
   const { t } = useLanguage()
   const [active, setActive] = useState(0)
-
   const ActiveIcon = featureIcons[active]
 
   return (
-    <section id="features" className="relative py-24 sm:py-32 px-4">
+    <section id="features" className="relative py-24 sm:py-32 px-4 sm:px-16">
       <div ref={ref} className="max-w-6xl mx-auto reveal">
-        <div className="text-center mb-16">
-          <p className="text-sm font-medium text-amber uppercase tracking-wider mb-3">{t.features.badge}</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading tracking-tight mb-5">
+
+        <div className="mb-16">
+          <div className="axm-tag">{t.features.badge}</div>
+          <h2 className="axm-section-h2 max-w-2xl">
             {t.features.headlinePre}
-            <span className="gradient-text-amber">{t.features.headlineAccent}</span>
+            <em>{t.features.headlineAccent}</em>
           </h2>
-          <p className="text-text-muted text-base sm:text-lg max-w-2xl mx-auto">
-            {t.features.description}
-          </p>
         </div>
 
-        {/* Interactive split layout */}
-        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6 items-stretch">
+        <div className="flex flex-col lg:flex-row gap-4 items-stretch">
 
-          {/* Left: Vertical numbered feature list */}
-          <div className="lg:w-[38%] flex flex-col gap-2">
+          {/* Left: Feature list as Axiom rows */}
+          <div className="lg:w-[40%] border-t border-surface-500">
             {t.features.items.map((f, i) => {
               const isActive = active === i
               return (
                 <button
                   key={i}
                   onClick={() => setActive(i)}
-                  className={`group relative flex items-center gap-4 text-left rounded-2xl px-5 py-4 border transition-all duration-300 cursor-pointer overflow-hidden ${
-                    isActive
-                      ? 'border-amber/25 bg-amber/[0.06]'
-                      : 'border-surface-500/40 bg-surface-800/30 hover:border-surface-500/70 hover:bg-surface-800/50'
-                  }`}
+                  className="group w-full flex items-center gap-4 py-4 border-b border-surface-500 relative overflow-hidden cursor-none text-left transition-all duration-300"
+                  style={{ background: isActive ? 'rgba(200,255,0,0.04)' : 'transparent' }}
                 >
-                  {/* Active left bar */}
                   {isActive && (
                     <motion.div
-                      layoutId="feature-active-bar"
-                      className="absolute left-0 top-0 bottom-0 w-0.5 bg-amber rounded-full"
-                      transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+                      layoutId="feat-bar"
+                      className="absolute left-0 top-0 bottom-0 w-0.5 bg-amber"
+                      transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                     />
                   )}
-
-                  {/* Number */}
-                  <span className={`text-xs font-mono font-bold tabular-nums w-5 shrink-0 transition-colors duration-300 ${
-                    isActive ? 'text-amber' : 'text-text-faint group-hover:text-text-muted'
-                  }`}>
+                  <span className={`text-xs font-heading font-bold tracking-wider ml-3 w-6 shrink-0 ${isActive ? 'text-amber' : 'text-text-faint'}`}>
                     {String(i + 1).padStart(2, '0')}
                   </span>
-
-                  {/* Title */}
-                  <p className={`text-sm font-semibold font-heading flex-1 transition-colors duration-300 ${
-                    isActive ? 'text-text-primary' : 'text-text-muted group-hover:text-text-primary'
-                  }`}>
+                  <span className={`text-sm font-heading font-bold uppercase tracking-wide transition-colors duration-300 flex-1 ${isActive ? 'text-white' : 'text-text-muted group-hover:text-white'}`}>
                     {f.title}
-                  </p>
-
-                  {/* Active dot */}
-                  {isActive && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-amber shrink-0" />
-                  )}
+                  </span>
+                  {isActive && <div className="w-1.5 h-1.5 rounded-full bg-amber mr-4 shrink-0" />}
                 </button>
               )
             })}
           </div>
 
-          {/* Right: Animated feature detail panel */}
-          <div className="lg:w-[62%] min-h-[340px]">
+          {/* Right: Animated detail panel */}
+          <div className="lg:w-[60%] min-h-[320px]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={active}
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 18 }}
                 animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                className="h-full rounded-2xl bg-surface-800/60 backdrop-blur-sm border border-amber/15 p-8 sm:p-10 relative overflow-hidden"
+                exit={{ opacity: 0, y: -18 }}
+                transition={{ duration: 0.26, ease: [0.16, 1, 0.3, 1] }}
+                className="h-full rounded-2xl bg-surface-800/60 border border-amber/12 p-8 sm:p-10 relative overflow-hidden"
               >
-                {/* Large background number */}
-                <div className="absolute -top-2 -right-3 text-[130px] font-bold font-heading text-surface-600/40 leading-none pointer-events-none select-none">
+                {/* Big ghost number */}
+                <div className="absolute -top-2 -right-3 text-[130px] font-heading font-bold text-surface-600/30 leading-none pointer-events-none select-none">
                   {String(active + 1).padStart(2, '0')}
                 </div>
-
-                {/* Ambient glow */}
-                <div className="absolute top-0 right-0 w-72 h-72 bg-amber/[0.06] rounded-full blur-[80px] pointer-events-none" />
+                <div className="absolute top-0 right-0 w-64 h-64 bg-amber/[0.05] rounded-full blur-[80px] pointer-events-none" />
 
                 <div className="relative">
-                  {/* Icon */}
-                  <div className="w-14 h-14 rounded-2xl bg-amber/10 border border-amber/20 flex items-center justify-center mb-6">
-                    <ActiveIcon size={26} className="text-amber/80" />
+                  <div className="w-12 h-12 rounded-2xl bg-amber/10 border border-amber/20 flex items-center justify-center mb-6">
+                    <ActiveIcon size={22} className="text-amber/80" />
                   </div>
-
-                  {/* Title */}
-                  <h3 className="text-2xl sm:text-3xl font-bold font-heading mb-3">
+                  <h3 className="font-heading font-black text-3xl sm:text-4xl uppercase tracking-tight mb-3">
                     {t.features.items[active].title}
                   </h3>
-
-                  {/* Description */}
-                  <p className="text-text-muted leading-relaxed mb-8 text-base sm:text-lg max-w-lg">
+                  <p className="text-text-muted leading-relaxed mb-8 max-w-md">
                     {t.features.items[active].description}
                   </p>
-
-                  {/* Feature bullets */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     {featureDetails[active].bullets.map((bullet, j) => (
                       <motion.div
                         key={j}
                         initial={{ opacity: 0, x: -8 }}
                         animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: j * 0.06, duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ delay: j * 0.055, duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
                         className="flex items-center gap-3"
                       >
                         <div className="w-1.5 h-1.5 rounded-full bg-amber shrink-0" />

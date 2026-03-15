@@ -3,7 +3,6 @@
 import Link from 'next/link'
 import { Check } from 'lucide-react'
 import { PRICING_TIERS } from '@/lib/constants'
-import { Button } from '@/components/ui/Button'
 import { cn } from '@/lib/cn'
 import { useReveal } from '@/hooks/useReveal'
 import { authClient } from '@/lib/auth-client'
@@ -16,80 +15,102 @@ export function Pricing() {
   const { t } = useLanguage()
 
   return (
-    <section id="pricing" className="relative py-24 sm:py-32 px-4 grid-bg">
-      <div ref={ref} className="max-w-6xl mx-auto reveal">
-        <div className="text-center mb-16">
-          <p className="text-sm font-medium text-amber uppercase tracking-wider mb-3">{t.pricing.badge}</p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold font-heading tracking-tight mb-5">
-            {t.pricing.headlinePre}
-            <span className="gradient-text-amber">{t.pricing.headlineAccent}</span>
-            {t.pricing.headlinePost}
-          </h2>
-          <p className="text-text-muted text-base sm:text-lg max-w-2xl mx-auto">
+    <section id="pricing" className="relative py-24 sm:py-32 px-4 sm:px-16 border-t border-surface-500">
+      {/* Ambient glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-amber/[0.04] rounded-full blur-[140px] pointer-events-none" />
+
+      <div ref={ref} className="relative max-w-6xl mx-auto reveal">
+
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-16">
+          <div>
+            <div className="axm-tag">{t.pricing.badge}</div>
+            <h2 className="axm-section-h2">
+              {t.pricing.headlinePre}
+              <em>{t.pricing.headlineAccent}</em>
+              {t.pricing.headlinePost}
+            </h2>
+          </div>
+          <p className="text-text-muted text-sm max-w-xs leading-relaxed">
             {t.pricing.description}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-px bg-surface-500 max-w-4xl mx-auto">
           {PRICING_TIERS.map((tier, idx) => {
             const tierT = t.pricing.tiers[idx]
             return (
               <div
                 key={tier.name}
                 className={cn(
-                  'group relative rounded-3xl border p-7 sm:p-8 flex flex-col transition-all duration-300',
+                  'relative flex flex-col p-8 transition-all duration-300',
                   tier.popular
-                    ? 'bg-surface-700/60 backdrop-blur-sm border-amber/30 glow-amber-strong hover:border-amber/50'
-                    : 'bg-surface-800/60 backdrop-blur-sm border-surface-500/60 hover:border-amber/15'
+                    ? 'bg-surface-700/80'
+                    : 'bg-bg hover:bg-surface-800/60'
                 )}
               >
+                {/* Top accent line */}
+                {tier.popular && (
+                  <div className="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent via-amber to-transparent" />
+                )}
+
                 {tier.popular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2">
-                    <span className="inline-flex items-center rounded-full bg-gradient-to-r from-[#FAFF00] via-[#C8FF00] to-[#00FF87] px-4 py-1 text-xs font-semibold text-black">
+                    <span className="inline-flex items-center rounded-full bg-amber px-4 py-1 text-xs font-heading font-bold text-black uppercase tracking-wider">
                       {t.pricing.mostPopular}
                     </span>
                   </div>
                 )}
-                <div className="mb-6">
-                  <h3 className="text-lg font-semibold font-heading mb-1">{tierT.name}</h3>
-                  <p className="text-sm text-text-muted">{tierT.description}</p>
+
+                {/* Tier name + desc */}
+                <div className="mb-7">
+                  <span className="text-xs font-heading font-bold text-text-muted uppercase tracking-widest mb-2 block">{tierT.name}</span>
+                  <p className="text-xs text-text-muted leading-relaxed">{tierT.description}</p>
                 </div>
-                <div className="mb-6">
-                  <span className="text-4xl font-bold font-heading">${tier.price}</span>
-                  <span className="text-text-muted text-sm">{t.pricing.perMonth}</span>
+
+                {/* Price */}
+                <div className="mb-8">
+                  <div className="flex items-end gap-1">
+                    <span className="font-heading font-black text-5xl leading-none" style={{ letterSpacing: '-0.02em' }}>${tier.price}</span>
+                    <span className="text-text-muted text-sm mb-1.5">{t.pricing.perMonth}</span>
+                  </div>
                   {tier.popular && (
-                    <p className="text-xs text-amber mt-1.5">{t.pricing.earlyBird}</p>
+                    <p className="text-xs text-amber mt-1.5 font-medium">{t.pricing.earlyBird}</p>
                   )}
                 </div>
+
+                {/* Features */}
                 <ul className="space-y-3 mb-8 flex-1">
                   {tierT.features.map((f, fi) => (
-                    <li key={fi} className="flex items-start gap-2.5 text-sm">
-                      <div className="w-5 h-5 rounded-full bg-amber/8 flex items-center justify-center flex-shrink-0 mt-0.5">
-                        <Check size={12} className="text-amber/70" />
+                    <li key={fi} className="flex items-start gap-3 text-sm">
+                      <div className="w-4 h-4 rounded-full bg-amber/10 border border-amber/20 flex items-center justify-center flex-shrink-0 mt-0.5">
+                        <Check size={10} className="text-amber" />
                       </div>
-                      <span className="text-text-primary">{f}</span>
+                      <span className="text-text-muted leading-relaxed">{f}</span>
                     </li>
                   ))}
                 </ul>
+
                 <Link href={isLoggedIn ? '/app' : '/sign-up'}>
-                  <Button
-                    variant={tier.popular ? 'primary' : 'secondary'}
-                    className="w-full"
-                  >
+                  <button className={cn(
+                    'w-full py-3 px-6 rounded-xl font-heading font-bold text-sm uppercase tracking-wide transition-all duration-300 cursor-none',
+                    tier.popular
+                      ? 'bg-amber text-black hover:bg-amber/90'
+                      : 'border border-surface-500 text-text-muted hover:border-amber/30 hover:text-white'
+                  )}>
                     {isLoggedIn ? t.pricing.ctaDashboard : tierT.cta}
-                  </Button>
+                  </button>
                 </Link>
               </div>
             )
           })}
         </div>
 
-        {/* Trust Badges */}
-        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-12">
+        {/* Trust badges */}
+        <div className="flex flex-wrap items-center justify-center gap-8 mt-12">
           {t.pricing.trustBadges.map((badge, i) => (
-            <span key={i} className="flex items-center gap-4">
-              {i > 0 && <span className="text-text-faint/30 hidden sm:inline">·</span>}
-              <span className="text-xs text-text-muted">{badge}</span>
+            <span key={i} className="flex items-center gap-2.5">
+              <span className="w-1 h-1 rounded-full bg-amber/40" />
+              <span className="text-xs text-text-muted font-heading tracking-wide uppercase">{badge}</span>
             </span>
           ))}
         </div>
