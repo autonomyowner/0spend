@@ -37,16 +37,21 @@ export function HowItWorks() {
                   </div>
                 )}
 
-                <div className="relative rounded-2xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/60 p-7 sm:p-8 hover:border-amber/20 hover:bg-surface-700/40 transition-all duration-300 h-full cursor-default">
+                <div className="relative rounded-2xl bg-surface-800/60 backdrop-blur-sm border border-surface-500/60 p-7 sm:p-8 hover:border-amber/20 hover:bg-surface-700/40 transition-all duration-300 h-full cursor-default overflow-hidden">
                   {/* Hover glow */}
                   <div className="absolute inset-0 rounded-2xl bg-amber/[0.02] opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
+
+                  {/* Large background number */}
+                  <div className="absolute -bottom-4 -right-2 text-[100px] font-bold font-heading text-surface-600/50 leading-none pointer-events-none select-none group-hover:text-amber/10 transition-colors duration-500">
+                    {String(i + 1).padStart(2, '0')}
+                  </div>
 
                   <div className="relative">
                     <div className="flex items-center gap-3 mb-5">
                       <div className="w-12 h-12 rounded-2xl bg-amber/8 border border-amber/10 flex items-center justify-center group-hover:bg-amber/12 transition-colors duration-300">
                         <Icon size={22} className="text-text-muted group-hover:text-amber/80 transition-colors duration-300" />
                       </div>
-                      <span className="text-xs font-mono text-amber/60 font-medium">0{i + 1}</span>
+                      <span className="text-xs font-mono text-amber/60 font-semibold tracking-wider">STEP {String(i + 1).padStart(2, '0')}</span>
                     </div>
                     <h3 className="text-lg font-semibold font-heading mb-2.5">{step.title}</h3>
                     <p className="text-text-muted text-sm leading-relaxed">{step.description}</p>

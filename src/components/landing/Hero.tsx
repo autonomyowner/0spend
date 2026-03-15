@@ -179,8 +179,25 @@ export function Hero() {
           </div>
         </div>
 
+        {/* Trust Bar — key metrics */}
+        <div className="mt-12 animate-fade-up" style={{ animationDelay: '0.45s' }}>
+          <div className="flex flex-wrap items-center justify-center gap-x-10 gap-y-4 py-5 px-6 rounded-2xl border border-surface-500/40 bg-surface-800/30 backdrop-blur-sm max-w-2xl mx-auto">
+            {[
+              { value: '10K+', label: 'Ads Analyzed' },
+              { value: '8', label: 'Platforms' },
+              { value: '<60s', label: 'Analysis Time' },
+              { value: '6', label: 'AI Personas' },
+            ].map((stat, i) => (
+              <div key={i} className="flex flex-col items-center gap-0.5">
+                <span className="text-xl sm:text-2xl font-bold font-heading gradient-text-amber">{stat.value}</span>
+                <span className="text-[11px] text-text-muted">{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Product showcase card */}
-        <div className="mt-16 sm:mt-20 max-w-4xl mx-auto animate-fade-up" style={{ animationDelay: '0.45s' }}>
+        <div className="mt-12 sm:mt-16 max-w-4xl mx-auto animate-fade-up" style={{ animationDelay: '0.5s' }}>
           <div className="relative rounded-3xl border border-surface-500/60 bg-surface-800/60 backdrop-blur-xl overflow-hidden glow-amber">
             {/* Subtle top gradient accent */}
             <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-amber/40 to-transparent" />
