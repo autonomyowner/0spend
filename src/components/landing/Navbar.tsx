@@ -26,9 +26,9 @@ export function Navbar() {
         <div className="flex items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5">
-            <img src="/logo-without-background.png" alt="0spend" className="h-8 w-auto" />
+            <img src="/logo-without-background.png" alt="10xSpend - AI Ad Analysis Platform" className="h-8 w-auto" />
             <span className="font-heading font-semibold text-text-primary tracking-tight text-lg">
-              0spend
+              10xSpend
             </span>
           </Link>
 

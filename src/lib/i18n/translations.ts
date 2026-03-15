@@ -14,13 +14,13 @@ export const translations = {
 
     // Hero
     hero: {
-      badge: 'AI-Powered Creative Testing',
-      headlinePre: 'Stop Burning ',
-      headlineAccent: 'Ad Budget',
-      headlinePost: 'on Untested Creatives',
-      subheading: 'Test your ad creatives with synthetic AI personas before spending a single dollar. Get scores, feedback, and fix-it suggestions in seconds.',
+      badge: 'AI Ad Analysis Platform',
+      headlinePre: 'Analyze Your ',
+      headlineAccent: 'Ads With AI',
+      headlinePost: 'Before You Spend',
+      subheading: 'Upload any ad and get instant AI analysis — scores, attention heatmaps, persona feedback, and fix-it suggestions. The smartest way to optimize your ads and marketing campaigns.',
       ctaDashboard: 'Go to Dashboard',
-      ctaStart: 'Start Testing Free',
+      ctaStart: 'Analyze Your First Ad Free',
       ctaHow: 'See How It Works',
       cardTitle: 'Creative Analysis',
       cardFile: 'summer-sale-v2.png',
@@ -43,28 +43,28 @@ export const translations = {
     howItWorks: {
       badge: 'How It Works',
       headlinePre: 'Three Steps to ',
-      headlineAccent: 'Validated Creatives',
-      description: 'No more guessing. No more wasted ad spend. Get AI-powered feedback before you hit publish.',
+      headlineAccent: 'AI-Powered Ad Analysis',
+      description: 'No more guessing which ads will perform. Get AI-driven insights before you spend a single dollar on your marketing campaigns.',
       steps: [
-        { title: 'Upload Creative', description: 'Drop in your ad image, video, carousel, or landing page. We handle all formats.' },
-        { title: 'AI Personas Evaluate', description: '8+ synthetic personas score your creative on hook strength, clarity, CTA power, and more.' },
-        { title: 'Get Actionable Results', description: 'Scores, agent debates, attention heatmaps, and specific "fix-it" rewrites — in seconds.' },
+        { title: 'Upload Your Ad', description: 'Drop in your ad image, video, or landing page URL. We support all major formats and 8 ad platforms.' },
+        { title: 'AI Analyzes Everything', description: '8+ AI personas score your ad on hook strength, visual clarity, CTA power, emotional impact, and more.' },
+        { title: 'Get Actionable Insights', description: 'Scores, agent debates, attention heatmaps, fix-it rewrites, performance predictions — in seconds.' },
       ],
     },
 
     // Features
     features: {
       badge: 'Features',
-      headlinePre: 'Everything You Need to ',
-      headlineAccent: 'Ship Winning Ads',
-      description: 'A complete toolkit for creative testing — no focus groups, no wasted spend, no guesswork.',
+      headlinePre: 'Everything You Need for ',
+      headlineAccent: 'AI Ad Analysis',
+      description: 'Everything you need to analyze, optimize, and improve your ads before launching your campaign.',
       items: [
-        { title: 'Persona Scoring', description: 'Score creatives against diverse synthetic personas — from Gen Z impulse buyers to skeptical enterprise CTOs.' },
-        { title: 'Agent Debate', description: 'Watch a Buyer Agent and Skeptic Agent debate your creative in real time. See both sides before you spend.' },
+        { title: 'Persona Scoring', description: 'Score your ads against diverse AI personas — from Gen Z impulse buyers to skeptical enterprise CTOs.' },
+        { title: 'Agent Debate', description: 'Watch a Buyer Agent and Skeptic Agent debate your ad in real time. See both sides before you spend.' },
         { title: 'Fix-It Engine', description: 'Get specific copy and visual rewrites with predicted impact scores. Not just "make it better" — actual alternatives.' },
-        { title: 'Attention Heatmaps', description: 'See where eyes land first, what gets ignored, and how visual hierarchy performs across your creative.' },
-        { title: 'Funnel Check', description: 'Validate creative-to-landing page consistency. Catch message mismatches before they tank your conversion rate.' },
-        { title: 'Competitive Benchmarks', description: 'Compare your scores against industry averages and top performers in your vertical.' },
+        { title: 'Attention Heatmaps', description: 'See where eyes land first, what gets ignored, and how visual hierarchy performs across your ad.' },
+        { title: 'Emotional Profiling', description: 'Understand the emotional response your ad triggers — mapped to Plutchik\'s 8 core emotions with actionable recommendations.' },
+        { title: 'Performance Predictions', description: 'Get predicted CTR, ROAS, scroll-stop rate, and more — before spending a dollar on your campaign.' },
       ],
     },
 
@@ -93,12 +93,12 @@ export const translations = {
     // Social Proof
     socialProof: {
       badge: 'Proof',
-      headlinePre: 'Teams That ',
-      headlineAccent: 'Stopped Guessing',
+      headlinePre: 'Teams That Trust ',
+      headlineAccent: 'AI Ad Analysis',
       testimonials: [
         { quote: 'We cut our wasted ad spend by 60% in the first month. The agent debate feature alone is worth the subscription.', name: 'Emily Chen', role: 'Head of Growth, Revo', metric: '$42K saved' },
         { quote: 'Finally, a tool that gives me real feedback — not just "looks good." The fix-it suggestions are incredibly specific.', name: 'James Okafor', role: 'Creative Director, PixelForge', metric: '3x ROAS' },
-        { quote: 'We test every creative before launch now. Our CTR improved 40% since adopting 0spend across all campaigns.', name: 'Ana Rivera', role: 'Performance Marketing, Scalebound', metric: '40% CTR lift' },
+        { quote: 'We analyze every ad before launch now. Our CTR improved 40% since adopting 10xSpend across all campaigns.', name: 'Ana Rivera', role: 'Performance Marketing, Scalebound', metric: '40% CTR lift' },
       ],
     },
 
@@ -121,24 +121,24 @@ export const translations = {
 
     // CTA
     cta: {
-      headlinePre: 'Stop Spending. ',
-      headlineAccent: 'Start Testing.',
-      description: 'Join thousands of marketers who validate every creative before it touches real budget.',
+      headlinePre: 'Stop Guessing. ',
+      headlineAccent: 'Start Analyzing.',
+      description: 'Join thousands of marketers who use AI ad analysis to optimize every campaign before spending real budget.',
       ctaDashboard: 'Go to Dashboard',
-      ctaStart: 'Get Started Free',
+      ctaStart: 'Analyze Your First Ad Free',
       noCreditCard: 'No credit card required. 14-day free trial.',
     },
 
     // Footer
     footer: {
-      tagline: 'AI-powered creative testing. Stop burning ad budget on untested creatives.',
+      tagline: 'AI-powered ad analysis and marketing intelligence. Analyze your ads with AI before you spend.',
       columns: [
-        { title: 'Product', links: ['Features', 'Pricing', 'How It Works', 'Changelog'] },
+        { title: 'Product', links: ['Features', 'Pricing', 'How It Works', 'Comparisons'] },
         { title: 'Company', links: ['About', 'Blog', 'Careers', 'Contact'] },
         { title: 'Resources', links: ['Documentation', 'API Reference', 'Support', 'Status'] },
         { title: 'Legal', links: ['Privacy', 'Terms', 'Security'] },
       ],
-      copyright: '0spend. All rights reserved.',
+      copyright: '10xSpend. All rights reserved.',
     },
 
     // ===== APP / DASHBOARD =====
@@ -489,13 +489,13 @@ export const translations = {
 
     // Hero
     hero: {
-      badge: 'اختبار إبداعي مدعوم بالذكاء الاصطناعي',
-      headlinePre: 'توقف عن حرق ',
-      headlineAccent: 'ميزانية الإعلانات',
-      headlinePost: 'على إبداعات غير مختبرة',
-      subheading: 'اختبر إبداعاتك الإعلانية مع شخصيات ذكاء اصطناعي قبل إنفاق دولار واحد. احصل على تقييمات وملاحظات واقتراحات تحسين في ثوانٍ.',
+      badge: 'منصة تحليل الإعلانات بالذكاء الاصطناعي',
+      headlinePre: 'حلّل ',
+      headlineAccent: 'إعلاناتك بالذكاء الاصطناعي',
+      headlinePost: 'قبل أن تنفق',
+      subheading: 'ارفع أي إعلان واحصل على تحليل فوري بالذكاء الاصطناعي — تقييمات، خرائط انتباه، ملاحظات الشخصيات، واقتراحات تحسين. الطريقة الأذكى لتحسين إعلاناتك وحملاتك التسويقية.',
       ctaDashboard: 'الذهاب إلى لوحة التحكم',
-      ctaStart: 'ابدأ الاختبار مجاناً',
+      ctaStart: 'حلّل إعلانك الأول مجاناً',
       ctaHow: 'شاهد كيف يعمل',
       cardTitle: 'تحليل الإبداع',
       cardFile: 'summer-sale-v2.png',
@@ -517,27 +517,27 @@ export const translations = {
     howItWorks: {
       badge: 'كيف يعمل',
       headlinePre: 'ثلاث خطوات نحو ',
-      headlineAccent: 'إبداعات موثّقة',
-      description: 'لا مزيد من التخمين. لا مزيد من هدر الإعلانات. احصل على ملاحظات الذكاء الاصطناعي قبل النشر.',
+      headlineAccent: 'تحليل إعلانات بالذكاء الاصطناعي',
+      description: 'لا مزيد من التخمين أي الإعلانات ستنجح. احصل على رؤى مدعومة بالذكاء الاصطناعي قبل إنفاق دولار واحد على حملاتك التسويقية.',
       steps: [
-        { title: 'ارفع إبداعك', description: 'أضف صورة إعلانك أو فيديو أو سلسلة صور أو صفحة هبوط. ندعم جميع الصيغ.' },
-        { title: 'شخصيات الذكاء الاصطناعي تُقيّم', description: 'أكثر من 8 شخصيات اصطناعية تُقيّم إبداعك على قوة الجذب والوضوح وقوة الـ CTA والمزيد.' },
-        { title: 'احصل على نتائج عملية', description: 'تقييمات، نقاشات، خرائط انتباه، وإعادة كتابة محددة — في ثوانٍ.' },
+        { title: 'ارفع إعلانك', description: 'أضف صورة إعلانك أو فيديو أو رابط صفحة هبوط. ندعم جميع الصيغ الرئيسية و8 منصات إعلانية.' },
+        { title: 'الذكاء الاصطناعي يحلّل كل شيء', description: 'أكثر من 8 شخصيات ذكاء اصطناعي تُقيّم إعلانك على قوة الجذب والوضوح البصري وقوة الـ CTA والتأثير العاطفي والمزيد.' },
+        { title: 'احصل على رؤى عملية', description: 'تقييمات، نقاشات الوكلاء، خرائط انتباه، اقتراحات إصلاح، توقعات الأداء — في ثوانٍ.' },
       ],
     },
 
     features: {
       badge: 'المميزات',
       headlinePre: 'كل ما تحتاجه لـ',
-      headlineAccent: 'إعلانات ناجحة',
-      description: 'مجموعة أدوات متكاملة لاختبار الإبداعات — بدون مجموعات تركيز، بدون هدر، بدون تخمين.',
+      headlineAccent: 'تحليل الإعلانات بالذكاء الاصطناعي',
+      description: 'كل ما تحتاجه لتحليل وتحسين إعلاناتك قبل إطلاق حملتك.',
       items: [
-        { title: 'تقييم الشخصيات', description: 'قيّم إبداعاتك مقابل شخصيات اصطناعية متنوعة — من مشتري الجيل Z الاندفاعيين إلى مدراء التقنية المتشككين.' },
-        { title: 'نقاش الوكلاء', description: 'شاهد وكيل المشتري ووكيل المتشكك يتناقشان حول إبداعك في الوقت الفعلي. اطلع على كلا الجانبين قبل الإنفاق.' },
+        { title: 'تقييم الشخصيات', description: 'قيّم إعلاناتك مقابل شخصيات ذكاء اصطناعي متنوعة — من مشتري الجيل Z الاندفاعيين إلى مدراء التقنية المتشككين.' },
+        { title: 'نقاش الوكلاء', description: 'شاهد وكيل المشتري ووكيل المتشكك يتناقشان حول إعلانك في الوقت الفعلي. اطلع على كلا الجانبين قبل الإنفاق.' },
         { title: 'محرك الإصلاح', description: 'احصل على إعادة كتابة محددة للنصوص والمرئيات مع درجات تأثير متوقعة. ليس فقط "اجعلها أفضل" — بدائل حقيقية.' },
-        { title: 'خرائط الانتباه', description: 'شاهد أين تقع العيون أولاً، وما يتم تجاهله، وكيف يعمل التسلسل البصري عبر إبداعك.' },
-        { title: 'فحص القمع', description: 'تحقق من تناسق الإبداع مع صفحة الهبوط. اكتشف عدم تطابق الرسائل قبل أن يؤثر على معدل التحويل.' },
-        { title: 'المقاييس التنافسية', description: 'قارن درجاتك مع متوسطات الصناعة والأداء الأفضل في مجالك.' },
+        { title: 'خرائط الانتباه', description: 'شاهد أين تقع العيون أولاً، وما يتم تجاهله، وكيف يعمل التسلسل البصري عبر إعلانك.' },
+        { title: 'التنميط العاطفي', description: 'افهم الاستجابة العاطفية التي يثيرها إعلانك — مرتبطة بمشاعر بلوتشيك الثمانية الأساسية مع توصيات عملية.' },
+        { title: 'توقعات الأداء', description: 'احصل على توقعات CTR وROAS ومعدل توقف التمرير والمزيد — قبل إنفاق دولار على حملتك.' },
       ],
     },
 
@@ -564,12 +564,12 @@ export const translations = {
 
     socialProof: {
       badge: 'إثبات',
-      headlinePre: 'فرق ',
-      headlineAccent: 'توقفت عن التخمين',
+      headlinePre: 'فرق تثق بـ',
+      headlineAccent: 'تحليل الإعلانات بالذكاء الاصطناعي',
       testimonials: [
         { quote: 'خفضنا هدر الإعلانات بنسبة 60% في الشهر الأول. ميزة نقاش الوكلاء وحدها تستحق الاشتراك.', name: 'إيميلي تشين', role: 'رئيسة النمو، Revo', metric: 'وفّرنا $42K' },
         { quote: 'أخيراً، أداة تعطيني ملاحظات حقيقية — وليس فقط "يبدو جيداً." اقتراحات الإصلاح دقيقة بشكل مذهل.', name: 'جيمس أوكافور', role: 'المدير الإبداعي، PixelForge', metric: '3x ROAS' },
-        { quote: 'نختبر كل إبداع قبل الإطلاق الآن. تحسن معدل النقر بنسبة 40% منذ اعتماد 0spend في جميع حملاتنا.', name: 'آنا ريفيرا', role: 'تسويق الأداء، Scalebound', metric: 'ارتفاع 40% CTR' },
+        { quote: 'نحلّل كل إعلان قبل الإطلاق الآن. تحسن معدل النقر بنسبة 40% منذ اعتماد 10xSpend في جميع حملاتنا.', name: 'آنا ريفيرا', role: 'تسويق الأداء، Scalebound', metric: 'ارتفاع 40% CTR' },
       ],
     },
 
@@ -590,23 +590,23 @@ export const translations = {
     },
 
     cta: {
-      headlinePre: 'توقف عن الإنفاق. ',
-      headlineAccent: 'ابدأ الاختبار.',
-      description: 'انضم إلى آلاف المسوقين الذين يتحققون من كل إبداع قبل أن يمس الميزانية الحقيقية.',
+      headlinePre: 'توقف عن التخمين. ',
+      headlineAccent: 'ابدأ التحليل.',
+      description: 'انضم إلى آلاف المسوقين الذين يستخدمون تحليل الإعلانات بالذكاء الاصطناعي لتحسين كل حملة قبل إنفاق الميزانية.',
       ctaDashboard: 'الذهاب إلى لوحة التحكم',
-      ctaStart: 'ابدأ مجاناً',
+      ctaStart: 'حلّل إعلانك الأول مجاناً',
       noCreditCard: 'لا حاجة لبطاقة ائتمان. تجربة مجانية لمدة 14 يوماً.',
     },
 
     footer: {
-      tagline: 'اختبار إبداعي مدعوم بالذكاء الاصطناعي. توقف عن حرق ميزانية الإعلانات على إبداعات غير مختبرة.',
+      tagline: 'تحليل إعلانات مدعوم بالذكاء الاصطناعي وذكاء تسويقي. حلّل إعلاناتك بالذكاء الاصطناعي قبل أن تنفق.',
       columns: [
-        { title: 'المنتج', links: ['المميزات', 'الأسعار', 'كيف يعمل', 'سجل التغييرات'] },
+        { title: 'المنتج', links: ['المميزات', 'الأسعار', 'كيف يعمل', 'المقارنات'] },
         { title: 'الشركة', links: ['من نحن', 'المدونة', 'الوظائف', 'تواصل معنا'] },
         { title: 'الموارد', links: ['التوثيق', 'مرجع API', 'الدعم', 'الحالة'] },
         { title: 'قانوني', links: ['الخصوصية', 'الشروط', 'الأمان'] },
       ],
-      copyright: '0spend. جميع الحقوق محفوظة.',
+      copyright: '10xSpend. جميع الحقوق محفوظة.',
     },
 
     // ===== APP / DASHBOARD =====

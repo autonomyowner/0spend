@@ -1,9 +1,9 @@
 import { LayoutDashboard, FlaskConical, Users, BarChart3 } from 'lucide-react'
 
 export const BRAND = {
-  name: '0spend',
-  tagline: 'AI Creative Testing',
-  description: 'Test ad creatives with synthetic AI personas before spending real ad budget.',
+  name: '10xSpend',
+  tagline: 'AI Ad Analysis',
+  description: 'Upload any ad and get instant AI analysis — scores, attention heatmaps, persona feedback, and optimization suggestions. The smartest way to analyze your ads before you spend.',
 } as const
 
 export const NAV_LINKS = [

@@ -4,8 +4,8 @@ import Link from 'next/link'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 const columnHrefs = [
-  ['#features', '#pricing', '#how-it-works', '#'],
-  ['#', '#', '#', '#'],
+  ['#features', '#pricing', '#how-it-works', '/vs'],
+  ['#', '/blog', '#', '#'],
   ['#', '#', '#', '#'],
   ['#', '#', '#'],
 ]
@@ -20,9 +20,9 @@ export function Footer() {
           {/* Logo column */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="flex items-center gap-2.5 mb-4">
-              <img src="/logo-without-background.png" alt="0spend" className="h-8 w-auto" />
+              <img src="/logo-without-background.png" alt="10xSpend - AI Ad Analysis Platform" className="h-8 w-auto" />
               <span className="font-heading font-semibold text-text-primary tracking-tight">
-                0spend
+                10xSpend
               </span>
             </Link>
             <p className="text-xs text-text-muted leading-relaxed">
@@ -32,7 +32,7 @@ export function Footer() {
 
           {t.footer.columns.map((col, ci) => (
             <div key={ci}>
-              <h4 className="text-sm font-semibold mb-4">{col.title}</h4>
+              <h3 className="text-sm font-semibold mb-4">{col.title}</h3>
               <ul className="space-y-2.5">
                 {col.links.map((label, li) => (
                   <li key={li}>
