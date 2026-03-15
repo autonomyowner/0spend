@@ -474,6 +474,33 @@ export const translations = {
         metric: 'Metric',
         verdict: 'Ranking',
       },
+
+      disclaimers: {
+        predictionsWarning: 'AI estimates based on creative quality scores — not real campaign data. Use for directional guidance.',
+        heatmapNote: 'AI-predicted attention zones based on visual analysis — not eye-tracking data.',
+        emotionsNote: 'Emotional intensity estimates based on creative analysis.',
+        learnMore: 'Learn more',
+      },
+
+      actualResults: {
+        title: 'How did it actually perform?',
+        description: 'Enter your real campaign results to improve future predictions.',
+        submit: 'Save Results',
+        saving: 'Saving...',
+        submitted: 'Actual Results',
+        predicted: 'Predicted',
+        actual: 'Actual',
+        accuracy: 'Accuracy',
+        diff: 'Diff',
+        totalSpend: 'Total Spend',
+        totalRevenue: 'Total Revenue',
+        impressions: 'Impressions',
+        notes: 'Notes',
+        notesPlaceholder: 'Any context about the campaign (audience, duration, etc.)',
+        optional: 'Optional',
+        close: 'Close match',
+        off: 'off',
+      },
     },
 
     // Auth pages
@@ -956,6 +983,33 @@ export const translations = {
         metricBreakdown: 'تحليل المقاييس',
         metric: 'المقياس',
         verdict: 'الترتيب',
+      },
+
+      disclaimers: {
+        predictionsWarning: 'تقديرات الذكاء الاصطناعي بناءً على درجات جودة الإبداع — وليست بيانات حملات حقيقية. استخدمها كتوجيه عام.',
+        heatmapNote: 'مناطق انتباه متوقعة بالذكاء الاصطناعي بناءً على التحليل البصري — وليست بيانات تتبع العين.',
+        emotionsNote: 'تقديرات شدة المشاعر بناءً على تحليل الإبداع.',
+        learnMore: 'اعرف المزيد',
+      },
+
+      actualResults: {
+        title: 'كيف كان الأداء الفعلي؟',
+        description: 'أدخل نتائج حملتك الحقيقية لتحسين التوقعات المستقبلية.',
+        submit: 'حفظ النتائج',
+        saving: 'جارٍ الحفظ...',
+        submitted: 'النتائج الفعلية',
+        predicted: 'المتوقع',
+        actual: 'الفعلي',
+        accuracy: 'الدقة',
+        diff: 'الفرق',
+        totalSpend: 'إجمالي الإنفاق',
+        totalRevenue: 'إجمالي الإيرادات',
+        impressions: 'مرات الظهور',
+        notes: 'ملاحظات',
+        notesPlaceholder: 'أي سياق حول الحملة (الجمهور، المدة، إلخ)',
+        optional: 'اختياري',
+        close: 'قريب',
+        off: 'فرق',
       },
     },
 

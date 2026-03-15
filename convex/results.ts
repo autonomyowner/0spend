@@ -1,4 +1,4 @@
-import { query, internalMutation } from "./_generated/server";
+import { query, mutation, internalMutation } from "./_generated/server";
 import { v } from "convex/values";
 import { getAuthenticatedAppUser } from "./auth";
 
@@ -231,6 +231,61 @@ export const getPredictedPerformance = query({
     if (!(await verifyTestOwnership(ctx, args.testId))) return null;
     return await ctx.db
       .query("predictedPerformance")
+      .withIndex("testId", (q) => q.eq("testId", args.testId))
+      .first();
+  },
+});
+
+// --- Actual Results (Validation Feedback Loop) ---
+
+export const saveActualResults = mutation({
+  args: {
+    testId: v.id("tests"),
+    results: v.array(
+      v.object({
+        metric: v.string(),
+        value: v.number(),
+        unit: v.string(),
+      })
+    ),
+    totalSpend: v.optional(v.number()),
+    totalRevenue: v.optional(v.number()),
+    impressions: v.optional(v.number()),
+    notes: v.optional(v.string()),
+  },
+  handler: async (ctx, args) => {
+    const user = await getAuthenticatedAppUser(ctx);
+    if (!user) throw new Error("Unauthenticated");
+
+    const test = await ctx.db.get(args.testId);
+    if (!test || test.userId !== user._id) throw new Error("Not found");
+
+    // Prevent duplicate submissions
+    const existing = await ctx.db
+      .query("actualResults")
+      .withIndex("testId", (q) => q.eq("testId", args.testId))
+      .first();
+    if (existing) throw new Error("Actual results already submitted for this test");
+
+    await ctx.db.insert("actualResults", {
+      testId: args.testId,
+      userId: user._id,
+      results: args.results,
+      totalSpend: args.totalSpend,
+      totalRevenue: args.totalRevenue,
+      impressions: args.impressions,
+      notes: args.notes,
+      submittedAt: Date.now(),
+    });
+  },
+});
+
+export const getActualResults = query({
+  args: { testId: v.id("tests") },
+  handler: async (ctx, args) => {
+    if (!(await verifyTestOwnership(ctx, args.testId))) return null;
+    return await ctx.db
+      .query("actualResults")
       .withIndex("testId", (q) => q.eq("testId", args.testId))
       .first();
   },

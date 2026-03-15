@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts'
 import { Card } from '@/components/ui/Card'
+import { AiDisclaimer } from '@/components/ui/AiDisclaimer'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface Emotion {
@@ -52,9 +53,10 @@ export function EmotionalProfile({
         <h3 className="text-sm font-semibold font-heading mb-1">
           {t.app.emotionalProfile.title}
         </h3>
-        <p className="text-xs text-text-muted mb-6">
+        <p className="text-xs text-text-muted mb-4">
           {t.app.emotionalProfile.description}
         </p>
+        <AiDisclaimer text={t.app.disclaimers.emotionsNote} severity="info" className="mb-6" />
 
         <div className="h-80">
           <ResponsiveContainer width="100%" height="100%">

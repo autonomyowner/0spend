@@ -2,6 +2,7 @@
 
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts'
 import { Card } from '@/components/ui/Card'
+import { AiDisclaimer } from '@/components/ui/AiDisclaimer'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface BenchmarkEntry {
@@ -76,9 +77,11 @@ export function CompetitiveBenchmark({ entries }: CompetitiveBenchmarkProps) {
         </ResponsiveContainer>
       </div>
 
-      <p className="text-[10px] text-text-faint mt-3">
-        {hasHistorical ? t.app.benchmark.sourceHistorical : t.app.benchmark.sourceEstimated}
-      </p>
+      <AiDisclaimer
+        text={hasHistorical ? t.app.benchmark.sourceHistorical : t.app.benchmark.sourceEstimated}
+        severity={hasHistorical ? 'info' : 'warning'}
+        className="mt-4"
+      />
     </Card>
   )
 }

@@ -1,6 +1,7 @@
 'use client'
 
 import { Card } from '@/components/ui/Card'
+import { AiDisclaimer } from '@/components/ui/AiDisclaimer'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 import { TrendingUp, TrendingDown, Minus, DollarSign, MousePointerClick, Eye, Target, BarChart3 } from 'lucide-react'
 
@@ -127,6 +128,9 @@ export function PredictedPerformance({
           </div>
         </Card>
       )}
+
+      {/* AI Disclaimer */}
+      <AiDisclaimer text={t.app.disclaimers.predictionsWarning} severity="warning" />
 
       {/* Metrics grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

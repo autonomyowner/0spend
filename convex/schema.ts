@@ -178,4 +178,24 @@ export default defineSchema({
     spendEfficiency: v.string(),
     confidence: v.string(),
   }).index("testId", ["testId"]),
+
+  actualResults: defineTable({
+    testId: v.id("tests"),
+    userId: v.id("users"),
+    results: v.array(
+      v.object({
+        metric: v.string(),
+        value: v.number(),
+        unit: v.string(),
+      })
+    ),
+    totalSpend: v.optional(v.number()),
+    totalRevenue: v.optional(v.number()),
+    impressions: v.optional(v.number()),
+    notes: v.optional(v.string()),
+    submittedAt: v.number(),
+  })
+    .index("testId", ["testId"])
+    .index("userId", ["userId"])
+    .index("userId_submittedAt", ["userId", "submittedAt"]),
 });

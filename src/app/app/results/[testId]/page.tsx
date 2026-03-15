@@ -16,6 +16,8 @@ import { AttentionHeatmap } from '@/components/results/AttentionHeatmap'
 import { CompetitiveBenchmark } from '@/components/results/CompetitiveBenchmark'
 import { EmotionalProfile } from '@/components/results/EmotionalProfile'
 import { PredictedPerformance } from '@/components/results/PredictedPerformance'
+import { ActualResultsForm } from '@/components/results/ActualResultsForm'
+import { PredictionAccuracy } from '@/components/results/PredictionAccuracy'
 import { ShareResultsCard } from '@/components/results/ShareResultsCard'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
@@ -46,6 +48,7 @@ export default function ResultsPage() {
   const benchmarks = useQuery(api.results.getBenchmarks, { testId })
   const emotionalProfile = useQuery(api.results.getEmotionalProfile, { testId })
   const predictedPerformance = useQuery(api.results.getPredictedPerformance, { testId })
+  const actualResults = useQuery(api.results.getActualResults, { testId })
   const creative = useQuery(
     api.creatives.getCreative,
     test?.creativeId ? { creativeId: test.creativeId } : "skip"
@@ -218,12 +221,31 @@ export default function ResultsPage() {
           )}
 
           {activeTab === 'predictions' && (
-            <PredictedPerformance
-              predictions={predictedPerformance?.predictions}
-              overallVerdict={predictedPerformance?.overallVerdict}
-              spendEfficiency={predictedPerformance?.spendEfficiency}
-              confidence={predictedPerformance?.confidence}
-            />
+            <div className="space-y-6">
+              <PredictedPerformance
+                predictions={predictedPerformance?.predictions}
+                overallVerdict={predictedPerformance?.overallVerdict}
+                spendEfficiency={predictedPerformance?.spendEfficiency}
+                confidence={predictedPerformance?.confidence}
+              />
+              {/* Actual results: show form if not submitted, accuracy comparison if submitted */}
+              {predictedPerformance?.predictions && actualResults === null && (
+                <ActualResultsForm
+                  testId={testId}
+                  predictions={predictedPerformance.predictions}
+                />
+              )}
+              {predictedPerformance?.predictions && actualResults && (
+                <PredictionAccuracy
+                  predictions={predictedPerformance.predictions}
+                  actuals={actualResults.results}
+                  totalSpend={actualResults.totalSpend}
+                  totalRevenue={actualResults.totalRevenue}
+                  impressions={actualResults.impressions}
+                  notes={actualResults.notes}
+                />
+              )}
+            </div>
           )}
 
           {activeTab === 'emotions' && (

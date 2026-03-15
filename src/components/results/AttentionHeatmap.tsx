@@ -1,5 +1,6 @@
 import { cn } from '@/lib/cn'
 import { Card } from '@/components/ui/Card'
+import { AiDisclaimer } from '@/components/ui/AiDisclaimer'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 interface HeatmapZone {
@@ -36,9 +37,10 @@ export function AttentionHeatmap({ zones }: AttentionHeatmapProps) {
   return (
     <Card className="p-6">
       <h3 className="text-sm font-semibold font-heading mb-4">{t.app.heatmap.title}</h3>
-      <p className="text-xs text-text-muted mb-6">
+      <p className="text-xs text-text-muted mb-4">
         {t.app.heatmap.description}
       </p>
+      <AiDisclaimer text={t.app.disclaimers.heatmapNote} severity="info" className="mb-6" />
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* Heatmap */}
