@@ -46,7 +46,8 @@ export function Footer() {
           ))}
         </div>
 
-        <div className="mt-12 pt-8 border-t border-surface-500 text-center">
+        <div className="mt-12 pt-8 border-t border-surface-500 text-center space-y-2">
+          <p className="text-xs text-text-faint">{t.footer.builtBy}</p>
           <p className="text-xs text-text-muted">
             &copy; {new Date().getFullYear()} {t.footer.copyright}
           </p>

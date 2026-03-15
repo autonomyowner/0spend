@@ -43,6 +43,7 @@ export function CTA() {
                 </Button>
               </Link>
               <p className="text-xs text-text-muted mt-5">{t.cta.noCreditCard}</p>
+              <p className="text-xs text-amber/70 mt-2">{t.cta.spotsRemaining}</p>
             </>
           )}
         </div>

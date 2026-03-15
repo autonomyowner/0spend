@@ -6,6 +6,7 @@ import { HowItWorks } from '@/components/landing/HowItWorks'
 import { FeaturesGrid } from '@/components/landing/FeaturesGrid'
 import { DemoPreview } from '@/components/landing/DemoPreview'
 import { SocialProof } from '@/components/landing/SocialProof'
+import { FreeTools } from '@/components/landing/FreeTools'
 import { Pricing } from '@/components/landing/Pricing'
 import { CTA } from '@/components/landing/CTA'
 import { Footer } from '@/components/landing/Footer'
@@ -19,6 +20,7 @@ export default function LandingPage() {
       <FeaturesGrid />
       <DemoPreview />
       <SocialProof />
+      <FreeTools />
       <Pricing />
       <CTA />
       <Footer />

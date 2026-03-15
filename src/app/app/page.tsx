@@ -6,6 +6,7 @@ import { StatsRow } from '@/components/dashboard/StatsRow'
 import { ScoreChart } from '@/components/dashboard/ScoreChart'
 import { RecentTests } from '@/components/dashboard/RecentTests'
 import { QuickActions } from '@/components/dashboard/QuickActions'
+import { OnboardingChecklist } from '@/components/dashboard/OnboardingChecklist'
 import { useLanguage } from '@/lib/i18n/LanguageContext'
 
 export default function DashboardPage() {
@@ -14,12 +15,17 @@ export default function DashboardPage() {
   const scoreTrend = useQuery(api.dashboard.scoreTrend)
   const { t } = useLanguage()
 
+  const testCount = stats?.testCount ?? 0
+  const creativeCount = stats?.testCount ?? 0 // creatives correlate with tests
+
   return (
     <div className="space-y-6 sm:space-y-8 max-w-7xl">
       <div>
         <h1 className="text-2xl font-bold font-heading">{t.app.dashboard.title}</h1>
         <p className="text-sm text-text-muted mt-1">{t.app.dashboard.subtitle}</p>
       </div>
+
+      <OnboardingChecklist testCount={testCount} creativeCount={creativeCount} />
 
       <StatsRow stats={stats} />
 

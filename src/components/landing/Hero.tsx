@@ -108,10 +108,15 @@ export function Hero() {
       <div className="relative max-w-6xl mx-auto">
         {/* Text content */}
         <div className="text-center max-w-4xl mx-auto">
-          {/* Status badge */}
-          <div className="inline-flex items-center gap-2 rounded-full border border-amber/20 bg-amber/5 backdrop-blur-sm px-4 py-1.5 mb-8 animate-fade-up">
+          {/* Scarcity banner */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-amber/30 bg-amber/5 backdrop-blur-sm px-4 py-1.5 mb-3 animate-fade-up" style={{ animation: 'fade-up 0.5s ease-out, pulse-glow 3s ease-in-out infinite' }}>
             <span className="w-2 h-2 rounded-full bg-amber animate-pulse" />
-            <span className="text-xs font-medium text-amber">{t.hero.badge}</span>
+            <span className="text-xs font-medium text-amber">{t.hero.scarcity}</span>
+          </div>
+
+          {/* Status badge */}
+          <div className="inline-flex items-center gap-2 rounded-full border border-surface-500/50 bg-surface-800/40 backdrop-blur-sm px-4 py-1.5 mb-8 animate-fade-up" style={{ animationDelay: '0.1s' }}>
+            <span className="text-xs font-medium text-text-muted">{t.hero.badge}</span>
           </div>
 
           {/* Headline with typewriter */}
@@ -153,6 +158,24 @@ export function Hero() {
                 </a>
               </>
             )}
+          </div>
+
+          {/* Free analysis text */}
+          {!isLoggedIn && (
+            <p className="text-xs text-text-muted mt-4 animate-fade-up" style={{ animationDelay: '0.35s' }}>
+              {t.hero.freeAnalyses}
+            </p>
+          )}
+
+          {/* Powered by row */}
+          <div className="flex items-center justify-center gap-3 mt-6 animate-fade-up" style={{ animationDelay: '0.4s' }}>
+            <span className="text-xs text-text-faint">{t.hero.poweredBy}</span>
+            {t.hero.poweredByItems.map((item, i) => (
+              <span key={i} className="flex items-center gap-3">
+                {i > 0 && <span className="text-text-faint/40">·</span>}
+                <span className="text-xs text-text-muted">{item}</span>
+              </span>
+            ))}
           </div>
         </div>
 

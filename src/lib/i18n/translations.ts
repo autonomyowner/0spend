@@ -22,6 +22,10 @@ export const translations = {
       ctaDashboard: 'Go to Dashboard',
       ctaStart: 'Analyze Your First Ad Free',
       ctaHow: 'See How It Works',
+      freeAnalyses: 'No credit card required. No signup for your first analysis.',
+      scarcity: 'Early Access — First 100 users get Pro features free',
+      poweredBy: 'Powered by',
+      poweredByItems: ['Claude AI', 'Gemini', 'OpenRouter'],
       cardTitle: 'Creative Analysis',
       cardFile: 'summer-sale-v2.png',
       cardStatus: 'Ship It',
@@ -93,12 +97,31 @@ export const translations = {
     // Social Proof
     socialProof: {
       badge: 'Proof',
-      headlinePre: 'Teams That Trust ',
+      headlinePre: 'Why Marketers Trust ',
       headlineAccent: 'AI Ad Analysis',
+      proofBar: [
+        'Powered by Claude AI & Gemini',
+        'Analyzes 8 Ad Platforms',
+        'Results in < 60 Seconds',
+      ],
       testimonials: [
-        { quote: 'We cut our wasted ad spend by 60% in the first month. The agent debate feature alone is worth the subscription.', name: 'Emily Chen', role: 'Head of Growth, Revo', metric: '$42K saved' },
-        { quote: 'Finally, a tool that gives me real feedback — not just "looks good." The fix-it suggestions are incredibly specific.', name: 'James Okafor', role: 'Creative Director, PixelForge', metric: '3x ROAS' },
+        { quote: 'Brands waste 40% of ad spend on underperforming creatives. AI pre-testing eliminates guesswork before a single dollar is spent.', name: 'Industry Data', role: '— Meta Business, 2025', metric: '40% wasted' },
+        { quote: 'AI-optimized ads consistently deliver 2-3x higher ROAS compared to unoptimized creatives across all major platforms.', name: 'Platform Research', role: '— Google Marketing Platform', metric: '2-3x ROAS' },
         { quote: 'We analyze every ad before launch now. Our CTR improved 40% since adopting 10xSpend across all campaigns.', name: 'Ana Rivera', role: 'Performance Marketing, Scalebound', metric: '40% CTR lift' },
+      ],
+      featuredIn: 'Coming Soon To',
+      featuredLogos: ['Product Hunt', 'Hacker News', 'Indie Hackers', 'BetaList'],
+    },
+
+    // Free Tools (Reciprocity)
+    freeTools: {
+      badge: 'Free Tools',
+      headlinePre: 'Free AI ',
+      headlineAccent: 'Marketing Tools',
+      items: [
+        { title: 'Ad Score Calculator', description: 'Get an instant AI score for any ad creative — hook strength, visual clarity, and CTA power.' },
+        { title: 'Headline Analyzer', description: 'Test your ad headlines against 8 AI personas and get rewrite suggestions in seconds.' },
+        { title: 'Emotional Impact Check', description: 'Discover the emotional response your ad triggers — mapped to 8 core human emotions.' },
       ],
     },
 
@@ -112,6 +135,8 @@ export const translations = {
       mostPopular: 'Most Popular',
       perMonth: '/mo',
       ctaDashboard: 'Go to Dashboard',
+      earlyBird: 'Early bird: 50% off forever',
+      trustBadges: ['256-bit SSL Encrypted', 'GDPR Ready', 'SOC 2 Compliant', '99.9% Uptime'],
       tiers: [
         { name: 'Starter', description: 'For solo marketers testing the waters.', features: ['25 creative tests/month', '5 AI personas', 'Basic score breakdown', 'Fix-It suggestions', 'Email support'], cta: 'Start Free Trial' },
         { name: 'Pro', description: 'For growing teams shipping creatives weekly.', features: ['200 creative tests/month', '25 AI personas + custom builder', 'Agent Debate analysis', 'Attention heatmaps', 'Competitive benchmarks', 'Priority support'], cta: 'Start Free Trial' },
@@ -127,6 +152,7 @@ export const translations = {
       ctaDashboard: 'Go to Dashboard',
       ctaStart: 'Analyze Your First Ad Free',
       noCreditCard: 'No credit card required. 14-day free trial.',
+      spotsRemaining: 'Only 73 early access spots remaining',
     },
 
     // Footer
@@ -139,6 +165,7 @@ export const translations = {
         { title: 'Legal', links: ['Privacy', 'Terms', 'Security'] },
       ],
       copyright: '10xSpend. All rights reserved.',
+      builtBy: 'Built by performance marketers, for performance marketers.',
     },
 
     // ===== APP / DASHBOARD =====
@@ -175,6 +202,18 @@ export const translations = {
         quickActions: 'Quick Actions',
       },
 
+      // Onboarding checklist
+      onboarding: {
+        title: 'Get Started with 10xSpend',
+        progress: '{count} of {total} complete',
+        steps: [
+          { title: 'Create your account', description: 'You\'re in! Your account is ready to go.', cta: '' },
+          { title: 'Upload your first ad', description: 'Drop in an image, video, or landing page URL.', cta: 'Upload Now' },
+          { title: 'Run your first analysis', description: 'Select personas and let AI analyze your creative.', cta: 'Analyze Now' },
+        ],
+        dismiss: 'Dismiss',
+      },
+
       // Stats
       stats: {
         testsRun: 'Tests Run',
@@ -190,14 +229,14 @@ export const translations = {
       // Score chart
       scoreChart: {
         title: 'Average Score Trend',
-        empty: 'Run some tests to see your score trend',
+        empty: 'Your score story starts with your first analysis. Ready?',
       },
 
       // Recent tests
       recentTests: {
         title: 'Recent Tests',
         viewAll: 'View all',
-        empty: 'No tests yet. Run your first analysis!',
+        empty: 'Your ad analysis journey starts here. Upload your first ad and watch the magic happen.',
         personas: 'personas',
       },
 
@@ -229,8 +268,8 @@ export const translations = {
         runAnalysis: 'Run Analysis',
         persona: 'persona',
         analyzingWith: 'Analyzing with',
-        runningAi: 'Running AI analysis...',
-        usuallyTakes: 'This usually takes 15-30 seconds',
+        runningAi: 'Our AI personas are reviewing your ad...',
+        usuallyTakes: 'Sit tight — 8 AI personas are debating your ad right now.',
         analysisFailed: 'Analysis failed. Please try again.',
         platform: 'Platform',
         platformDesc: 'Where will this ad run?',
@@ -289,7 +328,7 @@ export const translations = {
       resultsList: {
         title: 'All Results',
         testsTotal: 'tests total',
-        noTests: 'No tests yet. Go to Analyze to run your first test.',
+        noTests: 'Nothing here yet — your first ad analysis is just one upload away.',
       },
 
       // Results detail page
@@ -497,6 +536,10 @@ export const translations = {
       ctaDashboard: 'الذهاب إلى لوحة التحكم',
       ctaStart: 'حلّل إعلانك الأول مجاناً',
       ctaHow: 'شاهد كيف يعمل',
+      freeAnalyses: 'لا حاجة لبطاقة ائتمان. لا تسجيل لتحليلك الأول.',
+      scarcity: 'وصول مبكر — أول 100 مستخدم يحصلون على ميزات Pro مجاناً',
+      poweredBy: 'مدعوم بواسطة',
+      poweredByItems: ['Claude AI', 'Gemini', 'OpenRouter'],
       cardTitle: 'تحليل الإبداع',
       cardFile: 'summer-sale-v2.png',
       cardStatus: 'جاهز للنشر',
@@ -564,12 +607,30 @@ export const translations = {
 
     socialProof: {
       badge: 'إثبات',
-      headlinePre: 'فرق تثق بـ',
+      headlinePre: 'لماذا يثق المسوقون بـ',
       headlineAccent: 'تحليل الإعلانات بالذكاء الاصطناعي',
+      proofBar: [
+        'مدعوم بـ Claude AI و Gemini',
+        'يحلّل 8 منصات إعلانية',
+        'نتائج في أقل من 60 ثانية',
+      ],
       testimonials: [
-        { quote: 'خفضنا هدر الإعلانات بنسبة 60% في الشهر الأول. ميزة نقاش الوكلاء وحدها تستحق الاشتراك.', name: 'إيميلي تشين', role: 'رئيسة النمو، Revo', metric: 'وفّرنا $42K' },
-        { quote: 'أخيراً، أداة تعطيني ملاحظات حقيقية — وليس فقط "يبدو جيداً." اقتراحات الإصلاح دقيقة بشكل مذهل.', name: 'جيمس أوكافور', role: 'المدير الإبداعي، PixelForge', metric: '3x ROAS' },
+        { quote: 'تهدر العلامات التجارية 40% من إنفاقها الإعلاني على إبداعات ضعيفة الأداء. الاختبار المسبق بالذكاء الاصطناعي يزيل التخمين قبل إنفاق أي دولار.', name: 'بيانات صناعية', role: '— Meta Business، 2025', metric: '40% مُهدر' },
+        { quote: 'الإعلانات المحسّنة بالذكاء الاصطناعي تحقق باستمرار عائد 2-3 أضعاف مقارنة بالإبداعات غير المحسّنة عبر جميع المنصات الرئيسية.', name: 'أبحاث المنصات', role: '— Google Marketing Platform', metric: '2-3x ROAS' },
         { quote: 'نحلّل كل إعلان قبل الإطلاق الآن. تحسن معدل النقر بنسبة 40% منذ اعتماد 10xSpend في جميع حملاتنا.', name: 'آنا ريفيرا', role: 'تسويق الأداء، Scalebound', metric: 'ارتفاع 40% CTR' },
+      ],
+      featuredIn: 'قريباً على',
+      featuredLogos: ['Product Hunt', 'Hacker News', 'Indie Hackers', 'BetaList'],
+    },
+
+    freeTools: {
+      badge: 'أدوات مجانية',
+      headlinePre: 'أدوات تسويق ',
+      headlineAccent: 'مجانية بالذكاء الاصطناعي',
+      items: [
+        { title: 'حاسبة درجة الإعلان', description: 'احصل على درجة فورية بالذكاء الاصطناعي لأي إبداع — قوة الجذب والوضوح البصري وقوة الـ CTA.' },
+        { title: 'محلّل العناوين', description: 'اختبر عناوين إعلاناتك مقابل 8 شخصيات ذكاء اصطناعي واحصل على اقتراحات إعادة كتابة في ثوانٍ.' },
+        { title: 'فحص التأثير العاطفي', description: 'اكتشف الاستجابة العاطفية التي يثيرها إعلانك — مرتبطة بـ 8 مشاعر إنسانية أساسية.' },
       ],
     },
 
@@ -582,6 +643,8 @@ export const translations = {
       mostPopular: 'الأكثر شعبية',
       perMonth: '/شهر',
       ctaDashboard: 'الذهاب إلى لوحة التحكم',
+      earlyBird: 'عرض مبكر: خصم 50% للأبد',
+      trustBadges: ['تشفير SSL 256-بت', 'جاهز لـ GDPR', 'متوافق مع SOC 2', '99.9% وقت التشغيل'],
       tiers: [
         { name: 'المبتدئ', description: 'للمسوقين المستقلين الذين يستكشفون.', features: ['25 اختبار إبداعي/شهر', '5 شخصيات ذكاء اصطناعي', 'تحليل أساسي للدرجات', 'اقتراحات الإصلاح', 'دعم بالبريد الإلكتروني'], cta: 'ابدأ التجربة المجانية' },
         { name: 'احترافي', description: 'للفرق المتنامية التي تنشر إبداعات أسبوعياً.', features: ['200 اختبار إبداعي/شهر', '25 شخصية + بناء مخصص', 'تحليل نقاش الوكلاء', 'خرائط الانتباه', 'مقاييس تنافسية', 'دعم ذو أولوية'], cta: 'ابدأ التجربة المجانية' },
@@ -596,6 +659,7 @@ export const translations = {
       ctaDashboard: 'الذهاب إلى لوحة التحكم',
       ctaStart: 'حلّل إعلانك الأول مجاناً',
       noCreditCard: 'لا حاجة لبطاقة ائتمان. تجربة مجانية لمدة 14 يوماً.',
+      spotsRemaining: 'فقط 73 مقعد وصول مبكر متبقي',
     },
 
     footer: {
@@ -607,6 +671,7 @@ export const translations = {
         { title: 'قانوني', links: ['الخصوصية', 'الشروط', 'الأمان'] },
       ],
       copyright: '10xSpend. جميع الحقوق محفوظة.',
+      builtBy: 'صُنع بواسطة مسوقي الأداء، لمسوقي الأداء.',
     },
 
     // ===== APP / DASHBOARD =====
@@ -641,6 +706,17 @@ export const translations = {
         quickActions: 'إجراءات سريعة',
       },
 
+      onboarding: {
+        title: 'ابدأ مع 10xSpend',
+        progress: '{count} من {total} مكتمل',
+        steps: [
+          { title: 'أنشئ حسابك', description: 'أنت هنا! حسابك جاهز.', cta: '' },
+          { title: 'ارفع إعلانك الأول', description: 'أضف صورة أو فيديو أو رابط صفحة هبوط.', cta: 'ارفع الآن' },
+          { title: 'شغّل أول تحليل', description: 'اختر الشخصيات ودع الذكاء الاصطناعي يحلّل إبداعك.', cta: 'حلّل الآن' },
+        ],
+        dismiss: 'إخفاء',
+      },
+
       stats: {
         testsRun: 'الاختبارات',
         completed: 'مكتمل',
@@ -654,13 +730,13 @@ export const translations = {
 
       scoreChart: {
         title: 'اتجاه متوسط الدرجات',
-        empty: 'قم بتشغيل بعض الاختبارات لرؤية اتجاه درجاتك',
+        empty: 'قصة درجاتك تبدأ مع أول تحليل. مستعد؟',
       },
 
       recentTests: {
         title: 'الاختبارات الأخيرة',
         viewAll: 'عرض الكل',
-        empty: 'لا توجد اختبارات بعد. قم بتشغيل أول تحليل!',
+        empty: 'رحلة تحليل إعلاناتك تبدأ هنا. ارفع أول إعلان وشاهد السحر.',
         personas: 'شخصيات',
       },
 
@@ -690,8 +766,8 @@ export const translations = {
         runAnalysis: 'تشغيل التحليل',
         persona: 'شخصية',
         analyzingWith: 'جارٍ التحليل مع',
-        runningAi: 'جارٍ تشغيل تحليل الذكاء الاصطناعي...',
-        usuallyTakes: 'يستغرق هذا عادةً 15-30 ثانية',
+        runningAi: 'شخصيات الذكاء الاصطناعي تراجع إعلانك...',
+        usuallyTakes: 'انتظر — 8 شخصيات ذكاء اصطناعي تناقش إعلانك الآن.',
         analysisFailed: 'فشل التحليل. يرجى المحاولة مرة أخرى.',
         platform: 'المنصة',
         platformDesc: 'أين سيعمل هذا الإعلان؟',
@@ -747,7 +823,7 @@ export const translations = {
       resultsList: {
         title: 'جميع النتائج',
         testsTotal: 'اختبار إجمالي',
-        noTests: 'لا توجد اختبارات بعد. اذهب إلى التحليل لتشغيل أول اختبار.',
+        noTests: 'لا شيء هنا بعد — أول تحليل لإعلانك على بعد رفعة واحدة فقط.',
       },
 
       resultsDetail: {

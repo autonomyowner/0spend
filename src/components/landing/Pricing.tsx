@@ -57,6 +57,9 @@ export function Pricing() {
                 <div className="mb-6">
                   <span className="text-4xl font-bold font-heading">${tier.price}</span>
                   <span className="text-text-muted text-sm">{t.pricing.perMonth}</span>
+                  {tier.popular && (
+                    <p className="text-xs text-amber mt-1.5">{t.pricing.earlyBird}</p>
+                  )}
                 </div>
                 <ul className="space-y-3 mb-8 flex-1">
                   {tierT.features.map((f, fi) => (
@@ -79,6 +82,16 @@ export function Pricing() {
               </div>
             )
           })}
+        </div>
+
+        {/* Trust Badges */}
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mt-12">
+          {t.pricing.trustBadges.map((badge, i) => (
+            <span key={i} className="flex items-center gap-4">
+              {i > 0 && <span className="text-text-faint/30 hidden sm:inline">·</span>}
+              <span className="text-xs text-text-muted">{badge}</span>
+            </span>
+          ))}
         </div>
       </div>
     </section>
